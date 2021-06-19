@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\KategoriProduk;
-use DB;
-class KategoriProdukController extends Controller
+use App\Models\Produk;
+
+class ProdukController extends Controller
 {
     public function getData($id=null){
         try{
-            $id?$data = KategoriProduK::firstWhere('id', $id) : $data = KategoriProduk::all();
+            $id?$data = Produk::firstWhere('id', $id) : $data = Produk::all();
 
             // dd(is_null($data));
 
@@ -37,16 +37,21 @@ class KategoriProdukController extends Controller
         $limit = $limit?$limit:0;
         $page = intval($page);
         $limit = intval($page);
-        $data = KategoriProduk::skip($page*$limit)->take($limit)->get();
-        $totalRow = KategoriProduk::count();
+        $data = Produk::skip($page*$limit)->take($limit)->get();
+        $totalRow = Produk::count();
         if(count($data)>0)
             return response()->json(['data'=>$data, 'message'=>'success', 'page'=>$page, 'limit'=>$limit, 'total_row'=>$totalRow], 200);
         return response()->json(['message'=>'empty'], 401);
     }
     public function store(Request $req){
-        // dd($req->nama);
-        $data = KategoriProduk::create([
-            'nama'=>$req->nama
+        $data = Produk::create([
+            'id_pengusaha'=>$req->id_pengusaha,
+            'nama'=>$req->nama,
+            'harga'=>$req->harga,
+            'id_satuan'=>$req->id_satuan,
+            'id_kategori'=>$req->id_kategori,
+            'gambar'=>$req->gambar,
+            'deskripsi'=>$req->deskripsi
         ]);
         if($data){
             return response()->json([
@@ -61,8 +66,14 @@ class KategoriProdukController extends Controller
     }
 
     public function update(Request $r){
-        $data = KategoriProduk::where("id", $r->id)->update([
-            'nama'=>$r->nama
+        $data = Produk::where("id", $r->id)->update([
+            'id_pengusaha'=>$req->id_pengusaha,
+            'nama'=>$req->nama,
+            'harga'=>$req->harga,
+            'id_satuan'=>$req->id_satuan,
+            'id_kategori'=>$req->id_kategori,
+            'gambar'=>$req->gambar,
+            'deskripsi'=>$req->deskripsi
         ]);
         if($data){
             return response()->json(['Result'=>"Data has been Updated"], 200);
@@ -71,7 +82,7 @@ class KategoriProdukController extends Controller
         }
     }
     public function destroy ($id){
-        $data = KategoriProduk::where('id', $id)->delete();
+        $data = Produk::where('id', $id)->delete();
         if($data){
             return response()->json(['Result'=>"Data has been deleted"], 200);
         }else{

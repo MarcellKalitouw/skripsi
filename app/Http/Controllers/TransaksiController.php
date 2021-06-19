@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\KategoriProduk;
-use DB;
-class KategoriProdukController extends Controller
+use App\Models\Transaksi;
+class TransaksiController extends Controller
 {
     public function getData($id=null){
         try{
-            $id?$data = KategoriProduK::firstWhere('id', $id) : $data = KategoriProduk::all();
+            $id?$data = Transaksi::firstWhere('id', $id) : $data = Transaksi::all();
 
             // dd(is_null($data));
 
@@ -37,16 +36,27 @@ class KategoriProdukController extends Controller
         $limit = $limit?$limit:0;
         $page = intval($page);
         $limit = intval($page);
-        $data = KategoriProduk::skip($page*$limit)->take($limit)->get();
-        $totalRow = KategoriProduk::count();
+        $data = Transaksi::skip($page*$limit)->take($limit)->get();
+        $totalRow = Transaksi::count();
         if(count($data)>0)
             return response()->json(['data'=>$data, 'message'=>'success', 'page'=>$page, 'limit'=>$limit, 'total_row'=>$totalRow], 200);
         return response()->json(['message'=>'empty'], 401);
     }
     public function store(Request $req){
-        // dd($req->nama);
-        $data = KategoriProduk::create([
-            'nama'=>$req->nama
+        $data = Transaksi::create([
+            'id_status'=>$req->id_status,
+            'id_pelanggan'=>$req->id_pelanggan,
+            'id_pengusaha'=>$req->id_pengusaha,
+            'id_shipping'=>$req->id_shipping,
+            'tgl'=>$req->tgl,
+            'total_qty'=>$req->total_qty,
+            'subtotal_qty'=>$req->subtotal_qty,
+            'pajak'=>$req->pajak,
+            'diskon'=>$req->diskon,
+            'biaya_tambahan'=>$req->biaya_tambahan,
+            'biaya_pengiriman'=>$req->biaya_pengiriman,
+            'total'=>$req->total,
+            'keterangan'=>$req->keterangan
         ]);
         if($data){
             return response()->json([
@@ -61,8 +71,20 @@ class KategoriProdukController extends Controller
     }
 
     public function update(Request $r){
-        $data = KategoriProduk::where("id", $r->id)->update([
-            'nama'=>$r->nama
+        $data = Transaksi::where("id", $r->id)->update([
+            'id_status'=>$req->id_status,
+            'id_pelanggan'=>$req->id_pelanggan,
+            'id_pengusaha'=>$req->id_pengusaha,
+            'id_shipping'=>$req->id_shipping,
+            'tgl'=>$req->tgl,
+            'total_qty'=>$req->total_qty,
+            'subtotal_qty'=>$req->subtotal_qty,
+            'pajak'=>$req->pajak,
+            'diskon'=>$req->diskon,
+            'biaya_tambahan'=>$req->biaya_tambahan,
+            'biaya_pengiriman'=>$req->biaya_pengiriman,
+            'total'=>$req->total,
+            'keterangan'=>$req->keterangan
         ]);
         if($data){
             return response()->json(['Result'=>"Data has been Updated"], 200);
@@ -71,7 +93,7 @@ class KategoriProdukController extends Controller
         }
     }
     public function destroy ($id){
-        $data = KategoriProduk::where('id', $id)->delete();
+        $data = Transaksi::where('id', $id)->delete();
         if($data){
             return response()->json(['Result'=>"Data has been deleted"], 200);
         }else{

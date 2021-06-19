@@ -27,5 +27,5 @@ class Transaksi extends Model
         'biaya_pengiriman',
         'total',
         'keterangan'
-    ]
+    ];
 }
