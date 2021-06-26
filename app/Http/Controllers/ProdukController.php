@@ -65,8 +65,8 @@ class ProdukController extends Controller
         }
     }
 
-    public function update(Request $r){
-        $data = Produk::where("id", $r->id)->update([
+    public function update(Request $req){
+        $data = Produk::where("id", $req->id)->update([
             'id_pengusaha'=>$req->id_pengusaha,
             'nama'=>$req->nama,
             'harga'=>$req->harga,
@@ -75,6 +75,7 @@ class ProdukController extends Controller
             'gambar'=>$req->gambar,
             'deskripsi'=>$req->deskripsi
         ]);
+        
         if($data){
             return response()->json(['Result'=>"Data has been Updated"], 200);
         }else{

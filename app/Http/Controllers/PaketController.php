@@ -64,14 +64,15 @@ class PaketController extends Controller
         }
     }
 
-    public function update(Request $r){
-        $data = Paket::where("id", $r->id)->update([
+    public function update(Request $req){
+        $data = Paket::where("id", $req->id)->update([
             'id_pengusaha'=>$req->id_pengusaha,
             'harga' => $req->harga,
             'nama' => $req->nama,
             'gambar' => $req->gambar,
             'deskripsi' => $req->deskripsi
         ]);
+        // dd($data);
         if($data){
             return response()->json(['Result'=>"Data has been Updated"], 200);
         }else{
