@@ -6,6 +6,7 @@ use App\Http\Controllers\{
     KategoriProdukController,
     PaketController,
     PelangganController,
+    PengusahaController,
     ProdukController,
     ShippingController,
     StatusController,
@@ -85,10 +86,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::DELETE("transaksi_controller/{id}", [TransaksiController::class, 'destroy']);
 
 //SatuanProduk
-    Route::GET("status_produk/{id?}", [StatusProdukController::class, 'getData']); 
-    Route::GET("status_produk/{page?}/{limit?}", [StatusProdukController::class, 'getDataPageLimit']);
-    Route::POST("status_produk/", [StatusProdukController::class, 'store']);
-    Route::PUT("status_produk/", [StatusProdukController::class, 'update']);
-    Route::DELETE("status_produk/{id}", [StatusProdukController::class, 'destroy']);
+    Route::GET("status_produk/{id?}", [SatuanProdukController::class, 'getData']); 
+    Route::GET("status_produk/{page?}/{limit?}", [SatuanProdukController::class, 'getDataPageLimit']);
+    Route::POST("status_produk/", [SatuanProdukController::class, 'store']);
+    Route::PUT("status_produk/", [SatuanProdukController::class, 'update']);
+    Route::DELETE("status_produk/{id}", [SatuanProdukController::class, 'destroy']);
 
     

@@ -9,11 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KategoriProduk extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    use Uuids;
-    public $timestamps = true;
+    
     protected $table = 'kategori_produk';
+    use HasFactory, SoftDeletes, Uuids;
+    public $timestamps = true;
     protected $fillable = [
         'nama'
     ];

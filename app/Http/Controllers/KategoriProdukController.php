@@ -28,7 +28,7 @@ class KategoriProdukController extends Controller
             }
             
         }
-        catch(\Exception $e){
+        catch(Exception $e){
             return response()->json(['message'=>$e->getMessage()], 406);
         }
     }

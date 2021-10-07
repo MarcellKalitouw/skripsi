@@ -1,6 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\{
+    KategoriProdukWebController,
+    SatuanProdukWebController,
+    PaketWebController,
+    ProdukWebController,
+    PengusahaWebController,
+    ShippingWebController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +22,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('adminView.layout');
 });
+
+//Produk
+Route::resource('kategori_produk', KategoriProdukWebController::class);
+Route::resource('satuan_produk', SatuanProdukWebController::class);
+Route::resource('paket', PaketWebController::class);
+Route::resource('produk', ProdukWebController::class);
+Route::resource('pengusaha', PengusahaWebController::class);
+
+//Transaksi
+Route::resource('shipping', ShippingWebController::class);
