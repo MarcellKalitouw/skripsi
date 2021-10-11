@@ -7,7 +7,9 @@ use App\Http\Controllers\Web\{
     PaketWebController,
     ProdukWebController,
     PengusahaWebController,
-    ShippingWebController
+    ShippingWebController,
+    TransaksiWebController,
+    StatusWebController,
 };
 
 /*
@@ -34,3 +36,7 @@ Route::resource('pengusaha', PengusahaWebController::class);
 
 //Transaksi
 Route::resource('shipping', ShippingWebController::class);
+Route::resource('transaksi', TransaksiWebController::class);
+
+//Status
+Route::resource('status', StatusWebController::class);

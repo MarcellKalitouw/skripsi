@@ -1,84 +1,116 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use DB;
+use App\Models\Transaksi;
 
 class TransaksiWebController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    protected $pageTitle = 'Transaksi';
     public function index()
     {
-        //
+        $data = Transaksi::get();
+
+        return view('adminView.transaksi.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
-        //
+        $status = DB::table('status')->get();
+        $pengguna = DB::table('users')->get();
+        $pengusaha = DB::table('pengusaha')->get();
+        $shipping = DB::table('shipping')->get();
+        
+        return view('adminView.transaksi.create', [
+            'getStatus'=>$status,
+            'getPengguna'=>$pengguna,
+            'getPengusaha'=>$pengusaha,
+            'getShipping'=>$shipping,
+            'pageTitle'=>$this->pageTitle
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
-        //
+        $request['id_status'] = 1;
+        $request['tgl'] = now();
+        // dd($request); 
+        $validate = $this->validate($request, [
+            'id_status' => 'required',
+            'id_pelanggan' => 'required',
+            'id_pengusaha' => 'required',
+            'id_shipping' => 'required',
+            'total_qty' => 'required',
+            'subtotal_qty' => 'required',
+            'pajak' => 'required',
+            'diskon' => 'required',
+            'biaya_tambahan' => 'required',
+            'biaya_pengiriman' => 'required',
+            'total' => 'required',
+            'keterangan' => 'required'
+        ]);
+
+        $input = $request->except(['_token']);
+        $transaksi = Transaksi::create($input);
+        return redirect()->route('transaksi.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
-        //
+        $status = DB::table('status')->get();
+        $pengguna = DB::table('users')->get();
+        $pengusaha = DB::table('pengusaha')->get();
+        $shipping = DB::table('shipping')->get();
+        $getData = DB::table('transaksi')->where('id', $id)->first();
+        return view('adminView.transaksi.edit', [
+            'getData'=>$getData,
+            'getStatus'=>$status,
+            'getPengguna'=>$pengguna,
+            'getPengusaha'=>$pengusaha,
+            'getShipping'=>$shipping,
+            'pageTitle'=>$this->pageTitle
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
-        //
+        $validate = $this->validate($request, [
+            'id_status' => 'required',
+            'id_pelanggan' => 'required',
+            'id_pengusaha' => 'required',
+            'id_shipping' => 'required',
+            'total_qty' => 'required',
+            'subtotal_qty' => 'required',
+            'pajak' => 'required',
+            'diskon' => 'required',
+            'biaya_tambahan' => 'required',
+            'biaya_pengiriman' => 'required',
+            'total' => 'required',
+            'keterangan' => 'required'
+        ]);
+
+        $input = $request->except(['_token','_method']);
+        $transaksi = Transaksi::where('id',$id)->update($input);
+        return redirect()->route('transaksi.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
-        //
+        Transaksi::where('id', $id)->delete();
+        return redirect()->route('transaksi.index');
     }
 }

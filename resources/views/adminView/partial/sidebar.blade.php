@@ -100,6 +100,24 @@
                                 </span>
                             </a>
                         </li>
+                        <li class="sidebar-item"> 
+                            <a class="sidebar-link" href="{{route('transaksi.index')}}"
+                                aria-expanded="false">
+                                <i class="fas fa-table"></i>
+                                <span
+                                    class="hide-menu">Transaksi
+                                </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item"> 
+                            <a class="sidebar-link" href="{{route('status.index')}}"
+                                aria-expanded="false">
+                                <i class="fas fa-table"></i>
+                                <span
+                                    class="hide-menu">Status
+                                </span>
+                            </a>
+                        </li>
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow" href="javascript:void(0)"
                                 aria-expanded="false"><i data-feather="grid" class="feather-icon"></i><span
                                     class="hide-menu">Tables </span></a>

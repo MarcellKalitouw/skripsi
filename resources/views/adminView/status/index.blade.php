@@ -5,8 +5,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Tabel Satuan Produk
-                                    <a href="{{route('satuan_produk.create')}}" class="btn waves-effect waves-light btn-success">
+                                <h4 class="card-title">Tabel Status
+                                    <a href="{{route('status.create')}}" class="btn waves-effect waves-light btn-success">
                                     + Tambah Data
                                     </a>
 
@@ -32,10 +32,10 @@
                                                 
                                                  <tr>
                                                      <td>
-                                                         <form action="{{route('satuan_produk.destroy', $item->id)}}" method="POST">
+                                                         <form action="{{route('status.destroy', $item->id)}}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <a  href="{{route('satuan_produk.edit', $item->id)}}" 
+                                                            <a  href="{{route('status.edit', $item->id)}}" 
                                                                 data-toggle="tooltip" title="Ubah Data"
                                                                 type="button" class="btn waves-effect waves-light btn-warning"
                                                             >
