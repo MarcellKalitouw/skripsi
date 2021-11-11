@@ -6,15 +6,11 @@
         <div class="card">
 
             <div class="card-body">
-                <h4 class="card-title">Tabel Produk -
-                    <a href="{{route('produk.create')}}" class="btn waves-effect waves-light btn-success">+
+                <h4 class="card-title">Tabel Pelanggan -
+                    <a href="{{route('pelanggan.create')}}" class="btn waves-effect waves-light btn-success">+
                         Tambah Data</a>
                 </h4>
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success" role="alert">
-                        <strong>Success - </strong> {!! $message !!}
-                    </div>
-                @endif
+
                 <div class="table-responsive">
                     <table id="zero_config" class="table table-striped table-bordered no-wrap " style="text-align: center">
                         <thead>
@@ -22,12 +18,11 @@
                                 <th>Opsi</th>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Harga</th>
-                                <th>Pengusaha</th>
-                                <th>Satuan Produk</th>
-                                <th>Kategori Produk</th>
+                                <th>Nomor Telepon</th>
+                                <th>Email</th>
+                                <th>Password</th>
                                 <th>Gambar</th>
-                                <th>Deskripsi</th>
+                                <th>Status</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                                 <th>Deleted At</th>
@@ -35,16 +30,16 @@
                         </thead>
                         <tbody>
                             <?php 
-                                 $no = 0;
-                            ?>
+                                                $no = 0;
+                                            ?>
                             @foreach ($data as $item)
 
                             <tr>
                                 <td>
-                                    <form action="{{route('produk.destroy', $item->id)}}" method="POST">
+                                    <form action="{{route('pelanggan.destroy', $item->id)}}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <a  href="{{route('produk.edit', $item->id)}}" 
+                                        <a  href="{{route('pelanggan.edit', $item->id)}}" 
                                             data-toggle="tooltip" title="Ubah Data"
                                             type="button" class="btn waves-effect waves-light btn-warning"
                                         >
@@ -57,17 +52,11 @@
                                 </td>
                                 <td>{{$no+=1}}</td>
                                 <td>{{$item->nama}}</td>
-                                <td>Rp. {{number_format($item->harga,2,',','.')}}</td>
-                                <td>{{$item->pengusaha}}</td>
-                                <td>{{$item->satuanProduk}}</td>
-                                <td>{{$item->kategoriProduk}}</td>
-                                <td>
-
-                                    <img src="{{asset('/gambar_produk/'.$item->gambar)}}" alt="" width="300px" height="300px" style="object-fit:contain;">
-                                    {{-- {{$item->gambar}} --}}
-                                    {{-- <i class="far fa-times-circle"  ></i>  --}}
-                                </td>
-                                <td>{{$item->deskripsi}}</td>
+                                <td>{{$item->no_telp}}</td>
+                                <td>{{$item->email}}</td>
+                                <td>{{$item->password}}</td>
+                                <td>{{$item->gambar}}</td>
+                                <td>{{$item->status}}</td>
                                 <td>{{$item->created_at}}</td>
                                 <td>{{$item->updated_at}}</td>
                                 <td>{{$item->deleted_at}}</td>
@@ -81,11 +70,11 @@
                                 <th>Opsi</th>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Harga</th>
-                                <th>Satuan Produk</th>
-                                <th>Kategori Produk</th>
+                                <th>Nomor Telepon</th>
+                                <th>Email</th>
+                                <th>Password</th>
                                 <th>Gambar</th>
-                                <th>Deskripsi</th>
+                                <th>Status</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                                 <th>Deleted At</th>
@@ -98,4 +87,3 @@
     </div>
 </div>
 @endsection
-

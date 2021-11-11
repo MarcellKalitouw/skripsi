@@ -4,14 +4,14 @@
     <div class="row justify-content-center align-items-center">
         <div class="col-12">
             <div class="card border-primary">
-                <div class="card-header bg-primary">
-                    <h4 class="text-white">Tambah {{$pageTitle}}</h4>
+                <div class="card-header bg-warning">
+                    <h4 class="text-white">Edit {{$pageTitle}}</h4>
                 </div>
                 <div class="card-body">
                     <div class="col-12">
                         <h3>Form Ubah {{$pageTitle}}</h3>
                         <hr>
-                        <form method="post" action="{{ route('produk.update', $getData->id) }}" enctype="multipart/form-datab" id="myForm">
+                        <form method="post" action="{{ route('produk.update', $getData->id) }}" enctype="multipart/form-data" id="myForm">
                             @csrf
                             @method('PUT')
                             <div class="row">
@@ -80,8 +80,12 @@
                                         </div>
                                         <div class="col-12 form-group">
                                             <label for="gambar">Gambar</label>
+                                            {{-- <input type="file" name="gambar" class="form-control" id="gambar"
+                                                aria-describedby="name" accept="image/*" onchange="document.getElementById('showGambar').src = window.URL.createObjectURL(this.files[0])"> --}}
                                             <input type="file" name="gambar" class="form-control" id="gambar"
-                                                aria-describedby="name">
+                                                aria-describedby="name" accept="image/*" onchange="showImage(this.files[0])">
+
+                                            <img id="showGambar" src="{{asset('gambar_produk/'.$getData->gambar)}}" width="300px" height="300px" style="object-fit:contain; margin-top:2%">
                                         </div>
                                         <div class="col-12 form-group">
                                             <label for="deskripsi">Deskripsi</label>
@@ -115,4 +119,9 @@
             </div>
         </div>
     </div>
+@endsection
+@section('addScript')
+    <script src="{{asset ('../js/showImage.js')}}"></script>
+
+    
 @endsection

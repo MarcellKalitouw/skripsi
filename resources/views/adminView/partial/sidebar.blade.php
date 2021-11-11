@@ -61,33 +61,22 @@
                             </a>
                         </li>
 
-                        <li class="sidebar-item"> 
-                            <a class="sidebar-link" href="{{route('kategori_produk.index')}}"
+                        
+
+                        <li class="list-divider"></li>
+
+                        <li class="nav-small-cap"><span class="hide-menu">Pelanggan</span></li>
+                        
+                         <li class="sidebar-item"> 
+                            <a class="sidebar-link" href="{{route('pelanggan.index')}}"
                                 aria-expanded="false">
                                 <i class="fas fa-table"></i>
                                 <span
-                                    class="hide-menu">Kategori Produk
+                                    class="hide-menu">Data Pelanggan
                                 </span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
-                            <a class="sidebar-link" href="{{route('satuan_produk.index')}}"
-                                aria-expanded="false">
-                                <i class="fas fa-table"></i>
-                                <span
-                                    class="hide-menu">Satuan Produk
-                                </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item"> 
-                            <a class="sidebar-link" href="{{route('paket.index')}}"
-                                aria-expanded="false">
-                                <i class="fas fa-table"></i>
-                                <span
-                                    class="hide-menu">Paket
-                                </span>
-                            </a>
-                        </li>
+
                         
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Transaksi</span></li>

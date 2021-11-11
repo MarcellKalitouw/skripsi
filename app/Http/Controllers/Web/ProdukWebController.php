@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use DB;
+use File;
 class ProdukWebController extends Controller
 {
     protected $pageTitle = 'Produk';
@@ -45,20 +46,28 @@ class ProdukWebController extends Controller
     
     public function store(Request $request)
     {
+        dd($request);
         $validate = $this->validate($request, [
             'id_pengusaha' => 'required',
             'id_satuan' => 'required',
             'id_kategori' => 'required',
             'nama' => 'required',
             'harga' => 'required',
-            'gambar' => 'required',
+            'gambar' => 'required|file|mimes:jpg,jpeg,png|max:2048',
             'deskripsi' => 'required'
         ]);
         $input = $request->except(['_token']);
-        // dd($input);
+
+        if(is_file($request->gambar)){
+            $fileName = time().'.'.$request->gambar->extension();  
+            $request->gambar->move(public_path('gambar_produk'), $fileName);
+            $input['gambar'] = $fileName;
+        }
+        
+        // dd($input);  
         $paket = Produk::create($input);
         
-        return redirect()->route('produk.index');
+        return redirect()->route('produk.index')->with('success','Data product <strong> "'.$input['nama'].'" </strong> has been saved!!');
     }
 
     
@@ -89,18 +98,37 @@ class ProdukWebController extends Controller
     
     public function update(Request $request, $id)
     {
-       
-        $validate = $this->validate($request, [
+        $oldData = DB::table('produk')->where('id',$id)->first();
+        $input = $request->except(['_token','_method']);
+
+        if($request->gambar == null){
+            $this->validate($request, [
+                'id_pengusaha' => 'required',
+                'id_satuan' => 'required',
+                'id_kategori' => 'required',
+                'nama' => 'required',
+                'harga' => 'required',
+                'deskripsi' => 'required'
+            ]);            
+        }else{
+            $this->validate($request, [
             'id_pengusaha' => 'required',
             'id_satuan' => 'required',
             'id_kategori' => 'required',
-            'nama' => 'required',
+            'nama' => 'required',            
+            'gambar' => 'required|file|mimes:jpg,jpeg,png|max:2048',
             'harga' => 'required',
-            'gambar' => 'required',
             'deskripsi' => 'required'
         ]);
-        $input = $request->except(['_token','_method']);
-        // dd($input);
+            if(is_file($request->gambar)){
+                $fileName = time().'.'.$request->gambar->extension();  
+                $request->gambar->move(public_path('gambar_produk'), $fileName);
+                $input['gambar'] = $fileName;
+                File::delete(public_path('gambar_produk/'.$oldData->gambar));
+            }else{
+                dd('File does not exists.');
+            }
+        }
         $paket = Produk::where('id', $id)->update($input);
         
         return redirect()->route('produk.index');   
@@ -109,6 +137,8 @@ class ProdukWebController extends Controller
     
     public function destroy($id)
     {
+        $oldData = DB::table('produk')->where('id',$id)->first();
+        File::delete(public_path('gambar_produk/'.$oldData->gambar));
         Produk::where('id', $id)->delete();
         return redirect()->route('produk.index');
     }

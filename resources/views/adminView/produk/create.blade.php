@@ -63,16 +63,23 @@
                                         </div>
                                         <div class="col-12 form-group">
                                             <label for="gambar">Gambar</label>
-                                            <input type="file" name="gambar" class="form-control" id="gambar"
-                                                aria-describedby="name">
+                                            {{-- <input type="file" name="gambar" class="form-control" id="gambar"
+                                                aria-describedby="name" accept="image/*" onchange="document.getElementById('showGambar').src = window.URL.createObjectURL(this.files[0])"> --}}
+                                            <input type="file" name="gambar[]" class="form-control" id="gambar"
+                                                aria-describedby="name" accept="image/*" onchange="showImage(this.files[0])" required multiple>
+
+                                            <img id="showGambar" src="" width="300px" height="300px" style="display: none;object-fit:contain; margin-top:2%">
                                         </div>
+
+                                        
+
                                         <div class="col-12 form-group">
                                             <label for="deskripsi">Deskripsi</label>
                                             <textarea rows="5" name="deskripsi" class="form-control" id="deskripsi"
                                                 aria-describedby="name"></textarea>
                                         </div>
-                                        <div class="col-6 form-group">
-                                            <button type="submit" class="col-3 btn btn-primary">Simpan</button>
+                                        <div class="col-lg-6 form-group">
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -80,6 +87,9 @@
 
                             </div>
                         </form>
+
+                         
+                        
                         @if ($errors->any())
                         <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -92,10 +102,33 @@
                         @endif  
                     </div>
                     
-
+                      
                    
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('addScript')
+    <script src="{{asset ('../js/showImage.js')}}"></script>
+{{-- <script>
+    function showImage(file) {
+        let getFile = document.getElementById("showGambar");
+        getFile.src = window.URL.createObjectURL(file);
+    }
+</script> --}}
+
+<script >
+    $(document).ready(function() {
+      $(".btn-success").click(function(){ 
+          var lsthmtl = $(".clone").html();
+          $(".increment").after(lsthmtl);
+      });
+      $("body").on("click",".btn-danger",function(){ 
+          $(this).parents(".hdtuto").remove();
+      });
+    });
+</script>
+    
 @endsection
