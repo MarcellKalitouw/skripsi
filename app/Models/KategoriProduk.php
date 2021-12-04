@@ -18,3 +18,19 @@ class KategoriProduk extends Model
     ];
     
 }
+// $fileGambar = [];
+        // dd($request->gambar);
+
+
+        // if($request->hasfile('gambar')){
+        //     foreach ($request->gambar as $key => $gambar) {
+        //         $fileName = time().'.'.$gambar->extension();  
+        //         $gambar->move(public_path('gambar_produk'), $fileName);
+        //         $fileGambar['file'] = $fileName;
+        //         $fileGambar['id_produk'] = $paket->id;
+        //         dd($fileGambar);  
+        //         $gambarProduk = GambarProduk::create($fileGambar);
+                
+        //     }
+            
+        // }

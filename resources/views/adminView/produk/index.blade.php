@@ -50,7 +50,7 @@
                                         >
                                             <i class="far fa-edit"></i>
                                         </a>
-                                        <button type="submit" class="btn waves-effect waves-light btn-danger" data-toggle="tooltip" title="Hapus Data">
+                                        <button type="submit" class="btn waves-effect waves-light btn-danger" onclick="return confirm('Are You sure?')" data-toggle="tooltip" title="Hapus Data">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
@@ -62,10 +62,9 @@
                                 <td>{{$item->satuanProduk}}</td>
                                 <td>{{$item->kategoriProduk}}</td>
                                 <td>
-
-                                    <img src="{{asset('/gambar_produk/'.$item->gambar)}}" alt="" width="300px" height="300px" style="object-fit:contain;">
-                                    {{-- {{$item->gambar}} --}}
-                                    {{-- <i class="far fa-times-circle"  ></i>  --}}
+                                    @foreach ($item->gambar_produk as $gambar_item)
+                                        <img src="{{asset('/gambar_produk/'.$gambar_item->file)}}" alt="" width="300px" height="300px" style="object-fit:contain;">
+                                    @endforeach
                                 </td>
                                 <td>{{$item->deskripsi}}</td>
                                 <td>{{$item->created_at}}</td>

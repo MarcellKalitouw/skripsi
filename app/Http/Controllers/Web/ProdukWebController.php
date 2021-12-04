@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Produk;
+use App\Models\GambarProduk;
 use DB;
 use File;
 class ProdukWebController extends Controller
@@ -26,10 +27,21 @@ class ProdukWebController extends Controller
                         )
                 ->orderBy('created_at','desc')
                 ->get();
+        
+        $this->getGambarProdukById($data);
         // dd($data);
+
         return view('adminView.produk.index', compact('data'));
     }
-
+    public function getGambarProdukById($data){
+        foreach ($data as $key) {
+            $gambarProduk = DB::table('gambar_produk')->where('id_produk', $key->id)->get();
+            
+            $fileProduk = $gambarProduk;
+            $key->gambar_produk = $fileProduk;
+            // dd($gambarProduk->file);
+        }
+    }
     
     public function create()
     {
@@ -46,26 +58,46 @@ class ProdukWebController extends Controller
     
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         $validate = $this->validate($request, [
             'id_pengusaha' => 'required',
             'id_satuan' => 'required',
             'id_kategori' => 'required',
             'nama' => 'required',
             'harga' => 'required',
-            'gambar' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'gambar' => 'required',
+            'gambar.*' => 'file|mimes:jpg,jpeg,png|max:2048',
             'deskripsi' => 'required'
         ]);
-        $input = $request->except(['_token']);
+        $input = $request->except(['_token','gambar']);
+        $produk = Produk::create($input);
+        
+        $files = [];
+        if($request->hasfile('gambar')){
+            foreach ($request->file('gambar') as $key => $file ) {
+                $fileName = time().'_'.$file->getClientOriginalName();
+                $file->move(public_path('gambar_produk'), $fileName);
 
-        if(is_file($request->gambar)){
-            $fileName = time().'.'.$request->gambar->extension();  
-            $request->gambar->move(public_path('gambar_produk'), $fileName);
-            $input['gambar'] = $fileName;
+                $files['file'] = $fileName;
+                $files['id_produk'] = $produk->id;
+ 
+                // $files[$key]['file'] = $fileName;
+                // $files[$key]['id_produk'] = $produk->id;
+                // $fileName = time().'.'.$item->extension();  
+                // $item->move(public_path('gambar_produk'), $fileName);
+                // $files[] = array(
+                //         'file' => $fileName,
+                //         'id_produk' => $paket->id
+                // );
+                
+                // $files[$item]['file'] = $fileName;
+                // $files[$item]['id_produk'] = $paket->id;
+                // dd($files);
+                $gambarProduk = GambarProduk::create($files);
+            }
+            
         }
         
-        // dd($input);  
-        $paket = Produk::create($input);
         
         return redirect()->route('produk.index')->with('success','Data product <strong> "'.$input['nama'].'" </strong> has been saved!!');
     }
@@ -138,7 +170,11 @@ class ProdukWebController extends Controller
     public function destroy($id)
     {
         $oldData = DB::table('produk')->where('id',$id)->first();
-        File::delete(public_path('gambar_produk/'.$oldData->gambar));
+        $fileGambar = DB::table('gambar_produk')->where('id_produk',$id)->get();
+        foreach ($fileGambar as $key) {
+            DB::table('gambar_produk')->where('id_produk',$id)->delete();
+            File::delete(public_path('gambar_produk/'.$key->file));
+        }
         Produk::where('id', $id)->delete();
         return redirect()->route('produk.index');
     }

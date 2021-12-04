@@ -66,7 +66,7 @@
                                             {{-- <input type="file" name="gambar" class="form-control" id="gambar"
                                                 aria-describedby="name" accept="image/*" onchange="document.getElementById('showGambar').src = window.URL.createObjectURL(this.files[0])"> --}}
                                             <input type="file" name="gambar[]" class="form-control" id="gambar"
-                                                aria-describedby="name" accept="image/*" onchange="showImage(this.files[0])" required multiple>
+                                                aria-describedby="name" accept="image/*" onchange="showImage(this.files[])" required multiple>
 
                                             <img id="showGambar" src="" width="300px" height="300px" style="display: none;object-fit:contain; margin-top:2%">
                                         </div>
