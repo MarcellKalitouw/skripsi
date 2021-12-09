@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Uuids;
+use Laravel\Sanctum\HasApiTokens;
+
 class Pelanggan extends Model
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
     use SoftDeletes;
     use Uuids;
     public $timestamps = true;

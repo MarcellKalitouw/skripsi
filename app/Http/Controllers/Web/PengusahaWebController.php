@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Pengusaha;
-
+use File;
 class PengusahaWebController extends Controller
 {
     protected $pageTitle = 'Pengusaha';
@@ -14,8 +14,10 @@ class PengusahaWebController extends Controller
 
     public function index()
     {
-        $data = Pengusaha::withTrashed()->get();
-
+        $data = Pengusaha::withTrashed()
+                ->orderBy('created_at', 'desc')
+                ->get();
+        // dd($data);
         return view('adminView.pengusaha.index', compact('data'));
     }
 
@@ -42,10 +44,16 @@ class PengusahaWebController extends Controller
             'password' => 'required',
             'deskripsi' => 'required'
         ]);
+        if($request->hasfile('gambar')){
+            $fileName = time().'_'.$request->gambar->getClientOriginalName();
+            $request->gambar->move(public_path('gambar_pengusaha'), $fileName);
+            $input['gambar'] = $fileName;
+        }
+
         $input = $request->except(['_token']);
         $paket = Pengusaha::create($input);
         
-        return redirect()->route('pengusaha.index');
+        return redirect()->route('pengusaha.index')->with('success','Data pengusaha <strong> "'.$input['nama'].'" </strong> has been saved!!');
     }
 
     
@@ -76,13 +84,26 @@ class PengusahaWebController extends Controller
             'password' => 'required',
             'deskripsi' => 'required'
         ]);
+        if(is_file($request->gambar)){
+            $fileName = time().'.'.$request->gambar->extension();  
+            $request->gambar->move(public_path('gambar_produk'), $fileName);
+            $input['gambar'] = $fileName;
+            File::delete(public_path('gambar_pengusaha/'.$oldData->gambar));
+        }else{
+            dd('File does not exists.');
+        }
         $input = $request->except(['_token', '_method']);
         $pengusaha = Pengusaha::where('id', $id)->update($input);
-        return redirect()->route('pengusaha.index');
+        return redirect()->route('pengusaha.index')->with('success','Data pengusaha <strong> "'.$input['nama'].'" </strong> has been updated!!');;
     }
 
     public function destroy($id)
     {
-        //
+        //   
+        $oldData = Pengusaha::where('id', $id)->first();
+        File::delete(public_path('gambar_produk/'.$oldData->gambar));
+        Pengusaha::where('id',$id)->delete();
+        return redirect()->route('pengusaha.index')->with('success','Data pengusaha <strong> "'.$oldData['nama'].'" </strong> has been deleted!!');;
+
     }
 }

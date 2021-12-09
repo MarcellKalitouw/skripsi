@@ -11,7 +11,9 @@ use App\Http\Controllers\Web\{
     TransaksiWebController,
     StatusWebController,
     PelangganWebController,
-    StatusTransaksiWebController
+    StatusTransaksiWebController,
+    RegisterControllerWeb,
+    LoginControllerWeb
 };
 
 /*
@@ -46,3 +48,7 @@ Route::resource('status_transaksi', StatusTransaksiWebController::class);
 
 //Pelanggan
 Route::resource('pelanggan', PelangganWebController::class);
+
+//Register
+Route::resource('register', RegisterControllerWeb::class);
+Route::resource('login', LoginControllerWeb::class);

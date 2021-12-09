@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     StatusController,
     TransaksiController,
     StatusTransaksiController,
-    SatuanProdukController
+    SatuanProdukController,
+    AuthController
 };
 /*
 |--------------------------------------------------------------------------
@@ -25,18 +26,24 @@ use App\Http\Controllers\{
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-//KategoriProduk
+
+
+
+
+
+Route::group(['middleware' => 'auth:sanctum'], function(){
+//Kategori produk
     Route::GET("kategori_produk/{id?}", [KategoriProdukController::class, 'getData']); 
     Route::GET("kategori_produk/{page?}/{limit?}", [KategoriProdukController::class, 'getDataPageLimit']);
     Route::POST("kategori_produk/", [KategoriProdukController::class, 'store']);
     Route::PUT("kategori_produk/", [KategoriProdukController::class, 'update']);
     Route::DELETE("kategori_produk/{id}", [KategoriProdukController::class, 'destroy']);
 
-//Paket
+    //Paket
     Route::GET("paket/{id?}", [PaketController::class, 'getData']); 
     Route::GET("paket/{page?}/{limit?}", [PaketController::class, 'getDataPageLimit']);
     Route::POST("paket/", [PaketController::class, 'store']);
@@ -91,5 +98,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::POST("status_produk/", [SatuanProdukController::class, 'store']);
     Route::PUT("status_produk/", [SatuanProdukController::class, 'update']);
     Route::DELETE("status_produk/{id}", [SatuanProdukController::class, 'destroy']);
+});
+
+    
+//Login
+Route::post('/login', [AuthController::class, 'login']);
 
     

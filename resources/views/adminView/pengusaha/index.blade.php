@@ -10,7 +10,11 @@
                     <a href="{{route('pengusaha.create')}}" class="btn waves-effect waves-light btn-success">+
                         Tambah Data</a>
                 </h4>
-
+                @if ($message = Session::get('success'))
+                    <div class="alert alert-success" role="alert">
+                        <strong>Success - </strong> {!! $message !!}
+                    </div>
+                @endif
                 <div class="table-responsive">
                     <table id="zero_config" class="table table-striped table-bordered no-wrap " style="text-align: center">
                         <thead>
@@ -60,7 +64,13 @@
                                 <td>{{$item->longitude}}</td>
                                 <td>{{$item->no_telp}}</td>
                                 <td>{{$item->email}}</td>
-                                <td>{{$item->gambar}}</td>
+                                <td>
+                                    @if (file_exists('gambar_pengusaha/'.$item->gambar))
+                                        <img src="{{asset('/gambar_pengusaha/'.$item->gambar)}}" alt="" width="300px" height="300px" style="object-fit:contain;">
+                                    @else
+                                        No image
+                                    @endif
+                                </td>
                                 <td>{{$item->password}}</td>
                                 <td>{{$item->deskripsi}}</td>
                                 <td>{{$item->created_at}}</td>

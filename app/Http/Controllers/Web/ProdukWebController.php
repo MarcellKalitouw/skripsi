@@ -148,7 +148,8 @@ class ProdukWebController extends Controller
             'id_satuan' => 'required',
             'id_kategori' => 'required',
             'nama' => 'required',            
-            'gambar' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'gambar' => 'required',
+            'gambar' => 'file|mimes:jpg,jpeg,png|max:2048',
             'harga' => 'required',
             'deskripsi' => 'required'
         ]);

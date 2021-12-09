@@ -18,6 +18,7 @@ class CreateGambarProduk extends Migration
             $table->uuid('id_produk');
             $table->text('file');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
