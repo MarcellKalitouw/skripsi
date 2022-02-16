@@ -74,6 +74,8 @@ class PengusahaWebController extends Controller
     public function update(Request $request, $id)
     {
         // dd($request);
+
+        
         $validate = $this->validate($request, [
             'nama' => 'required',
             'alamat' => 'required',
@@ -81,20 +83,41 @@ class PengusahaWebController extends Controller
             'longitude' => 'required',
             'no_telp' => 'required',
             'email' => 'required',
-            'password' => 'required',
             'deskripsi' => 'required'
         ]);
+        $input = $request->except(['_token', '_method']);
+        $check = DB::table('pengusaha')->where('id', $id)->first();
+
         if(is_file($request->gambar)){
             $fileName = time().'.'.$request->gambar->extension();  
             $request->gambar->move(public_path('gambar_produk'), $fileName);
             $input['gambar'] = $fileName;
             File::delete(public_path('gambar_pengusaha/'.$oldData->gambar));
         }else{
-            dd('File does not exists.');
+            // dd('File does not exists.');
+            $input['gambar'] = $check->gambar;
         }
-        $input = $request->except(['_token', '_method']);
+        // dd($check); 
+        if($check){
+            if($input['password'] != null){
+                $input['password'] = bcrypt($input['password']);
+            }
+            else{
+                $input['password'] = $check->password;
+            }
+        }
+        //  dd($input);
+        
         $pengusaha = Pengusaha::where('id', $id)->update($input);
-        return redirect()->route('pengusaha.index')->with('success','Data pengusaha <strong> "'.$input['nama'].'" </strong> has been updated!!');;
+
+        //redirect
+        $s = session()->get('tipe');
+        if($s == 'Pengusaha'){
+            return redirect('/dashboard_pengusaha')->with('success','Data pengusaha <strong> "'.$input['nama'].'" </strong> has been updated!!');;
+        }else{
+            return redirect()->route('pengusaha.index')->with('success','Data pengusaha <strong> "'.$input['nama'].'" </strong> has been updated!!');
+        }
+
     }
 
     public function destroy($id)
@@ -106,4 +129,16 @@ class PengusahaWebController extends Controller
         return redirect()->route('pengusaha.index')->with('success','Data pengusaha <strong> "'.$oldData['nama'].'" </strong> has been deleted!!');;
 
     }
+
+    //User Pengusaha
+
+    public function EditProfile($id) {
+        // dd($id);
+        $pageTitle = $this->pageTitle;
+        $getData = Pengusaha::where('id', $id)->first();
+        // dd($getData);
+        return view('adminView.profile-pengusaha.edit', compact('pageTitle', 'getData'));
+        
+    }
+
 }

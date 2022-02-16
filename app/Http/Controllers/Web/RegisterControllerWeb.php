@@ -10,6 +10,10 @@ class RegisterControllerWeb extends Controller
     
     public function index()
     {
+        $s = session()->get('email');
+        if($s){
+            return redirect('/dashboard_pengusaha');
+        }
         return view('register.index');
     }
 
@@ -24,10 +28,7 @@ class RegisterControllerWeb extends Controller
     {
         // dd($request);
         $validate = $this->validate($request, [
-            'nama' => 'required',
-            'alamat' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'nama' => 'required|unique:pengusaha,nama',
             'no_telp' => 'required',
             'email' => 'required|unique:pengusaha,email',
             'gambar' => 'required',
@@ -46,7 +47,7 @@ class RegisterControllerWeb extends Controller
 
         $paket = Pengusaha::create($input);
         
-        return redirect()->route('pengusaha.index')->with('success','Data pengusaha <strong> "'.$input['nama'].'" </strong> has been saved!!');
+        return redirect()->route('dashboard.pengusaha')->with('success','Data pengusaha <strong> "'.$input['nama'].'" </strong> has been saved!!');
     }
 
     

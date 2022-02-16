@@ -12,8 +12,18 @@
 		<!-- DATE-PICKER -->
 		<link rel="stylesheet" href="{{ asset ('../template_register/colorlib-wizard-4/vendor/date-picker/css/datepicker.min.css') }}">
 
+
+		{{-- HERE MAPS --}}
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+		
 		<!-- STYLE CSS -->
+
 		<link rel="stylesheet" href="{{ asset ('../template_register/colorlib-wizard-4/css/style.css') }}">
+
         <style>
             .btn-upload-gambar{
                 padding: 0;
@@ -47,6 +57,7 @@
             	<div class="form-header">
             		<a href="#">#Yunit Laundry</a>
             		<h3>Mendaftar untuk menjadi partner</h3>
+					<a style="margin-bottom: 20px; background: #0075fc;" href="{{ route('login.index') }}"  >Login Account</a>
             	</div>
             	<div id="wizard">
             		<!-- SECTION 1 -->
@@ -70,24 +81,7 @@
 								
 	                    	</div>
 	                    </div>	
-	                    
-                        <div class="form-row">
-	                    	<label for="">
-	                    		Foto Usaha 
-	                    	</label>
-	                    	<div class="form-holder" >
-                                <button type="button" onclick="getFoto()" class="btn-upload-gambar" >Pilih Foto</button>
-                                <input type="file" name="gambar" id="gambar" style="visibility: hidden;">
-                            </div>
-	                    </div>
-                        <div class="form-row">
-	                    	<label for="">
-	                    		Deskripsi Usaha 
-	                    	</label>
-	                    	<div class="form-holder" >
-	                    		<textarea style="height: 100px; padding: 0 10px 0 10px" class="form-control" name="deskripsi" id=""  placeholder="Usaha ini adalah..."></textarea>
-	                    	</div>
-	                    </div>	
+	                   
 {{-- 	                   	
 	                    <div class="form-row">
 	                    	<label for="">
@@ -116,12 +110,7 @@
 								@error('no_telp')
                                 <li>{{ $message }}</li>
 								@enderror
-								@error('gambar')
-                                <li>{{ $message }}</li>
-								@enderror
-								@error('deskripsi')
-                                <li>{{ $message }}</li>
-								@enderror
+								
                             </ul>
                         </div>
                         @endif
@@ -130,8 +119,26 @@
 					<!-- SECTION 2 -->
 	                <h4></h4>
 	                <section>
-	                    
+	                     
                         <div class="form-row">
+	                    	<label for="">
+	                    		Foto Usaha 
+	                    	</label>
+	                    	<div class="form-holder" >
+                                <input type="file" name="gambar" id="gambar" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" style="visibility: hidden;">
+								<img id="output" src=""  style="display: none; max-width:100%; height:auto;">
+                                <button type="button" onclick="getFoto()" class="btn-upload-gambar" >Pilih Foto</button>
+                            </div>
+	                    </div>
+                        <div class="form-row">
+	                    	<label for="">
+	                    		Deskripsi Usaha 
+	                    	</label>
+	                    	<div class="form-holder" >
+	                    		<textarea style="height: 100px; padding: 0 10px 0 10px" class="form-control" name="deskripsi" id=""  placeholder="Usaha ini adalah..."></textarea>
+	                    	</div>
+	                    </div>	
+                        {{-- <div class="form-row">
 	                    	<label for="">
 	                    		Alamat 
 	                    	</label>
@@ -139,6 +146,9 @@
 	                    		<textarea style="height: 100px; padding: 0 10px 0 10px" class="form-control" name="alamat" id=""  placeholder="Tataaran 1, Tondano Selatan, Kabupaten Minahas, Sulawesi Utara..."></textarea>
 	                    	</div>
 	                    </div>
+						
+						
+						
 						<div class="form-row" style="margin-bottom: 26px;">
 	                    	<label for="">
 	                    		Longitude
@@ -156,7 +166,18 @@
 	                    		<input type="text" name="latitude" value="124.830677" id="" placeholder="" class="form-control" autocomplete="off" required readonly>
 								
 	                    	</div>
-	                    </div>	
+	                    </div>	 --}}
+						{{-- <div class="form-row" >
+	                    	<label for="">Pin Location</label>
+	                    	<div id="here-maps" class="form-holder">
+								<div id="mapContainer" style="height:300px"></div>
+							</div>
+	                    </div> --}}
+
+						{{-- <div id="here-maps" style="background: #000000;">
+                            <label for="">Pin Location</label>
+                            <div id="mapContainer" style="height:500px; "></div>
+                        </div> --}}
 						@if ($errors->any())
                        	<div class="alert alert-danger" style="color: #000000; background:rgba(145, 145, 145, 0.3); padding:5%; border-radius: 25px;" >
                             <strong style="color: #C74667;">Whoops!</strong> There were some problems with your input.<br>
@@ -164,13 +185,10 @@
                                 {{-- @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                                 @endforeach --}}
-								@error('alamat')
+								@error('gambar')
                                 <li>{{ $message }}</li>
 								@enderror
-								@error('longitude')
-                                <li>{{ $message }}</li>
-								@enderror
-								@error('latitude')
+								@error('deskripsi')
                                 <li>{{ $message }}</li>
 								@enderror
                             </ul>
@@ -296,19 +314,27 @@
             }
             function getFoto() {
                 let inGbr = document.getElementById("gambar");
+                let showGbr = document.getElementById("output");
                 inGbr.click();
+				$("#output").show();
             }
         </script>
 		<script src="{{asset ('../template_register/colorlib-wizard-4/js/jquery-3.3.1.min.js') }}"></script>
-		
+		@stack('script')
+		<script>
+			window.hereApiKey = "{{ env('HERE_API_KEY') }}"
+		</script>
+		<script src="{{ asset('js/here.js') }}"></script>
 		<!-- JQUERY STEP -->
 		<script src="{{ asset ('../template_register/colorlib-wizard-4/js/jquery.steps.js') }}"></script>
 
 		<!-- DATE-PICKER -->
-		<script src="{{asset ('../template_register/colorlib-wizard-4/vendor/date-picker/js/datepicker.js') }}"></script>
-		<script src="{{asset ('../template_register/colorlib-wizard-4/vendor/date-picker/js/datepicker.en.js') }}"></script>
+		{{-- <script src="{{asset ('../template_register/colorlib-wizard-4/vendor/date-picker/js/datepicker.js') }}"></script>
+		<script src="{{asset ('../template_register/colorlib-wizard-4/vendor/date-picker/js/datepicker.en.js') }}"></script> --}}
 
+		
 		<script src="{{asset ('../template_register/colorlib-wizard-4/js/main.js') }}"></script>
+		
 <!-- Template created and distributed by Colorlib -->
 </body>
 </html>

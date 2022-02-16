@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pelanggan;
+use File;
 
 class PelangganController extends Controller
 {
@@ -48,7 +49,6 @@ class PelangganController extends Controller
             'nama'=>$req->nama,
             'no_telp' => $req->no_telp,
             'email' => $req->email,
-            'gambar' => $req->gambar,
             'status' => $req->status,
             'password' => $req->password
         ]);
@@ -57,9 +57,44 @@ class PelangganController extends Controller
                 'data'=>$data,
                 'Result'=>'Data has been stored'
             ], 200);
-        }else{
+        }else{  
             return response()->json([
                 'Result'=> "Data failed to be stored"
+            ], 401);
+        }
+    }
+    public function storeGambar(Request $request, $id){
+        $input = $request->except(['_token']);
+        $oldData = Pelanggan::find($id);
+        // dd($oldData['gambar']);
+        
+        if($oldData->gambar){
+            if($request->hasFile('gambar')){
+                $fileName = time().'_'.$request->gambar->getClientOriginalName();
+                $request->gambar->move(public_path('gambar_pelanggan'), $fileName);
+                $input['gambar'] = $fileName;
+                File::delete(public_path('gambar_pelanggan/'.$oldData->gambar));
+
+            }else{
+                $input['gambar'] = $check->gambar;
+            }
+        }else{
+            $fileName = time().'_'.$request->gambar->getClientOriginalName();
+            $request->gambar->move(public_path('gambar_pelanggan'), $fileName);
+            $input['gambar'] = $fileName;
+        }
+
+        $data = Pelanggan::find($id)->update($input);
+        
+        // dd($input);
+        if($data){
+            return response()->json([
+                'data'=>$data,
+                'Result'=>'Image has been updated'
+            ], 200);
+        }else{
+            return response()->json([
+                'Result'=> "Image failed to be updated"
             ], 401);
         }
     }
@@ -69,7 +104,6 @@ class PelangganController extends Controller
             'nama'=>$req->nama,
             'no_telp' => $req->no_telp,
             'email' => $req->email,
-            'gambar' => $req->gambar,
             'status' => $req->status,
             'password' => $req->password
         ]);

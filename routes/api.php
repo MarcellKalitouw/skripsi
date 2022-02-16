@@ -54,8 +54,10 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::GET("pelanggan/{id?}", [PelangganController::class, 'getData']); 
     Route::GET("pelanggan/{page?}/{limit?}", [PelangganController::class, 'getDataPageLimit']);
     Route::POST("pelanggan/", [PelangganController::class, 'store']);
+    Route::POST('pelanggan/updateProfilePic/{id}', [PelangganController::class, 'storeGambar']);
     Route::PUT("pelanggan/", [PelangganController::class, 'update']);
     Route::DELETE("pelanggan/{id}", [PelangganController::class, 'destroy']);
+
 
 //Pengusaha
     Route::GET("pengusaha/{id?}", [PengusahaController::class, 'getData']); 
@@ -102,6 +104,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     
 //Login
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'login']);
 
     

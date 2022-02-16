@@ -84,6 +84,12 @@
                                             <textarea rows="5" name="deskripsi" class="form-control" id="deskripsi"
                                                 aria-describedby="name"></textarea>
                                         </div>
+                                        <div class="col-12 form-group">
+                                            <label for="">Pin Location</label>
+                                            <div id="here-maps">
+                                                <div id="mapContainer" style="height:500px"></div>
+                                            </div>
+                                        </div>
                                         <div class="col-6 form-group">
                                             <button type="submit" class="col-3 btn btn-primary">Simpan</button>
                                         </div>
@@ -112,3 +118,8 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+   
+    <!--This page JavaScript -->
+@endpush

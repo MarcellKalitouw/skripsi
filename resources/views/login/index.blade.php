@@ -32,6 +32,23 @@
                 color: #fff;
                 border-radius: 5px;
             }
+			.btn-upload-register{
+                padding: 5px 30px;
+                border: none;
+                display: inline-flex;
+                height: 40px;
+                width: auto;
+                letter-spacing: 1.3px;
+                align-items: center;
+                background: #0ccf74;
+                font-family: 'Muli-Bold';
+                cursor: pointer;
+				position: relative;
+                /* padding-left: 40px; */
+                text-transform: uppercase;
+                color: #fff;
+                border-radius: 5px;
+            }
         </style>
 	</head>
 	<body onload="killSteps()">
@@ -46,8 +63,9 @@
 
             	<div class="form-header">
             		<a href="#">#Yunit Laundry</a>
-            		<h3>Login sebagai Partner usaha</h3>
-            	</div>
+            		<h3 style="margin-bottom: 20px">Login sebagai Partner usaha</h3>
+					<a style="margin-bottom: 20px; background: #0075fc;" href="{{ route('register.index') }}"  >Register Account</a>
+				</div>
             	<div id="">
             		<!-- SECTION 1 -->
 	                
@@ -80,12 +98,18 @@
                             </ul>
                         </div>
                         @endif
-	                    <div class="actions clearfix" >
-							<ul style="display: flex; ">
-								<button type="submit"  class="btn-upload-gambar" >Submit</button>
-							</ul>
-	                    	
-	                    </div>
+						<div style="display: flex; 
+							--tw-space-x-reverse: 0;
+						">
+							<div class="actions clearfix" >
+								<ul style="display: flex; ">
+									<button type="submit"  class="btn-upload-gambar" >Submit</button>
+								</ul>
+							</div>
+							
+							
+						</div>
+	                    
 						
 	                </section>
                     

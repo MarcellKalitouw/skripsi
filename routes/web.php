@@ -13,7 +13,8 @@ use App\Http\Controllers\Web\{
     PelangganWebController,
     StatusTransaksiWebController,
     RegisterControllerWeb,
-    LoginControllerWeb
+    LoginControllerWeb,
+    DashboardWebController
 };
 
 /*
@@ -29,26 +30,37 @@ use App\Http\Controllers\Web\{
 
 Route::get('/', function () {
     return view('adminView.layout');
-});
+})->name('dashboard.admin');
 
 //Produk
-Route::resource('kategori_produk', KategoriProdukWebController::class);
-Route::resource('satuan_produk', SatuanProdukWebController::class);
-Route::resource('paket', PaketWebController::class);
-Route::resource('produk', ProdukWebController::class);
-Route::resource('pengusaha', PengusahaWebController::class);
+Route::middleware(['checkStatus'])->group(function () {
+    
+    Route::resource('kategori_produk', KategoriProdukWebController::class);
 
-//Transaksi
-Route::resource('shipping', ShippingWebController::class);
-Route::resource('transaksi', TransaksiWebController::class);
+    Route::resource('satuan_produk', SatuanProdukWebController::class);
+    Route::resource('paket', PaketWebController::class);
+    Route::resource('produk', ProdukWebController::class);
+    Route::resource('pengusaha', PengusahaWebController::class);
 
-//Status
-Route::resource('status', StatusWebController::class);
-Route::resource('status_transaksi', StatusTransaksiWebController::class);
+    //Transaksi
+    Route::resource('shipping', ShippingWebController::class);
+    Route::resource('transaksi', TransaksiWebController::class);
 
-//Pelanggan
-Route::resource('pelanggan', PelangganWebController::class);
+    //Status
+    Route::resource('status', StatusWebController::class);
+    Route::resource('status_transaksi', StatusTransaksiWebController::class);
+
+    //Pelanggan
+    Route::resource('pelanggan', PelangganWebController::class);
+
+    //Dashboard
+    Route::get('dashboard_pengusaha', [DashboardWebController::class, 'DashboardPengusaha'])->name('dashboard.pengusaha');
+
+    //User : Pengusaha
+    Route::get('edit-profile/pengusaha/{id}',[PengusahaWebController::class,'EditProfile'] )->name('pengusaha.edit-profil');
+});
 
 //Register
 Route::resource('register', RegisterControllerWeb::class);
 Route::resource('login', LoginControllerWeb::class);
+Route::get('logout',[LoginControllerWeb::class,'logout'])->name('logout');

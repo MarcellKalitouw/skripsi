@@ -34,9 +34,9 @@ class LoginControllerWeb extends Controller
             if($user && \Hash::check($r->password, $user->password)) {
             
                 session([
-                    'email' => $pengusaha->email,
-                    'nama' => $pengusaha->nama,
-                    'tipe' => "Pengusaha"
+                    'email' => $user->email,
+                    'nama' => $user->nama,
+                    'tipe' => "Admin"
                 ]);
                 dd(session()->all());
                 return redirect()->route('produk.index')->with('success', '<b>Login Admin Berhasil</b>');
@@ -44,11 +44,12 @@ class LoginControllerWeb extends Controller
             }
             elseif ($pengusaha && \Hash::check($r->password, $pengusaha->password)) {
                 session([
+                    'id' => $pengusaha->id,
                     'email' => $pengusaha->email,
                     'nama' => $pengusaha->nama,
                     'tipe' => "Pengusaha"
                 ]);
-                return redirect()->route('pengusaha.index')->with('success', '<b>Login Pengusaha Berhasil</b>');
+                return redirect()->route('dashboard.pengusaha')->with('success', '<b>Login Pengusaha Berhasil</b>');
             }
             else{
                 session()->flush();
@@ -56,7 +57,10 @@ class LoginControllerWeb extends Controller
             }
         }
     }
-
+    public function logout(){
+        session()->flush();
+        return redirect()->route('login.index');
+    }
    
     public function show($id)
     {

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\Uuids;
+use App\Traits\Uuids; 
 use Laravel\Sanctum\HasApiTokens;
 
 class Pelanggan extends Model
@@ -18,6 +18,7 @@ class Pelanggan extends Model
     protected $fillable = [
         'nama',
         'no_telp',
+        'gender',
         'email',
         'gambar',
         'status',
