@@ -10,11 +10,7 @@
                     <a href="{{route('produk.create')}}" class="btn waves-effect waves-light btn-success">+
                         Tambah Data</a>
                 </h4>
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success" role="alert">
-                        <strong>Success - </strong> {!! $message !!}
-                    </div>
-                @endif
+                <x-alert />
                 <div class="table-responsive">
                     <table id="zero_config" class="table table-striped table-bordered no-wrap " style="text-align: center">
                         <thead>
@@ -25,7 +21,7 @@
                                 <th>Harga</th>
                                 <th>Pengusaha</th>
                                 <th>Satuan Produk</th>
-                                <th>Kategori Produk</th>
+                                {{-- <th>Kategori Produk</th> --}}
                                 <th>Gambar</th>
                                 <th>Deskripsi</th>
                                 <th>Created At</th>
@@ -60,7 +56,7 @@
                                 <td>Rp. {{number_format($item->harga,2,',','.')}}</td>
                                 <td>{{$item->pengusaha}}</td>
                                 <td>{{$item->satuanProduk}}</td>
-                                <td>{{$item->kategoriProduk}}</td>
+                                {{-- <td>{{$item->kategoriProduk}}</td> --}}
                                 <td>
                                     @foreach ($item->gambar_produk as $gambar_item)
                                         <img src="{{asset('/gambar_produk/'.$gambar_item->file)}}" alt="" width="300px" height="300px" style="object-fit:contain;">

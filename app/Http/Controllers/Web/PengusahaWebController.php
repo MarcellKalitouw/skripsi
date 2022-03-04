@@ -44,13 +44,15 @@ class PengusahaWebController extends Controller
             'password' => 'required',
             'deskripsi' => 'required'
         ]);
+        $input = $request->except(['_token']);
+
         if($request->hasfile('gambar')){
             $fileName = time().'_'.$request->gambar->getClientOriginalName();
             $request->gambar->move(public_path('gambar_pengusaha'), $fileName);
             $input['gambar'] = $fileName;
         }
+        $input['password'] = bcrypt($input['password']);
 
-        $input = $request->except(['_token']);
         $paket = Pengusaha::create($input);
         
         return redirect()->route('pengusaha.index')->with('success','Data pengusaha <strong> "'.$input['nama'].'" </strong> has been saved!!');

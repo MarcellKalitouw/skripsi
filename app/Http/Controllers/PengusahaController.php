@@ -32,11 +32,40 @@ class PengusahaController extends Controller
             return response()->json(['message'=>$e->getMessage()], 406);
         }
     }
-    public function getDataPageLimit($page=null, $limit = null){
+
+    public function searchPengusaha($page, $limit, $key){
+        try{
+            $page = $page?intVal($page):0;
+            $limit = $limit?intval($limit): 0;
+            
+            if($key){
+                $data = Pengusaha::where('nama', 'LIKE', '%'.$key.'%')
+                        ->skip($page*$limit)->take($limit)->get();
+                $totalRow = $data->count();
+                if(count($data)> 0){
+                    return response()->json([
+                        'message'=>'success',
+                        'data'=>$data,
+                        'total_row'=>$totalRow,
+                        'page'=>$page,
+                        'limit'=> $limit
+                    ],200);
+                }else{
+                    return response()->json(['message'=>'empty'], 401);
+                }
+            }
+
+            dd($page);
+        }catch(\Exception $e){
+            return response()->json(['message'=>$e->getMessage()], 406);
+            
+        }
+    }
+    public function getDataPageLimit($page, $limit){
         $page = $page?$page:0;
         $limit = $limit?$limit:0;
         $page = intval($page);
-        $limit = intval($page);
+        $limit = intval($limit);
         $data = Pengusaha::skip($page*$limit)->take($limit)->get();
         $totalRow = Pengusaha::count();
         if(count($data)>0)

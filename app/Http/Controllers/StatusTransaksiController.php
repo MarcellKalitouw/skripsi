@@ -35,7 +35,7 @@ class StatusTransaksiController extends Controller
         $page = $page?$page:0;
         $limit = $limit?$limit:0;
         $page = intval($page);
-        $limit = intval($page);
+        $limit = intval($limit);
         $data = StatusTransaksi::skip($page*$limit)->take($limit)->get();
         $totalRow = StatusTransaksi::count();
         if(count($data)>0)

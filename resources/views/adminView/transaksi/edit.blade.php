@@ -32,6 +32,9 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @if (session()->get('tipe') == 'Pengusaha')
+                                            <input type="hidden" name="id_pengusaha" value="{{session()->get('id')}}">
+                                        @else
                                         <div class="col-12 form-group">
                                             <label for="pengusaha">Pengusaha</label>
                                             <select class="form-control" name="id_pengusaha" id="pengusaha">
@@ -45,6 +48,8 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @endif
+                                        
                                         
                                         <div class="col-12 form-group">
                                             <label for="id_pelanggan">Pengguna</label>

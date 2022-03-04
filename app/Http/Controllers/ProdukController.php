@@ -21,7 +21,7 @@ class ProdukController extends Controller
                 }
             }else{
                 if($data->isEmpty()){
-                    return response()->json(['message'=>'Data is not avaible', 'data'=>$data], 404);
+                    return response()->json(['message'=>'Data is empty', 'data'=>$data], 404);
                 }else{
                     return response()->json(['data'=>$data], 200);
                 }
@@ -32,11 +32,36 @@ class ProdukController extends Controller
             return response()->json(['message'=>$e->getMessage()], 406);
         }
     }
+    public function getProdukPengusaha($idPengusaha){
+        try{
+            $data = Produk::where('id_pengusaha', $idPengusaha)->get();
+            // dd($data);
+            if($idPengusaha){
+                if(is_null($data)){
+                    return response()->json(['message'=>'Data is not avaible', 'data'=>$data], 404);
+                }else{
+                    return response()->json(['data'=>$data], 200);
+                }
+            }else{
+                if($data->isEmpty()){
+                    return response()->json(['message'=>'Data is empty', 'data'=>$data], 404);
+                }else{
+                    return response()->json(['data'=>$data], 200);
+                }
+            }
+
+
+        }catch(\Exception $e){
+            return response()->json(['message'=>$e->getMessage()], 406);
+        }
+    }
+
+
     public function getDataPageLimit($page=null, $limit = null){
         $page = $page?$page:0;
         $limit = $limit?$limit:0;
         $page = intval($page);
-        $limit = intval($page);
+        $limit = intval($limit);
         $data = Produk::skip($page*$limit)->take($limit)->get();
         $totalRow = Produk::count();
         if(count($data)>0)

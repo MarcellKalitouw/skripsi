@@ -29,28 +29,7 @@
                                             </textarea>
                                             
                                         </div>
-                                        <div class="col-12 form-group">
-                                            <label for="latitude">Latitude</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <label class="input-group-text" for="latitude">Lat</label>
-                                                </div>
-                                                <input type="number" name="latitude" class="form-control"  id="latitude"
-                                                    aria-describedby="latitude">
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="col-12 form-group">
-                                            <label for="longitude">Longitude</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <label class="input-group-text" for="longitude">Long</label>
-                                                </div>
-                                                <input type="number" name="longitude" class="form-control"  id="longitude"
-                                                    aria-describedby="longitude">
-                                            </div>
-                                            
-                                        </div>
+                                        
                                         <div class="col-12 form-group">
                                             <label for="no_telp">Nomor Telepon</label>
                                             <div class="input-group">
@@ -84,12 +63,36 @@
                                             <textarea rows="5" name="deskripsi" class="form-control" id="deskripsi"
                                                 aria-describedby="name"></textarea>
                                         </div>
-                                        <div class="col-12 form-group">
-                                            <label for="">Pin Location</label>
-                                            <div id="here-maps">
-                                                <div id="mapContainer" style="height:500px"></div>
+                                    
+                                            <div class="col-12 form-group">
+                                                <label for="lat">Latitude</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <label class="input-group-text" for="lat">Lat</label>
+                                                    </div>
+                                                    <input type="number" name="latitude" value="" readonly class="form-control"  id="lat"
+                                                        aria-describedby="lat">
+                                                </div>
+                                                
                                             </div>
-                                        </div>
+                                            <div class="col-12 form-group">
+                                                <label for="lng">Longitude</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <label class="input-group-text" for="lng">Long</label>
+                                                    </div>
+                                                    <input type="number" name="longitude" value="" readonly class="form-control"  id="lng"
+                                                        aria-describedby="lng">
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="col-12 form-group">
+                                                <label for="">Pin Location</label>
+                                                <div id="here-maps">
+                                                    <div id="mapContainer" style="height:500px"></div>
+                                                </div>
+                                            </div>
+                                            
                                         <div class="col-6 form-group">
                                             <button type="submit" class="col-3 btn btn-primary">Simpan</button>
                                         </div>
@@ -120,6 +123,8 @@
 @endsection
 
 @push('script')
-   
+   <script>
+       window.action = "submit"
+   </script>
     <!--This page JavaScript -->
 @endpush

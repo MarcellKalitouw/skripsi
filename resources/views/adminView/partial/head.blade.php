@@ -14,6 +14,9 @@
     
     <link href="{{asset ('../template/src/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
     
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     {{-- HERE MAPS --}}
     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>

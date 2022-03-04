@@ -35,8 +35,9 @@ class StatusController extends Controller
         $page = $page?$page:0;
         $limit = $limit?$limit:0;
         $page = intval($page);
-        $limit = intval($page);
+        $limit = intval($limit);
         $data = Status::skip($page*$limit)->take($limit)->get();
+        // dd($data);
         $totalRow = Status::count();
         if(count($data)>0)
             return response()->json(['data'=>$data, 'message'=>'success', 'page'=>$page, 'limit'=>$limit, 'total_row'=>$totalRow], 200);

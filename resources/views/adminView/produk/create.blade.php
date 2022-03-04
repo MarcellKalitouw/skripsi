@@ -46,7 +46,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 form-group">
+                                        {{-- <div class="col-12 form-group">
                                             <label for="kategori_produk">Kategori Produk</label>
                                             <select class="form-control" name="id_kategori" id="kategori_produk">
                                                 <option selected disabled>Pilih Kategori Produk</option>
@@ -54,7 +54,7 @@
                                                     <option value="{{$item->id}}">{{$item->nama}}</option>
                                                 @endforeach
                                             </select>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-12 form-group">
                                             <label for="nama">Harga Produk</label>
                                             <div class="input-group">

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Warna;
+use App\Models\AlamatPengguna;
 use Illuminate\Http\Request;
 
-class WarnaController extends Controller
+class AlamatPenggunaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class WarnaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Warna  $warna
+     * @param  \App\Models\AlamatPengguna  $alamatPengguna
      * @return \Illuminate\Http\Response
      */
-    public function show(Warna $warna)
+    public function show(AlamatPengguna $alamatPengguna)
     {
         //
     }
@@ -52,10 +52,10 @@ class WarnaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Warna  $warna
+     * @param  \App\Models\AlamatPengguna  $alamatPengguna
      * @return \Illuminate\Http\Response
      */
-    public function edit(Warna $warna)
+    public function edit(AlamatPengguna $alamatPengguna)
     {
         //
     }
@@ -64,10 +64,10 @@ class WarnaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Warna  $warna
+     * @param  \App\Models\AlamatPengguna  $alamatPengguna
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Warna $warna)
+    public function update(Request $request, AlamatPengguna $alamatPengguna)
     {
         //
     }
@@ -75,10 +75,10 @@ class WarnaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Warna  $warna
+     * @param  \App\Models\AlamatPengguna  $alamatPengguna
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Warna $warna)
+    public function destroy(AlamatPengguna $alamatPengguna)
     {
         //
     }

@@ -62,7 +62,6 @@ class ProdukWebController extends Controller
         $validate = $this->validate($request, [
             'id_pengusaha' => 'required',
             'id_satuan' => 'required',
-            'id_kategori' => 'required',
             'nama' => 'required',
             'harga' => 'required',
             'gambar' => 'required',
@@ -137,7 +136,6 @@ class ProdukWebController extends Controller
             $this->validate($request, [
                 'id_pengusaha' => 'required',
                 'id_satuan' => 'required',
-                'id_kategori' => 'required',
                 'nama' => 'required',
                 'harga' => 'required',
                 'deskripsi' => 'required'

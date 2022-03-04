@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\SatuanProduk;
+use App\Models\Pengusaha;
 
 class SatuanProdukWebController extends Controller
 {
@@ -22,14 +23,17 @@ class SatuanProdukWebController extends Controller
     public function create()
     {
         $pageTitle = $this->pageTitle;
-        return view('adminView.satuan_produk.create', compact('pageTitle'));
+        $getPengusaha = DB::table('pengusaha')->get();
+
+        return view('adminView.satuan_produk.create', compact('pageTitle','getPengusaha'));
     }
 
     
     public function store(Request $request)
     {
         $validate = $this->validate($request, [
-            'nama' => 'required'
+            'nama' => 'required',
+            'id_pengusaha' => 'required'
         ]);
         $input = $request->except(['_token']);
         // dd($input);
@@ -57,7 +61,8 @@ class SatuanProdukWebController extends Controller
     public function update(Request $request, $id)
     {
         $validate = $this->validate($request, [
-            'nama' => 'required'
+            'nama' => 'required',
+            'id_pengusaha' => 'required'
         ]);
         $input = $request->except(['_token','_method']);
         // dd($input);

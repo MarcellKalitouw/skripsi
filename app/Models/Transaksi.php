@@ -19,6 +19,7 @@ class Transaksi extends Model
         'id_pelanggan',
         'id_pengusaha',
         'id_shipping',
+        'kode_transaksi',
         'total_qty',
         'subtotal_qty',
         'pajak',

@@ -35,10 +35,10 @@ class LoginControllerWeb extends Controller
             
                 session([
                     'email' => $user->email,
-                    'nama' => $user->nama,
+                    'nama' => $user->name,
                     'tipe' => "Admin"
                 ]);
-                dd(session()->all());
+                // dd(session()->all());
                 return redirect()->route('produk.index')->with('success', '<b>Login Admin Berhasil</b>');
             
             }

@@ -35,7 +35,7 @@ class ShippingController extends Controller
         $page = $page?$page:0;
         $limit = $limit?$limit:0;
         $page = intval($page);
-        $limit = intval($page);
+        $limit = intval($limit);
         $data = Shipping::skip($page*$limit)->take($limit)->get();
         $totalRow = Shipping::count();
         if(count($data)>0)

@@ -17,6 +17,9 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="row">
+                                        @if (session()->get('tipe') == 'Pengusaha')
+                                            <input type="hidden" name="id_pengusaha" value="{{session()->get('id')}}">
+                                        @else
                                         <div class="col-12 form-group">
                                             <label for="pengusaha">Pengusaha</label>
                                             <select class="form-control" name="id_pengusaha" id="pengusaha">
@@ -31,6 +34,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @endif
                                         <div class="col-12 form-group">
                                             <label for="nama">Nama Produk</label>
                                             <input type="text" name="nama" class="form-control"  id="nama" value="{{$getData->nama}}"

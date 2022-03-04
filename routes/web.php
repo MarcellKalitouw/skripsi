@@ -14,7 +14,8 @@ use App\Http\Controllers\Web\{
     StatusTransaksiWebController,
     RegisterControllerWeb,
     LoginControllerWeb,
-    DashboardWebController
+    DashboardWebController,
+    KurirWebController
 };
 
 /*
@@ -28,13 +29,13 @@ use App\Http\Controllers\Web\{
 |
 */
 
-Route::get('/', function () {
-    return view('adminView.layout');
-})->name('dashboard.admin');
+
 
 //Produk
 Route::middleware(['checkStatus'])->group(function () {
-    
+    Route::get('/', function () {
+        return view('adminView.layout');
+    })->name('dashboard.admin');
     Route::resource('kategori_produk', KategoriProdukWebController::class);
 
     Route::resource('satuan_produk', SatuanProdukWebController::class);
@@ -53,6 +54,8 @@ Route::middleware(['checkStatus'])->group(function () {
     //Pelanggan
     Route::resource('pelanggan', PelangganWebController::class);
 
+    Route::resource('kurir', KurirWebController::class);
+
     //Dashboard
     Route::get('dashboard_pengusaha', [DashboardWebController::class, 'DashboardPengusaha'])->name('dashboard.pengusaha');
 
@@ -61,6 +64,9 @@ Route::middleware(['checkStatus'])->group(function () {
 });
 
 //Register
+Route::get('list-transaksi', [TransaksiWebController::class, 'listTransaksi'])->name('transaksi.get-transaksi');
+Route::get('detail-transaksi/{id}', [TransaksiWebController::class, 'detailTransaksi'])->name('transaksi.detail-transaksi');
+Route::get('update-transaksi/{id}/{status}/{tipe}', [TransaksiWebController::class, 'updateStatusTransaksi'])->name('transaksi.update-status');
 Route::resource('register', RegisterControllerWeb::class);
 Route::resource('login', LoginControllerWeb::class);
 Route::get('logout',[LoginControllerWeb::class,'logout'])->name('logout');

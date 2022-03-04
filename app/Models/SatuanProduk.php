@@ -14,6 +14,7 @@ class SatuanProduk extends Model
     public $timestamps = true;
     protected $table = "satuan_produk";
     protected $fillable = [
-        'nama'
+        'nama',
+        'id_pengusaha'
     ];
 }

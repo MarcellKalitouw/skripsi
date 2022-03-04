@@ -25,22 +25,26 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 form-group">
-                                            <label for="pengusaha">Pengusaha</label>
-                                            <select class="form-control" name="id_pengusaha" id="pengusaha">
-                                                <option selected disabled>Pilih Pengusaha</option>
-                                                @foreach ($getPengusaha as $item)
-                                                    <option value="{{$item->id}}">{{$item->nama}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        @if (session()->get('tipe') == 'Pengusaha')
+                                            <input type="hidden" name="id_pengusaha" value="{{session()->get('id')}}">
+                                        @else
+                                            <div class="col-12 form-group">
+                                                <label for="pengusaha">Pengusaha</label>
+                                                <select class="form-control" name="id_pengusaha" id="pengusaha">
+                                                    <option selected disabled>Pilih Pengusaha</option>
+                                                    @foreach ($getPengusaha as $item)
+                                                        <option value="{{$item->id}}">{{$item->nama}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>    
+                                        @endif
                                         
                                         <div class="col-12 form-group">
                                             <label for="id_pelanggan">Pengguna</label>
                                             <select class="form-control" name="id_pelanggan" id="id_pelanggan">
                                                 <option selected disabled>Pilih Pengguna</option>
                                                 @foreach ($getPengguna as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                                    <option value="{{$item->id}}">{{$item->nama}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -120,7 +124,7 @@
                                             
                                         </div>
                                         <div class="col-12 form-group">
-                                            <label for="total">Total/label>
+                                            <label for="total">Total</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <label class="input-group-text" for="total">Rp</label>

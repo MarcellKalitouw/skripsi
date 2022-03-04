@@ -16,6 +16,9 @@ class CreateStatusTransaksi extends Migration
         Schema::create('status_transaksi', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('id_transaksi');
+            $table->uuid('id_user');
+            $table->uuid('id_user');
+            $table->string('updated_by', 50);
             $table->string('nama', 25);
             $table->enum('tipe', ['transaksi', 'shipping']);
             $table->timestamps();

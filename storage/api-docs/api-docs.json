@@ -1,0 +1,120 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Yunit Laundry",
+        "description": "Demo Yunit Laundry",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/transaksi_controller/create/": {
+            "post": {
+                "tags": [
+                    "Transaksi"
+                ],
+                "summary": "Create Transaksi",
+                "operationId": "0be14ccebf251685e5a4065a52da3fb8",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "": {
+                                        "properties": {
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "content": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "transaksi": {
+                                        "id_status": 1,
+                                        "id_pelanggan": "a2495e9a-84f4-4841-9e46-dc05b3ffd1fe",
+                                        "id_pengusaha": "342a526e-f0e5-4d9e-9665-337b5b0d3693",
+                                        "id_shipping": 4,
+                                        "tgl": "2020-01-01",
+                                        "total_qty": 10,
+                                        "subtotal_qty": 20,
+                                        "pajak": 10,
+                                        "diskon": 10,
+                                        "biaya_tambahan": 1000,
+                                        "total": 2000,
+                                        "keterangan": "testing 12345"
+                                    },
+                                    "detail_transaksi": {
+                                        "id_transaksi": 2,
+                                        "id_user": "a2495e9a-84f4-4841-9e46-dc05b3ffd1fe",
+                                        "id_pengusaha": "342a526e-f0e5-4d9e-9665-337b5b0d3693",
+                                        "id_produk": "7d492461-46bd-4b93-8b95-21dcaa9d8c40",
+                                        "harga": 10000,
+                                        "qty": 5,
+                                        "diskon": 0,
+                                        "total": 50000
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "number",
+                                            "example": 1
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "title"
+                                        },
+                                        "content": {
+                                            "type": "string",
+                                            "example": "content"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2021-12-11T09:25:53.000000Z"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2021-12-11T09:25:53.000000Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "fail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

@@ -6,10 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Transaksi;
+use App\Models\DetailTransaksi;
+use App\Models\Shipping;
+use App\Models\StatusTransaksi;
+use App\Models\Status;
 
 class TransaksiWebController extends Controller
 {
     protected $pageTitle = 'Transaksi';
+    
     public function index()
     {
         $data = Transaksi::get();
@@ -17,14 +22,102 @@ class TransaksiWebController extends Controller
         return view('adminView.transaksi.index', compact('data'));
     }
 
-    
+    public function getId(){
+        $id = session()->get('id');
+        return $id;
+    }
+
+    public function listTransaksi (){
+        $id = session()->get('id');
+        $data = DB::table('transaksi')
+                ->leftJoin('pelanggan', 'transaksi.id_pelanggan', 'pelanggan.id')
+                ->leftJoin('status', 'transaksi.id_status', 'status.id')
+                ->whereNull('transaksi.deleted_at')
+                ->where('id_pengusaha', $this->getId())
+                ->select(
+                    'transaksi.*',
+                    'pelanggan.nama as nama_pelanggan',
+                    'status.nama as nama_status'
+                
+                )
+                ->orderBy('created_at','desc')
+                ->get();
+
+        return view('adminView.transaksi.list-transaksi', compact('data'));
+    }
+
+    public function detailTransaksi($id){
+        // dd($id);
+        $item = DB::table('transaksi')
+                ->leftJoin('pelanggan', 'transaksi.id_pelanggan', 'pelanggan.id')
+                ->leftJoin('status', 'transaksi.id_status', 'status.id')
+                ->whereNull('transaksi.deleted_at')
+                ->where('transaksi.id', $id)
+                ->select(
+                    'transaksi.*',
+                    'pelanggan.nama as nama_pelanggan',
+                    'status.nama as nama_status'
+                
+                )
+                ->orderBy('created_at','desc')
+                ->first();;
+        $detail_transaksi = DetailTransaksi::where('id_transaksi',$id )->get();
+        $shipping = Shipping::where('id_transaksi', $id)->get();
+        $status_transaksi = StatusTransaksi::where('id_transaksi', $id)->get();
+        // dd($data);
+        return view('adminView.transaksi.detail-transaksi', compact(
+            'item',
+            'detail_transaksi',
+            'shipping',
+            'status_transaksi'
+        ));
+
+        
+    }
+
+    public function updateStatusTransaksi($id, $status, $tipe){
+        DB::beginTransaction();
+        $getUser = session()->all();
+
+        // dd($getUser);
+        $transaksi = Transaksi::findOrFail($id);
+        $status_transaksi = Status::where('nama', $status)->first(['id','nama']);
+        // dd($status);
+        try{
+            //update Transaksi pe status
+            Transaksi::find($id)->update(['id_status'=>$status_transaksi->id]);
+            
+            //update tabel status transaksi
+            
+            $updateStatusTransaksi = StatusTransaksi::create([
+                'id_transaksi' => $id,
+                'nama' => $status_transaksi->nama,
+                'keterangan' => '',
+                'tipe' => $tipe,
+                'id_user' => $getUser['id'],
+                'updated_by' => $getUser['tipe']
+            ]);
+            DB::commit();
+            return redirect()->route('transaksi.detail-transaksi', $id)->with('success', 'Status Transaksi Berhasil di perbaharui');
+
+        }catch(\Exception $e){
+            dd($e);
+            DB::rollback();
+            return redirect()->route('transaksi.detail-transaksi')->with('error', 'Status Transaksi Gagal di perbaharui');
+        }
+
+
+
+        
+    }
+
     public function create()
     {
         $status = DB::table('status')->get();
-        $pengguna = DB::table('users')->get();
+        $pengguna = DB::table('pelanggan')->get();
         $pengusaha = DB::table('pengusaha')->get();
         $shipping = DB::table('shipping')->get();
-        
+        // dd($pengguna);
         return view('adminView.transaksi.create', [
             'getStatus'=>$status,
             'getPengguna'=>$pengguna,
@@ -37,14 +130,13 @@ class TransaksiWebController extends Controller
     
     public function store(Request $request)
     {
-        $request['id_status'] = 1;
+        // $request['id_status'] = 1;
         $request['tgl'] = now();
         // dd($request); 
         $validate = $this->validate($request, [
             'id_status' => 'required',
             'id_pelanggan' => 'required',
             'id_pengusaha' => 'required',
-            'id_shipping' => 'required',
             'total_qty' => 'required',
             'subtotal_qty' => 'required',
             'pajak' => 'required',

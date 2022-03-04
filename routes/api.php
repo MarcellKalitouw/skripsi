@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::POST("pengusaha/", [PengusahaController::class, 'store']);
     Route::PUT("pengusaha/", [PengusahaController::class, 'update']);
     Route::DELETE("pengusaha/{id}", [PengusahaController::class, 'destroy']);
+    Route::GET("search-tenant/{page}/{limit}/{key}", [PengusahaController::class, 'searchPengusaha']);
 
 //Produk
     Route::GET("produk/{id?}", [ProdukController::class, 'getData']); 
@@ -72,6 +73,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::POST("produk/", [ProdukController::class, 'store']);
     Route::PUT("produk/", [ProdukController::class, 'update']);
     Route::DELETE("produk/{id}", [ProdukController::class, 'destroy']);
+    Route::get('produk_pengusaha/{idPengusaha}', [ProdukController::class, 'getProdukPengusaha']);
 
 //Shipping
     Route::GET("shipping/{id?}", [ShippingController::class, 'getData']); 
@@ -88,11 +90,14 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::DELETE("status/{id}", [StatusController::class, 'destroy']);
 
 //TransaksiController
-    Route::GET("transaksi_controller/{id?}", [TransaksiController::class, 'getData']); 
-    Route::GET("transaksi_controller/{page?}/{limit?}", [TransaksiController::class, 'getDataPageLimit']);
-    Route::POST("transaksi_controller/", [TransaksiController::class, 'store']);
-    Route::PUT("transaksi_controller/", [TransaksiController::class, 'update']);
-    Route::DELETE("transaksi_controller/{id}", [TransaksiController::class, 'destroy']);
+    Route::GET("transaksi/{id?}", [TransaksiController::class, 'getData']); 
+    Route::GET("transaksi/{page?}/{limit?}", [TransaksiController::class, 'getDataPageLimit']);
+    Route::POST("transaksi/", [TransaksiController::class, 'store']);
+    Route::PUT("transaksi/", [TransaksiController::class, 'update']);
+    Route::DELETE("transaksi/{id}", [TransaksiController::class, 'destroy']);
+    Route::POST("transaksi/create/", [TransaksiController::class, 'createTransaksi']);
+    Route::GET("history_transaksi/{page}/{limitf}/{idPelanggan}", [TransaksiController::class, 'getRiwayatTransaksi']);
+
 
 //SatuanProduk
     Route::GET("status_produk/{id?}", [SatuanProdukController::class, 'getData']); 
@@ -105,5 +110,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     
 //Login
 Route::post('login', [AuthController::class, 'login']);
+Route::post('login_kurir', [AuthController::class, 'login_kurir']);
 
     

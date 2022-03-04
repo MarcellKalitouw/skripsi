@@ -15,6 +15,7 @@ class CreateSatuanProduk extends Migration
     {
         Schema::create('satuan_produk', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('id_pengusaha');
             $table->string('nama'); 
             $table->timestamps();
             $table->softDeletes();

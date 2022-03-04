@@ -22,7 +22,7 @@
                                     </a>
                                 </li>
 
-                                <li class="sidebar-item"> 
+                                {{-- <li class="sidebar-item"> 
                                     <a class="sidebar-link" href="{{route('kategori_produk.index')}}"
                                         aria-expanded="false">
                                         <i class="fas fa-table"></i>
@@ -30,7 +30,7 @@
                                             class="hide-menu">Kategori Produk
                                         </span>
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li class="sidebar-item"> 
                                     <a class="sidebar-link" href="{{route('satuan_produk.index')}}"
                                         aria-expanded="false">
@@ -111,7 +111,7 @@
                                 aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
                                     class="hide-menu">Transaksi </span></a>
                             <ul aria-expanded="false" class="collapse  first-level base-level-line">
-                                <li class="sidebar-item"> 
+                                {{-- <li class="sidebar-item"> 
                                     <a class="sidebar-link" href="{{route('shipping.index')}}"
                                         aria-expanded="false">
                                         <i class="fas fa-table"></i>
@@ -119,9 +119,9 @@
                                             class="hide-menu">Shipping
                                         </span>
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li class="sidebar-item"> 
-                                    <a class="sidebar-link" href="{{route('transaksi.index')}}"
+                                    <a class="sidebar-link" href="{{(session()->get('tipe') == 'Pengusaha') ? route('transaksi.get-transaksi') : route('transaksi.index') }}"
                                         aria-expanded="false">
                                         <i class="fas fa-table"></i>
                                         <span
@@ -149,6 +149,20 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <li class="list-divider"></li>
+
+                            <li class="nav-small-cap"><span class="hide-menu">Kurir</span></li>
+                            
+                            <li class="sidebar-item"> 
+                                <a class="sidebar-link" href="{{route('kurir.index')}}"
+                                    aria-expanded="false">
+                                    <i class="fas fa-table"></i>
+                                    <span
+                                        class="hide-menu">Data Kurir
+                                    </span>
+                                </a>
+                            </li>   
                         
                         <li class="list-divider"></li>
                         

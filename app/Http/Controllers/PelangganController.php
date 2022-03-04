@@ -37,7 +37,7 @@ class PelangganController extends Controller
         $page = $page?$page:0;
         $limit = $limit?$limit:0;
         $page = intval($page);
-        $limit = intval($page);
+        $limit = intval($limit);
         $data = Pelanggan::skip($page*$limit)->take($limit)->get();
         $totalRow = Pelanggan::count();
         if(count($data)>0)
