@@ -7,9 +7,12 @@ use App\Models\Transaksi;
 use App\Models\DetailTransaksi;
 use App\Models\StatusTransaksi;
 use App\Models\Status;
+use App\Models\Kurir;
+use App\Models\Pelanggan;
 use DB;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Validator;
+use Auth;
 
 class TransaksiController extends Controller
 {
@@ -114,7 +117,54 @@ class TransaksiController extends Controller
         }
     }
     //Get history Transaksi by user
-    public function getRiwayatTransaksi($page=null, $limit = null, $idPelanggan){
+
+    public function getCurentTransaction(Request $request, $id){
+        // dd($request->header('tipe'));
+        // dd($id);
+        // 17|dWtBkvP5KaLpkW94B9lW3Uq3L4rouroQUHrtN7Ul user
+        // 19|Fi9V7SONzDiPTgkQhks7sVto8vDgJumu87uGYklg kurir
+        $tipe_user = $request->header('tipe');
+        $idPengguna = Auth::user()->id;
+        // dd($idPengguna);
+        if($tipe_user == 'kurir'){
+            $cekKurir = Kurir::find($idPengguna);
+            if($cekKurir){
+                $transaksi = Transaksi::find($id);
+                $detail_transaksi = DetailTransaksi::where('id_transaksi',$id)->get();
+                return response()->json(
+                [
+                    'transaksi'=>$transaksi,
+                    'detail_transaksi' => $detail_transaksi,
+                    'message'=>'success',
+                ], 200);
+            }else{
+                return response()->json([
+                    'message' => 'Error not kurir'
+                ], 401);
+            }
+        }else{
+            $cekPelanggan = Pelanggan::find($idPengguna);
+            $cekPelanggan ? $cekTransaksi = Transaksi::where('id_pelanggan', $cekPelanggan->id)->where('id', $id)->first() : null;
+            if($cekPelanggan && $cekTransaksi){
+                $transaksi = Transaksi::find($id);
+                $detail_transaksi = DetailTransaksi::where('id_transaksi',$id)->get();
+                return response()->json(
+                [
+                    'transaksi'=>$transaksi,
+                    'detail_transaksi' => $detail_transaksi,
+                    'message'=>'success',
+                ], 200);
+            }else{
+                return response()->json([
+                    'message' => 'Error not pelanggan'
+                ], 401);
+            }
+        }
+        
+    }
+    public function getRiwayatTransaksi( $page=null, $limit = null, $idPelanggan){
+        
+        // dd()
         $page = $page?$page:0;
         $limit = $limit?$limit:0;
         $page = intval($page);
@@ -125,11 +175,29 @@ class TransaksiController extends Controller
                 ->whereNull('deleted_at')
                 ->orderBy('created_at','desc')
                 ->get();
-        // dd($data);
+        
         $totalRow = Transaksi::count();
         if(count($data)>0)
-            return response()->json(['data'=>$data, 'message'=>'success', 'page'=>$page, 'limit'=>$limit, 'total_row'=>$totalRow], 200);
+            return response()->json(
+                [
+                    'data'=>$data,
+                    'message'=>'success', 
+                    'page'=>$page, 
+                    'limit'=>$limit, 
+                    'total_row'=>$totalRow
+                ], 200);
         return response()->json(['message'=>'empty'], 401);
+    }
+
+    public function getQrCode($idTransaksi){
+        $kode_transaksi = Transaksi::where('id',$idTransaksi)->first('kode_transaksi');
+        // dd($kode_transaksi);
+        // $image = \QrCode::format('png')
+        //                  ->merge('qrcode/laravel.png', 0.5, true)
+        //                  ->size(500)->errorCorrection('H')
+        //                  ->generate('A simple example of QR code!');
+        // return response($image)->header('Content-type','image/png');
+        return \QrCode::size(300)->generate($kode_transaksi); 
     }
 
     public function getDataPageLimit($page=null, $limit = null){
@@ -151,7 +219,7 @@ class TransaksiController extends Controller
             'id_status'=>$req->id_status,
             'id_pelanggan'=>$req->id_pelanggan,
             'id_pengusaha'=>$req->id_pengusaha,
-            'id_shipping'=>$req->id_shipping,
+            // 'id_shipping'=>$req->id_shipping,
             'tgl'=>$req->tgl,
             'total_qty'=>$req->total_qty,
             'subtotal_qty'=>$req->subtotal_qty,
@@ -180,7 +248,8 @@ class TransaksiController extends Controller
             'transaksi.id_status'=>'required',
             'transaksi.id_pelanggan'=> 'required',
             'transaksi.id_pengusaha' => 'required',
-            'transaksi.id_shipping' => 'required',
+            // 'transaksi.id_shipping' => 'required',
+            'transaksi.id_alamat' => 'required',
             'transaksi.tgl' => 'required',
             'transaksi.total_qty' => 'required',
             'transaksi.subtotal_qty' => 'required',
@@ -256,22 +325,33 @@ class TransaksiController extends Controller
 
             return response()->json([
                 'data'=> $transaksi,
+                
                 'Result'=>'Transaksi has been created!'
             ], 200);
             
-        } catch (\Exception $e) {
-            // dd($e);
-            if($e->errors()){
-                throw new HttpResponseException(response()->json($e->errors(), 422));
+        } catch (HttpResponseException $e) {
+            // dd($e->getResponse());
+            // report($e);
+            
+            // return $e->getResponse();
+
+
+            if($e){
+                throw new HttpResponseException(response()->json($e, 422));
             }else{
                 throw $e;
             }
         }
 
     }
+
     public function updateTransaksiByKurir(Request $req){
         DB::beginTransaction();
         try{
+            //Send by mobile id_transaksi
+            //sequence 
+
+
             // update Transaksi
 
             // update Status Transaksi

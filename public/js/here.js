@@ -105,6 +105,25 @@ if (navigator.geolocation) {
         if (window.action == "submit") {
             addDragableMarker(map, behavior);
         }
+        if (window.action == "show") {
+            let inputLat = document.getElementById("lat");
+            let inputLng = document.getElementById("lng");
+
+            if (inputLat.value != "" && inputLng.value != "") {
+                objLocalCoord = {
+                    lat: inputLat.value,
+                    lng: inputLng.value,
+                };
+            }
+
+            let marker = new H.map.Marker(objLocalCoord, {
+                volatility: true,
+            });
+
+            marker.draggable = true;
+            map.addObject(marker);
+            map.setCenter({ lat: inputLat.value, lng: inputLng.value });
+        }
     });
 } else {
     console.error("Geolocation is not support in this browser");

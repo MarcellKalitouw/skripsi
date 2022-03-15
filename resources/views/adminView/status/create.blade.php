@@ -21,13 +21,19 @@
                                             <input type="text" name="nama" class="form-control" id="nama"
                                                 aria-describedby="name">
                                         </div>
-                                        
+                                        <div class="col-12 form-group">
+                                            <label for="nama">Urutan</label>
+                                            <input type="text" name="sequence" id="sequence" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" value="{{ old('sequence') }}" class="form-control">
+
+                                        </div>
                                         <div class="col-6 form-group">
                                             <button type="submit" class="col-3 btn btn-primary">Simpan</button>
                                         </div>
                                     </div>
                                 </div>
                                 
+                                
+
 
                             </div>
                         </form>

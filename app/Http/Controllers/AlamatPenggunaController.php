@@ -7,79 +7,82 @@ use Illuminate\Http\Request;
 
 class AlamatPenggunaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    public function getData($id=null){
+        try{
+            $id?$data =  $data = AlamatPengguna::all() : AlamatPengguna::firstWhere('id', $id);
+            // dd($data);
+            // dd(is_null($data));
+
+            if($id){
+                if(is_null($data)){
+                    return response()->json(['message'=>'Data is not avaible', 'data'=>$data], 404);
+                }else{
+                    return response()->json(['data'=>$data], 200);
+                }
+            }else{
+                if($data->isEmpty()){
+                    return response()->json(['message'=>'Data is not avaible', 'data'=>$data], 404);
+                }else{
+                    return response()->json(['data'=>$data], 200);
+                }
+            }
+            
+        }
+        catch(\Exception $e){
+            return response()->json(['message'=>$e->getMessage()], 406);
+        }
+    }
+    public function getDataPageLimit($page=null, $limit = null){
+        $page = $page?$page:0;
+        $limit = $limit?$limit:0;
+        $page = intval($page);
+        $limit = intval($limit);
+        $data = AlamatPengguna::skip($page*$limit)->take($limit)->get();
+        $totalRow = AlamatPengguna::count();
+        if(count($data)>0)
+            return response()->json(['data'=>$data, 'message'=>'success', 'page'=>$page, 'limit'=>$limit, 'total_row'=>$totalRow], 200);
+        return response()->json(['message'=>'empty'], 401);
+    }
+    public function store(Request $req){
+        // dd($req);
+        $data = AlamatPengguna::create([
+            'id_pelanggan'=>$req->id_pelanggan,
+            'alamat' => $req->alamat,
+            'long' => $req->long,
+            'lat' => $req->lat
+        ]);
+        if($data){
+            return response()->json([
+                'data'=>$data,
+                'Result'=>'Data has been stored'
+            ], 200);
+        }else{
+            return response()->json([
+                'Result'=> "Data failed to be stored"
+            ], 401);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function update(Request $req){
+        $data = AlamatPengguna::where("id", $req->id)->update([
+            'id_pelanggan'=>$req->id_pelanggan,
+            'alamat' => $req->alamat,
+            'long' => $req->long,
+            'lat' => $req->lat
+        ]);
+        // dd($data);
+        if($data){
+            return response()->json(['Result'=>"Data has been Updated"], 200);
+        }else{
+            return response()->json(['Result'=>'Data failed to be updated'], 401);
+        }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\AlamatPengguna  $alamatPengguna
-     * @return \Illuminate\Http\Response
-     */
-    public function show(AlamatPengguna $alamatPengguna)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\AlamatPengguna  $alamatPengguna
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(AlamatPengguna $alamatPengguna)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AlamatPengguna  $alamatPengguna
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, AlamatPengguna $alamatPengguna)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\AlamatPengguna  $alamatPengguna
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(AlamatPengguna $alamatPengguna)
-    {
-        //
+    public function destroy ($id){
+        $data = AlamatPengguna::where('id', $id)->delete();
+        if($data){
+            return response()->json(['Result'=>"Data has been deleted"], 200);
+        }else{
+            return response()->json(['Result'=>"Data failed to be deleted"], 401);
+        }
     }
 }

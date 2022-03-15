@@ -17,9 +17,10 @@ class CreateTransaksi extends Migration
             $table->uuid('id')->primary();
             $table->date('tgl');
             $table->uuid('id_status');
+            $table->uuid('id_alamat');
             $table->uuid('id_pelanggan');
             $table->uuid('id_pengusaha');
-            $table->uuid('id_shipping');
+            // $table->uuid('id_shipping');
             $table->integer('total_qty')->default(5);
             $table->integer('subtotal_qty')->default(5);
             $table->integer('pajak')->default(5);

@@ -9,6 +9,7 @@ use App\Models\Transaksi;
 use App\Models\DetailTransaksi;
 use App\Models\Shipping;
 use App\Models\StatusTransaksi;
+use App\Models\AlamatPengguna;
 use App\Models\Status;
 
 class TransaksiWebController extends Controller
@@ -42,7 +43,7 @@ class TransaksiWebController extends Controller
                 )
                 ->orderBy('created_at','desc')
                 ->get();
-
+        // dd($data);
         return view('adminView.transaksi.list-transaksi', compact('data'));
     }
 
@@ -64,12 +65,14 @@ class TransaksiWebController extends Controller
         $detail_transaksi = DetailTransaksi::where('id_transaksi',$id )->get();
         $shipping = Shipping::where('id_transaksi', $id)->get();
         $status_transaksi = StatusTransaksi::where('id_transaksi', $id)->get();
-        // dd($data);
+        $alamat_transaksi = AlamatPengguna::where('id', $item->id_alamat)->first();
+        // dd($alamat_transaksi);
         return view('adminView.transaksi.detail-transaksi', compact(
             'item',
             'detail_transaksi',
             'shipping',
-            'status_transaksi'
+            'status_transaksi',
+            'alamat_transaksi'
         ));
 
         
@@ -78,15 +81,15 @@ class TransaksiWebController extends Controller
     public function updateStatusTransaksi($id, $status, $tipe){
         DB::beginTransaction();
         $getUser = session()->all();
-
+        // dd($id);
         // dd($getUser);
         $transaksi = Transaksi::findOrFail($id);
         $status_transaksi = Status::where('nama', $status)->first(['id','nama']);
-        // dd($status);
+        // dd($status_transaksi->id);
         try{
             //update Transaksi pe status
-            Transaksi::find($id)->update(['id_status'=>$status_transaksi->id]);
-            
+            $updateTransaksi = Transaksi::find($id)->update(['id_status'=>$status_transaksi->id]);
+            // dd($updateTransaksi);
             //update tabel status transaksi
             
             $updateStatusTransaksi = StatusTransaksi::create([
@@ -105,8 +108,6 @@ class TransaksiWebController extends Controller
             DB::rollback();
             return redirect()->route('transaksi.detail-transaksi')->with('error', 'Status Transaksi Gagal di perbaharui');
         }
-
-
 
         
     }

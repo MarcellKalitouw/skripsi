@@ -25,12 +25,39 @@
                             -webkit-line-clamp: 3;
                             -webkit-box-orient: vertical;
                         ">
-                         
-                        {{$item->keterangan}}
+                        <p style="margin-bottom: 2px; font-weight: 500">Alamat : </p> 
+                        <p class="card-text" style="
+                            display: -webkit-box;
+                            overflow: hidden;
+                            -webkit-line-clamp: 3;
+                            -webkit-box-orient: vertical;
+                        ">
+                        @if ($alamat_transaksi !== null)
+                            {{$alamat_transaksi->alamat}}
+                            <div class="col-12 " style="margin-bottom: 25px">
+                                <label for="">Pin Location</label>
+                                <div id="here-maps">
+                                    <div id="mapContainer" style="height:500px"></div>
+                                </div>
+                                
+                                <input type="hidden" name="lat" value="{{ $alamat_transaksi->lat }}" readonly class="form-control"  id="lat"
+                                    aria-describedby="lat">
+                            
+                        
+                                <input type="hidden" name="long" value="{{ $alamat_transaksi->long }}" readonly class="form-control"  id="lng"
+                                    aria-describedby="lng">
+                                
+                            </div>
+                        @else
+                        -
+                        @endif
+                        
                         </p>
+                        
                         <div style="border-bottom: 1px solid; display:flex; justify-content: space-between;margin-bottom:1rem">
-                            <p class="" style="margin: 2px;font-weight: 500">Rincian Produk</p>
+                                <p class="" style="margin: 2px;font-weight: 500">Rincian Produk</p>
                         </div>
+                        
                         
                         <div class="table-responsive">
                             <table class="table">
@@ -139,6 +166,9 @@
 @endsection
 
 @push('script')
+    <script>
+        window.action = "show"
+    </script>
     <script>
         
         // function updateTransaksi(){

@@ -13,9 +13,15 @@ class CreateAlamatPenggunasTable extends Migration
      */
     public function up()
     {
-        Schema::create('alamat_penggunas', function (Blueprint $table) {
-            $table->id();
+        Schema::create('alamat_pengguna', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('id_pelanggan');
+            $table->text('alamat');
+            $table->double('long');
+            $table->double('lat');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
@@ -26,6 +32,6 @@ class CreateAlamatPenggunasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alamat_penggunas');
+        Schema::dropIfExists('alamat_pengguna');
     }
 }

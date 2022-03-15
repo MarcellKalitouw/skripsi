@@ -12,8 +12,8 @@ class StatusWebController extends Controller
     protected $pageTitle = 'Status';
     public function index()
     {
-        $data = Status::withTrashed()->get();
-
+        $data = Status::withTrashed()->orderBy('sequence', 'asc')->get();
+    
         return view('adminView.status.index', compact('data'));
     }
 
@@ -25,7 +25,8 @@ class StatusWebController extends Controller
     public function store(Request $request)
     {
         $validate = $this->validate($request, [
-            'nama' => 'required'
+            'nama' => 'required',
+            'sequence' => 'required'
         ]);
 
         $input = $request->except(['_token']);
@@ -48,7 +49,8 @@ class StatusWebController extends Controller
     public function update(Request $request, $id)
     {
         $validate = $this->validate($request, [
-            'nama' => 'required'
+            'nama' => 'required',
+            'sequence'=> 'required'
         ]);
 
         $input = $request->except(['_token','_method']);

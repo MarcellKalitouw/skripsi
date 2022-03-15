@@ -27,6 +27,7 @@
                         ">
                         {{$item->keterangan}}
                         </p>
+                        
                         <div style="border-bottom: 1px solid; display:flex; justify-content: space-between;margin-bottom:1rem">
                             <p class="" style="margin: 2px">Rincian Biaya Pesanan</p>
                             <p class="" style="margin:2px"> <i class="far fa-calendar-alt"></i> {{ date('d/M/Y ', strtotime($item->created_at)) }} - <i class="far fa-clock"></i> {{ date('h:i:s', strtotime($item->created_at)) }}</p>
@@ -67,22 +68,22 @@
                                 </button>
                                 <div class="dropdown-menu bg-dark text-white" style="width:100%">
 
-                                    <a class="dropdown-item updateTransaksi" onclick="statusDiterimaDialog()" data-type="Diterima" href="javascript:void(0)">
+                                    <a class="dropdown-item updateTransaksi" onclick="statusDiterimaDialog('{{ $item->id }}')" data-type="Diterima" href="javascript:void(0)">
                                        Diterima
                                     </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusDitolakDialog()" data-type="Ditolak" href="javascript:void(0)">
+                                    <a class="dropdown-item updateTransaksi" onclick="statusDitolakDialog('{{ $item->id }}')"  data-type="Ditolak" href="javascript:void(0)">
                                        Ditolak
                                     </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusPenjemputanDialog()" data-type="Penjemputan" href="javascript:void(0)">
+                                    <a class="dropdown-item updateTransaksi" onclick="statusPenjemputanDialog('{{ $item->id }}')"  data-type="Penjemputan" href="javascript:void(0)">
                                        Penjemputan
                                     </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusProsesDialog()" data-type="Diproses" href="javascript:void(0)">
+                                    <a class="dropdown-item updateTransaksi" onclick="statusProsesDialog('{{ $item->id }}')"  data-type="Diproses" href="javascript:void(0)">
                                        Diproses
                                     </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusProsesSelesaiDialog()" data-type="ProsesSelesai" href="javascript:void(0)">
+                                    <a class="dropdown-item updateTransaksi" onclick="statusProsesSelesaiDialog('{{ $item->id }}')"  data-type="ProsesSelesai" href="javascript:void(0)">
                                        Proses Selesai
                                     </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusPengantaranDialog()" data-type="Pengantaran" href="javascript:void(0)">
+                                    <a class="dropdown-item updateTransaksi" onclick="statusPengantaranDialog('{{ $item->id }}')" data-type="Pengantaran" href="javascript:void(0)">
                                        Pengantaran
                                     </a>
                                     {{-- <a class="dropdown-item" href="javascript:void(0)">Something else
@@ -105,6 +106,18 @@
 
 @push('script')
     <script>
+        window.addEventListener('keydown', function (event) {
+            if(event.shiftKey && event.key === 'A'){
+                alert('succes keyboard');
+            }
+            if(event.shiftKey && event.key === 'B'){
+                alert('succes keyboard B');
+                // document.location.href = `../dashboard_pengusaha`;
+
+            }
+        })
+    </script>
+    <script>
         
         // function updateTransaksi(){
 
@@ -117,8 +130,9 @@
         //     }
         // }
         // const status = $('.updateTransaksi').data('type');
+        
 
-        async function statusDitolakDialog() {
+        async function statusDitolakDialog(id) {
            const  {value :accept}  = await Swal.fire({
                 title: `Apakah anda yakin mengganti status laporan ini ke Status Ditolak`,
                 text: "Jika ya, klik tombol OK",
@@ -128,19 +142,22 @@
                 showLoaderOnConfirm: true,
             });
             // const status = document.getElementsByClassName("updateTransaksi").data('type');
-
+            // const id = $('.updateTransaksi').data('id');
+            console.log('id', id);
             
+
             if(accept){
                 Swal.fire({
                     title:"Status Transaksi sedang diperbaharui",
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Ditolak Laundry', 'tipe'=>'transaksi'])}}`;
+                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Ditolak Laundry', 'tipe'=>'transaksi'])}}`;
+                    document.location.href = `../update-transaksi/${id}/Ditolak Laundry/transaksi`;
                 });
             }
         }
-        async function statusDiterimaDialog() {
+        async function statusDiterimaDialog(id) {
            const  {value :accept}  = await Swal.fire({
                 title: `Apakah anda yakin mengganti status laporan ini ke Status Diterima`,
                 text: "Jika ya, klik tombol OK",
@@ -150,6 +167,7 @@
                 showLoaderOnConfirm: true,
             });
             // const status = document.getElementsByClassName("updateTransaksi").data('type');
+            // const id = $('.updateTransaksi').data('id');
 
             
             if(accept){
@@ -158,11 +176,13 @@
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Diterima Laundry', 'tipe'=>'transaksi'])}}`;
+                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Diterima Laundry', 'tipe'=>'transaksi'])}}`;
+                    document.location.href = `../update-transaksi/${id}/Diterima Laundry/transaksi`;
+
                 });
             }
         }
-        async function statusPenjemputanDialog() {
+        async function statusPenjemputanDialog(id) {
            const  {value :accept}  = await Swal.fire({
                 title: `Apakah anda yakin mengganti status laporan ini ke Status Penjemputan `,
                 text: "Jika ya, klik tombol OK",
@@ -172,6 +192,7 @@
                 showLoaderOnConfirm: true,
             });
             // const status = document.getElementsByClassName("updateTransaksi").data('type');
+            // const id = $('.updateTransaksi').data('id');
 
             
             if(accept){
@@ -180,12 +201,14 @@
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Penjemputan', 'tipe'=>'shipping'])}}`;
+                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Penjemputan', 'tipe'=>'shipping'])}}`;
+                    document.location.href = `../update-transaksi/${id}/Penjemputan/shipping`;
+
                 });
             }
         }
 
-        async function statusProsesDialog() {
+        async function statusProsesDialog(id) {
            const  {value :accept}  = await Swal.fire({
                 title: `Apakah anda yakin mengganti status laporan ini ke Status Diproses`,
                 text: "Jika ya, klik tombol OK",
@@ -195,6 +218,7 @@
                 showLoaderOnConfirm: true,
             });
             // const status = document.getElementsByClassName("updateTransaksi").data('type');
+            // const id = $('.updateTransaksi').data('id');
 
             
             if(accept){
@@ -203,11 +227,12 @@
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Diproses', 'tipe'=>'transaksi'])}}`;
+                    document.location.href = `../update-transaksi/${id}/Diproses/transaksi`;
+                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Diproses', 'tipe'=>'transaksi'])}}`;
                 });
             }
         }
-        async function statusProsesSelesaiDialog() {
+        async function statusProsesSelesaiDialog(id) {
            const  {value :accept}  = await Swal.fire({
                 title: `Apakah anda yakin mengganti status laporan ini ke Status Proses Selesai`,
                 text: "Jika ya, klik tombol OK",
@@ -217,6 +242,7 @@
                 showLoaderOnConfirm: true,
             });
             // const status = document.getElementsByClassName("updateTransaksi").data('type');
+            // const id = $('.updateTransaksi').data('id');
 
             
             if(accept){
@@ -225,11 +251,13 @@
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Proses Selesai', 'tipe'=>'transaksi'])}}`;
+                    document.location.href = `../update-transaksi/${id}/Proses Selesai/transaksi`;
+
+                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Proses Selesai', 'tipe'=>'transaksi'])}}`;
                 });
             }
         }
-        async function statusPengantaranDialog() {
+        async function statusPengantaranDialog(id) {
            const  {value :accept}  = await Swal.fire({
                 title: `Apakah anda yakin mengganti status laporan ini ke Status Pengantaran`,
                 text: "Jika ya, klik tombol OK",
@@ -239,6 +267,7 @@
                 showLoaderOnConfirm: true,
             });
             // const status = document.getElementsByClassName("updateTransaksi").data('type');
+            // const id = $('.updateTransaksi').data('id');
 
             
             if(accept){
@@ -247,7 +276,9 @@
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Pengantaran', 'tipe'=>'shipping'])}}`;
+                    document.location.href = `../update-transaksi/${id}/Pengantaran/shipping`;
+
+                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Pengantaran', 'tipe'=>'shipping'])}}`;
                 });
             }
         }

@@ -13,7 +13,8 @@ use App\Http\Controllers\{
     TransaksiController,
     StatusTransaksiController,
     SatuanProdukController,
-    AuthController
+    AuthController,
+    AlamatPenggunaController
 };
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::DELETE("transaksi/{id}", [TransaksiController::class, 'destroy']);
     Route::POST("transaksi/create/", [TransaksiController::class, 'createTransaksi']);
     Route::GET("history_transaksi/{page}/{limitf}/{idPelanggan}", [TransaksiController::class, 'getRiwayatTransaksi']);
+    Route::GET("current_transaksi/{idTransaksi}", [TransaksiController::class, 'getCurentTransaction']);
+    Route::GET("qrcode_transaksi/{idTransaksi}", [TransaksiController::class, 'getQrCode']);
+
 
 
 //SatuanProduk
@@ -105,6 +109,14 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::POST("status_produk/", [SatuanProdukController::class, 'store']);
     Route::PUT("status_produk/", [SatuanProdukController::class, 'update']);
     Route::DELETE("status_produk/{id}", [SatuanProdukController::class, 'destroy']);
+
+//Alamat
+    Route::GET("alamat_pengguna/{id}", [AlamatPenggunaController::class, 'getData']); 
+    Route::GET("alamat_pengguna/{id}/{page?}/{limit?}", [AlamatPenggunaController::class, 'getDataPageLimit']);
+    Route::POST("alamat_pengguna/", [AlamatPenggunaController::class, 'store']);
+    Route::PUT("alamat_pengguna/", [AlamatPenggunaController::class, 'update']);
+    Route::DELETE("alamat_pengguna/{id}", [AlamatPenggunaController::class, 'destroy']);
+
 });
 
     

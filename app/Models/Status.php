@@ -14,6 +14,7 @@ class Status extends Model
     public $timestamps = true;
     protected $table = "status";
     protected $fillable = [
-        'nama'
+        'nama',
+        'sequence'
     ];
 }

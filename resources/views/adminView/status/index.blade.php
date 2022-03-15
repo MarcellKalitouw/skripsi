@@ -19,6 +19,7 @@
                                                 <th>Opsi</th>
                                                 <th>No</th>
                                                 <th>Nama</th>
+                                                <th>Urutan</th>
                                                 <th>Created At</th>
                                                 <th>Updated At</th>
                                                 <th>Deleted At</th>
@@ -48,6 +49,7 @@
                                                      </td>
                                                      <td>{{$no+=1}}</td>
                                                      <td>{{$item->nama}}</td>
+                                                     <td>{{$item->sequence}}</td>
                                                      <td>{{$item->created_at}}</td>
                                                      <td>{{$item->updated_at}}</td>
                                                      <td>{{$item->deleted_at}}</td>
