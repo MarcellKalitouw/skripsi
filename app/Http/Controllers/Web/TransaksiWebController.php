@@ -115,7 +115,9 @@ class TransaksiWebController extends Controller
     }
 
     public function createPelanggan(){
-        return view('adminView.transaksi.create-pelanggan');
+        $pelanggan = Pelanggan::all();
+
+        return view('adminView.transaksi.create-pelanggan', compact('pelanggan'));
     }
 
     // public function pilihProdukTransaksi

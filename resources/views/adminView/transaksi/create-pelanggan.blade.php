@@ -17,6 +17,18 @@
                                 <div class="col-6">
                                     <div class="row">
                                         <div class="col-12 form-group">
+                                            <label for="nama">Nama Pelanggan</label>
+                                            <select name="" id="" class="js-example-basic-single form-control" name="state">
+                                                @forelse ($pelanggan as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                @empty
+                                                    <option value="0">Pelanggan Baru</option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="form-new-pelanggan" style="display: none">
+                                        {{-- <div class="col-12 form-group">
                                             <label for="nama">Pilih Pelanggan yang terdaftar</label>
                                             <datalist id="browsers" class="form-control">
                                                 <option value="Edge">
@@ -25,7 +37,9 @@
                                                 <option value="Opera">
                                                 <option value="Safari">
                                             </datalist>
-                                        </div>
+                                        </div> --}}
+                                        
+
                                         <div class="col-12 form-group">
                                             <label for="nama">Nama Pelanggan</label>
                                             <input type="text" name="nama" class="form-control"  id="nama"
@@ -62,7 +76,7 @@
                                         
                                         
                                         <div class="col-6 form-group">
-                                            <button type="submit" class="col-3 btn btn-primary">Simpan</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -89,3 +103,11 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+    </script>
+@endpush

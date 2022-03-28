@@ -16,6 +16,7 @@
     
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <link rel="stylesheet" href="{{ asset('/select2/dist/css/select2.min.css') }}">
 
     {{-- HERE MAPS --}}
     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>

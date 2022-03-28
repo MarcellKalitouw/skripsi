@@ -5,6 +5,7 @@
     <script src="{{asset ('../template/src/assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
     <!-- apps -->
 
+    <script src="{{ asset('../select2/dist/js/select2.min.js') }}"></script>
 
     <!-- apps -->
     <script src="{{asset ('../template/src/dist/js/app-style-switcher.js')}}"></script>
