@@ -11,6 +11,8 @@ use App\Models\Shipping;
 use App\Models\StatusTransaksi;
 use App\Models\AlamatPengguna;
 use App\Models\Status;
+use App\Models\{Produk, SatuanProduk, Pelanggan};
+
 
 class TransaksiWebController extends Controller
 {
@@ -110,6 +112,141 @@ class TransaksiWebController extends Controller
         }
 
         
+    }
+
+    public function createPelanggan(){
+        return view('adminView.transaksi.create-pelanggan');
+    }
+
+    // public function pilihProdukTransaksi
+    public function createIdTransaksi(Request $request){
+        try {
+            dd($request->nama  == null);
+            if($request->all())
+            $inputPelanggan = $this->validate($request, [
+                'nama' => 'required',
+                'gender' => 'required',
+                'no_telp' => 'required',
+                'email' => 'required',
+            ]);
+            $inputPelanggan['password'] = '12345678';
+
+            $pelanggan = Pelanggan::create($inputPelanggan);
+            // dd($pelanggan);
+
+            $idPengusaha = session()->get('id');
+
+            // Make Random Code Transaction
+            $random_number = intval(rand(1,9) . rand(0,9)); 
+            $date = date('ds');
+            $inputTransaksi['tgl'] = date('Y-m-d');
+            $inputTransaksi['kode_transaksi'] = "#yunit_MAN_".$random_number.$date;
+            $inputTransaksi['id_pengusaha'] = $idPengusaha;
+            $inputTransaksi['id_pelanggan'] = $pelanggan->id;
+
+            // dd($inputTransaksi);
+
+            $transaksi = Transaksi::create($inputTransaksi);
+
+            return redirect()->route('transaksi.create-normal', $transaksi->id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    public function deleteDetailTransaksi($id){
+        // dd($id);
+        $deleteDetailTransaksi = DB::table('detail_transaksi')->where('id',$id)->delete();
+
+        return response()->json($deleteDetailTransaksi);
+    }
+
+    public function createNormalTransaksi($idTransaksi)
+    {
+        DB::beginTransaction();
+        try {
+            $idPengusaha = session()->get('id');
+            
+
+            // dd($idTransaksi);
+
+            $getProdukPengusaha = Produk::where('id_pengusaha', $idPengusaha)->get();
+            // $detailTransaksi = DetailTransaksi::where('id_pengusaha', $idPengusaha)
+            //                     ->where('id_transaksi', $idTransaksi)
+            //                     ->get();
+            $detailTransaksi = DB::table('detail_transaksi')
+                                ->leftJoin('transaksi', 'detail_transaksi.id_transaksi', 'transaksi.id')
+                                ->leftJoin('produk', 'detail_transaksi.id_produk', 'produk.id')
+                                ->whereNull('detail_transaksi.deleted_at')
+                                ->where('detail_transaksi.id_transaksi', $idTransaksi)
+                                ->select(
+                                    'detail_transaksi.*',
+                                    'produk.nama as nama_produk',
+                                    'transaksi.kode_transaksi as kode_transaksi'
+                                )
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+            // dd($detailTransaksi);
+                            
+
+            $this->getGambarProdukById($getProdukPengusaha);
+            DB::commit();
+
+
+            // dd($getProdukPengusaha);
+            return view('adminView.transaksi.create-normal-transaksi', [
+                'produk' => $getProdukPengusaha,
+                'idTransaksi' => $idTransaksi,
+                'detailTransaksi' => $detailTransaksi,
+                'pageTitle'=>$this->pageTitle
+            ]);
+        } catch (\Throwable $th) {
+            
+            throw $th;
+        }
+        
+    }
+    public function getDetailSelectedProduct($id){
+        $detailProduk = Produk::find($id);
+        $satuanProduk = SatuanProduk::where('id_pengusaha', session()->get('id'))->first('nama');
+
+        $detailProduk['satuan_produk'] = $satuanProduk;
+        // dd($detailProduk);
+        return response()->json($detailProduk);
+    }
+
+    public function getGambarProdukById($data){
+        foreach ($data as $key) {
+            $gambarProduk = DB::table('gambar_produk')->where('id_produk', $key->id)->get();
+            
+            $fileProduk = $gambarProduk;
+            $key->gambar_produk = $fileProduk;
+            // dd($gambarProduk->file);
+        }
+    }
+
+    public function storeDetailTransaksi(Request $request, $idTransaksi){
+        // dd($request, $idTransaksi);
+        $idPengusaha = session()->get('id');
+
+        $input = $request->validate([
+            'id_produk' => 'required',
+            'harga' => 'required',
+            'qty' => 'required',
+            'diskon' => 'required',
+            'total' => 'required'
+        ]);
+        $input['id_pengusaha'] = $idPengusaha;
+        $input['id_transaksi'] = $idTransaksi;
+
+        $detailTransaksi = DetailTransaksi::create($input);
+        // dd($input);
+        return redirect()->route('transaksi.create-normal', $idTransaksi);
+
+
+        
+    }
+    public function storeNormalTransaks(Request $request){
+
     }
 
     public function create()

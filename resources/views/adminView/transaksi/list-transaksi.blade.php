@@ -5,7 +5,10 @@
         <div class="col-12 mt-4 mb-4">
             <h4 class="mb-0">Daftar Transaksi</h4>
             <x-alert> </x-alert>
-            
+            <h4 class="card-title">
+                <a href="{{route('transaksi.create-pelanggan')}}" class="btn waves-effect waves-light btn-success">+
+                    Tambah Data</a>
+            </h4>
         </div>
         @foreach ($data as $item)
             <div class="col-md-4">

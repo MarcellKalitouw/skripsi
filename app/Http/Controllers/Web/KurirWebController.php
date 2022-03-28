@@ -5,8 +5,9 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Kurir;
 use Illuminate\Http\Request;
-use DB;
-use File;
+use DB, File;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Gmail;
 
 class KurirWebController extends Controller
 {
@@ -63,6 +64,18 @@ class KurirWebController extends Controller
         $input['password'] = bcrypt($input['password']);
 
         // dd($input);
+        $email = '1802arthur@gmail.com';
+
+        $details =[
+            'title' => 'Thank you for signing in',
+            'body' => 'You did it'
+        ];
+        Mail::to($email)->send(new Gmail($details));
+        // if (Mail::failures()) {
+        //    return response()->Fail('Sorry! Please try again latter');
+        // }else{
+        //     return response()->success('Great! Successfully send in your mail');
+        // }
         
         $kurir = Kurir::create($input);
         return redirect()->route('kurir.index')->with('success','Data kurir <strong> "'.$request->nama_kurir.'" </strong> has been saved!!');
@@ -125,7 +138,8 @@ class KurirWebController extends Controller
     public function destroy($id)
     {
         //
-        $data = $this->findId($id)->delete();
+        // $data = $this->findId($id)->delete();
+        $data = DB::table('kurir')->where('id',$id)->delete();
         return redirect()->route('kurir.index')->with('deleted','Data kurir  has been deleted!!');
         
     }

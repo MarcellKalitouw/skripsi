@@ -116,10 +116,11 @@
         window.hereApiKey = "{{ env('HERE_API_KEY') }}"
     </script>
     
-    @stack('script')
+    
     
     <script src="{{ asset('js/here.js') }}"></script>
     @include('adminView.partial.script')
+    @stack('script')
     
 </body>
 

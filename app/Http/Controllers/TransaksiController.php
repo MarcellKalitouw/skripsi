@@ -285,6 +285,7 @@ class TransaksiController extends Controller
             //Transaksi
             $inputTransaksi = $this->validateTransaksi($req)['transaksi'];
             // dd($remakeIdPelanggan);
+            
             //Make Random Code Transaction
             $remakeIdPelanggan = explode('-', $inputTransaksi['id_pelanggan'])[3];
             $random_number = intval(rand(1,9) . rand(0,9)); 

@@ -46,6 +46,15 @@ Route::middleware(['checkStatus'])->group(function () {
     //Transaksi
     Route::resource('shipping', ShippingWebController::class);
     Route::resource('transaksi', TransaksiWebController::class);
+    Route::get('chooseProdukTransaksi/', [TransaksiWebController::class, 'pilihProdukTransaksi'])->name('transaksi.pilih-produk');
+    
+    Route::get('getDetailProduk/{id}', [TransaksiWebController::class, 'getDetailSelectedProduct'])->name('transaksi.detail-produk');
+    Route::get('createPelanggan/', [TransaksiWebController::class, 'createPelanggan'])->name('transaksi.create-pelanggan');
+    Route::post('createTransaski/', [TransaksiWebController::class, 'createIdTransaksi'])->name('transaksi.create-transaksi');
+    Route::get('createTransaksiNormal/{idTransaksi}', [TransaksiWebController::class, 'createNormalTransaksi'])->name('transaksi.create-normal');
+    Route::post('storeDetailTransaksi/{idTransaksi}', [TransaksiWebController::class, 'storeDetailTransaksi'])->name('transaksi.store-detailTransaksi');
+    Route::delete('detailTransaksi/{id}', [TransaksiWebController::class, 'deleteDetailTransaksi'])->name('transaksi.delete-detailTransaksi');
+
 
     //Status
     Route::resource('status', StatusWebController::class);
