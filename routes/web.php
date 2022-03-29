@@ -53,7 +53,7 @@ Route::middleware(['checkStatus'])->group(function () {
     Route::post('createTransaski/', [TransaksiWebController::class, 'createIdTransaksi'])->name('transaksi.create-transaksi');
     Route::get('createTransaksiNormal/{idTransaksi}', [TransaksiWebController::class, 'createNormalTransaksi'])->name('transaksi.create-normal');
     Route::post('storeDetailTransaksi/{idTransaksi}', [TransaksiWebController::class, 'storeDetailTransaksi'])->name('transaksi.store-detailTransaksi');
-    Route::delete('detailTransaksi/{id}', [TransaksiWebController::class, 'deleteDetailTransaksi'])->name('transaksi.delete-detailTransaksi');
+    Route::delete('deleteDetailTransaksi/{id}', [TransaksiWebController::class, 'deleteDetailTransaksi'])->name('transaksi.delete-detailTransaksi');
 
 
     //Status

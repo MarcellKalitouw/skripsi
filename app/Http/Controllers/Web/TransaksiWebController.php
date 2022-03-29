@@ -116,24 +116,30 @@ class TransaksiWebController extends Controller
 
     public function createPelanggan(){
         $pelanggan = Pelanggan::all();
-
+        // $pelanggan = [];
         return view('adminView.transaksi.create-pelanggan', compact('pelanggan'));
     }
 
     // public function pilihProdukTransaksi
     public function createIdTransaksi(Request $request){
         try {
-            dd($request->nama  == null);
-            if($request->all())
-            $inputPelanggan = $this->validate($request, [
-                'nama' => 'required',
-                'gender' => 'required',
-                'no_telp' => 'required',
-                'email' => 'required',
-            ]);
-            $inputPelanggan['password'] = '12345678';
+            // dd($request->all());
+            if($request->id_pelanggan == null){
+                $inputPelanggan = $this->validate($request, [
+                    'nama' => 'required',
+                    'gender' => 'required',
+                    'no_telp' => 'required',
+                    'email' => 'required',
+                ]);
+                $inputPelanggan['password'] = '12345678';
+                $pelanggan = Pelanggan::create($inputPelanggan);
+            }else{
+                $pelanggan = new \stdClass();
+                $pelanggan->id = $request->id_pelanggan;
+            }
+                // dd($pelanggan->id);
+            
 
-            $pelanggan = Pelanggan::create($inputPelanggan);
             // dd($pelanggan);
 
             $idPengusaha = session()->get('id');
@@ -187,7 +193,12 @@ class TransaksiWebController extends Controller
                                 )
                                 ->orderBy('created_at', 'desc')
                                 ->get();
-            // dd($detailTransaksi);
+            // $totalQty = DB::table('detail_transaksi')
+            //             ->where('id_transaksi', $idTransaksi)
+            //             ->sum('qty');
+                            
+            $totalDetailTransaksi = $this->SumDetailTransaksi($idTransaksi);
+            // dd($totalDetailTransaksi);
                             
 
             $this->getGambarProdukById($getProdukPengusaha);
@@ -199,6 +210,7 @@ class TransaksiWebController extends Controller
                 'produk' => $getProdukPengusaha,
                 'idTransaksi' => $idTransaksi,
                 'detailTransaksi' => $detailTransaksi,
+                'totalDetailTransaksi' => $totalDetailTransaksi,
                 'pageTitle'=>$this->pageTitle
             ]);
         } catch (\Throwable $th) {
@@ -206,6 +218,24 @@ class TransaksiWebController extends Controller
             throw $th;
         }
         
+    }
+    public function SumDetailTransaksi($idTransaksi){
+        $sumDetailTransaksi = new \stdClass();
+        $sumDetailTransaksi->total_qty = DB::table('detail_transaksi')
+                                        ->where('id_transaksi', $idTransaksi)
+                                        ->sum('qty');
+        $sumDetailTransaksi->total_harga = DB::table('detail_transaksi')
+                                        ->where('id_transaksi', $idTransaksi)
+                                        ->sum('harga');
+        $sumDetailTransaksi->total_diskon = DB::table('detail_transaksi')
+                                        ->where('id_transaksi', $idTransaksi)
+                                        ->sum('diskon');
+        $sumDetailTransaksi->grand_total = DB::table('detail_transaksi')
+                                        ->where('id_transaksi', $idTransaksi)
+                                        ->sum('total');
+        return $sumDetailTransaksi;
+        // dd($sumDetailTransaksi);
+
     }
     public function getDetailSelectedProduct($id){
         $detailProduk = Produk::find($id);
@@ -243,9 +273,6 @@ class TransaksiWebController extends Controller
         $detailTransaksi = DetailTransaksi::create($input);
         // dd($input);
         return redirect()->route('transaksi.create-normal', $idTransaksi);
-
-
-        
     }
     public function storeNormalTransaks(Request $request){
 
