@@ -22,7 +22,7 @@ class CreateTransaksi extends Migration
             $table->uuid('id_pengusaha');
             // $table->uuid('id_shipping');
             $table->integer('total_qty')->default(5);
-            $table->integer('subtotal_qty')->default(5);
+            $table->integer('subtotal')->default(5);
             $table->integer('pajak')->default(5);
             $table->integer('diskon')->default(5);
             $table->integer('biaya_tambahan')->default(10);

@@ -22,7 +22,7 @@ class Transaksi extends Model
         'id_alamat',
         'kode_transaksi',
         'total_qty',
-        'subtotal_qty',
+        'subtotal',
         'pajak',
         'diskon',
         'biaya_tambahan',

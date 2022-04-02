@@ -54,6 +54,11 @@ Route::middleware(['checkStatus'])->group(function () {
     Route::get('createTransaksiNormal/{idTransaksi}', [TransaksiWebController::class, 'createNormalTransaksi'])->name('transaksi.create-normal');
     Route::post('storeDetailTransaksi/{idTransaksi}', [TransaksiWebController::class, 'storeDetailTransaksi'])->name('transaksi.store-detailTransaksi');
     Route::delete('deleteDetailTransaksi/{id}', [TransaksiWebController::class, 'deleteDetailTransaksi'])->name('transaksi.delete-detailTransaksi');
+    Route::put('updateTransaksi/{id}', [TransaksiWebController::class, 'updateTransaksiNormal'])->name('transaksi.update-transaksi');
+
+    Route::get('list-transaksi', [TransaksiWebController::class, 'listTransaksi'])->name('transaksi.get-transaksi');
+Route::get('detail-transaksi/{id}', [TransaksiWebController::class, 'detailTransaksi'])->name('transaksi.detail-transaksi');
+Route::get('update-transaksi/{id}/{status}/{tipe}', [TransaksiWebController::class, 'updateStatusTransaksi'])->name('transaksi.update-status');
 
 
     //Status
@@ -73,9 +78,7 @@ Route::middleware(['checkStatus'])->group(function () {
 });
 
 //Register
-Route::get('list-transaksi', [TransaksiWebController::class, 'listTransaksi'])->name('transaksi.get-transaksi');
-Route::get('detail-transaksi/{id}', [TransaksiWebController::class, 'detailTransaksi'])->name('transaksi.detail-transaksi');
-Route::get('update-transaksi/{id}/{status}/{tipe}', [TransaksiWebController::class, 'updateStatusTransaksi'])->name('transaksi.update-status');
+
 Route::resource('register', RegisterControllerWeb::class);
 Route::resource('login', LoginControllerWeb::class);
 Route::get('logout',[LoginControllerWeb::class,'logout'])->name('logout');

@@ -69,13 +69,13 @@
                                             
                                         </div>
                                         <div class="col-12 form-group">
-                                            <label for="subtotal_qty">Sub Total Kuantiti</label>
+                                            <label for="subtotal">Sub Total Kuantiti</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <label class="input-group-text" for="subtotal_qty"></label>
+                                                    <label class="input-group-text" for="subtotal"></label>
                                                 </div>
-                                                <input type="number" name="subtotal_qty" class="form-control"  id="subtotal_qty"
-                                                    aria-describedby="subtotal_qty">
+                                                <input type="number" name="subtotal" class="form-control"  id="subtotal"
+                                                    aria-describedby="subtotal">
                                             </div>
                                             
                                         </div>

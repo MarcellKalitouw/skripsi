@@ -64,7 +64,7 @@
                                 <td>{{$item->id_pengusaha}}</td>
                                 <td>{{$item->id_shipping}}</td>
                                 <td>{{$item->total_qty}}</td>
-                                <td>{{$item->subtotal_qty}}</td>
+                                <td>{{$item->subtotal}}</td>
                                 <td>{{$item->pajak}}</td>
                                 <td>{{$item->diskon}}</td>
                                 <td>{{$item->biaya_tambahan}}</td>

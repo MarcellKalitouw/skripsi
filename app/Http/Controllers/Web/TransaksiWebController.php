@@ -64,14 +64,28 @@ class TransaksiWebController extends Controller
                 )
                 ->orderBy('created_at','desc')
                 ->first();;
-        $detail_transaksi = DetailTransaksi::where('id_transaksi',$id )->get();
+        $detailTransaksi = DB::table('detail_transaksi')
+                                ->leftJoin('transaksi', 'detail_transaksi.id_transaksi', 'transaksi.id')
+                                ->leftJoin('produk', 'detail_transaksi.id_produk', 'produk.id')
+                                ->whereNull('detail_transaksi.deleted_at')
+                                ->where('detail_transaksi.id_transaksi', $id)
+                                ->select(
+                                    'detail_transaksi.*',
+                                    'produk.nama as nama_produk',
+                                    'transaksi.kode_transaksi as kode_transaksi'
+                                )
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+        $totalDetailTransaksi = $this->SumDetailTransaksi($id);
+        // dd($totalDetailTransaksi);
         $shipping = Shipping::where('id_transaksi', $id)->get();
         $status_transaksi = StatusTransaksi::where('id_transaksi', $id)->get();
         $alamat_transaksi = AlamatPengguna::where('id', $item->id_alamat)->first();
         // dd($alamat_transaksi);
         return view('adminView.transaksi.detail-transaksi', compact(
             'item',
-            'detail_transaksi',
+            'detailTransaksi',
+            'totalDetailTransaksi',
             'shipping',
             'status_transaksi',
             'alamat_transaksi'
@@ -221,7 +235,7 @@ class TransaksiWebController extends Controller
     }
     public function SumDetailTransaksi($idTransaksi){
         $sumDetailTransaksi = new \stdClass();
-        $sumDetailTransaksi->total_qty = DB::table('detail_transaksi')
+        $sumDetailTransaksi->qty_total = DB::table('detail_transaksi')
                                         ->where('id_transaksi', $idTransaksi)
                                         ->sum('qty');
         $sumDetailTransaksi->total_harga = DB::table('detail_transaksi')
@@ -230,9 +244,9 @@ class TransaksiWebController extends Controller
         $sumDetailTransaksi->total_diskon = DB::table('detail_transaksi')
                                         ->where('id_transaksi', $idTransaksi)
                                         ->sum('diskon');
-        $sumDetailTransaksi->grand_total = DB::table('detail_transaksi')
+        $sumDetailTransaksi->grand_total = intval( DB::table('detail_transaksi')
                                         ->where('id_transaksi', $idTransaksi)
-                                        ->sum('total');
+                                        ->sum('total'));
         return $sumDetailTransaksi;
         // dd($sumDetailTransaksi);
 
@@ -274,8 +288,15 @@ class TransaksiWebController extends Controller
         // dd($input);
         return redirect()->route('transaksi.create-normal', $idTransaksi);
     }
-    public function storeNormalTransaks(Request $request){
-
+    public function updateTransaksiNormal($idTransaksi, Request $request){
+        $data = $request->data;
+        $idStatus = DB::table('status')->where('sequence', 1)->first('id');
+        $data['id_status'] = $idStatus->id;
+        // dd($data );
+        $updateTransaksi = Transaksi::where('id', $idTransaksi)->update($data);
+        // dd($updateTransaksi);
+        // return redirect()->route('transaksi.get-transaksi');
+        return response()->json($updateTransaksi);
     }
 
     public function create()
@@ -305,7 +326,7 @@ class TransaksiWebController extends Controller
             'id_pelanggan' => 'required',
             'id_pengusaha' => 'required',
             'total_qty' => 'required',
-            'subtotal_qty' => 'required',
+            'subtotal' => 'required',
             'pajak' => 'required',
             'diskon' => 'required',
             'biaya_tambahan' => 'required',
@@ -352,7 +373,7 @@ class TransaksiWebController extends Controller
             'id_pengusaha' => 'required',
             'id_shipping' => 'required',
             'total_qty' => 'required',
-            'subtotal_qty' => 'required',
+            'subtotal' => 'required',
             'pajak' => 'required',
             'diskon' => 'required',
             'biaya_tambahan' => 'required',

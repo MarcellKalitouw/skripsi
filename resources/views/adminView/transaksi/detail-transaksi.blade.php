@@ -19,6 +19,7 @@
                             <h3><span class="badge badge-success">status : {{ $item->nama_status }}</span></h3> 
                         </div>
                         <p style="margin-bottom: 2px; font-weight: 500">Keterangan : </p> 
+                        <p>{{ $item->keterangan }}</p>
                         <p class="card-text" style="
                             display: -webkit-box;
                             overflow: hidden;
@@ -55,48 +56,60 @@
                         </p>
                         
                         <div style="border-bottom: 1px solid; display:flex; justify-content: space-between;margin-bottom:1rem">
-                                <p class="" style="margin: 2px;font-weight: 500">Rincian Produk</p>
+                                <p class="" style="margin: 2px;font-weight: 500">Rincian Pesanan</p>
                         </div>
                         
                         
                         <div class="table-responsive">
-                            <table class="table">
-                                <thead class="bg-inverse text-black">
-                                    <tr>
+                            <table class="table table-hover">
+                                <thead >
+                                    
+                                    <tr class="bg-success text-white" style="position: -webkit-sticky; 
+                                        position: sticky;
+                                        top: 0;">
                                         <th>#</th>
-                                        <th>Produk</th>
+                                        <th>Nama Produk</th>
                                         <th>Harga</th>
                                         <th>Kuantiti</th>
                                         <th>Diskon</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
-                                <tbody class="">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Nigam</td>
-                                        <td>Eichmann</td>
-                                        <td>@Sonu</td>
-                                        <td>@Sonu</td>
-                                        <td>@Sonu</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Nigam</td>
-                                        <td>Eichmann</td>
-                                        <td>@Sonu</td>
-                                        <td>@Sonu</td>
-                                        <td>@Sonu</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Nigam</td>
-                                        <td>Eichmann</td>
-                                        <td>@Sonu</td>
-                                        <td>@Sonu</td>
-                                        <td>@Sonu</td>
-                                    </tr>
+                                <tbody>
+                                    <?php $no = 0 ?>
+                                    @forelse ($detailTransaksi as $dt)
+                                        <tr>
+                                            <td>
+                                                {{ $no +=1 }}
+                                            </td>
+                                            <td>{{ $dt->nama_produk }}</td>
+                                            <td>Rp.{{ $dt->harga }}</td>
+                                            <td>{{ $dt->qty }}</td>
+                                            <td>Rp.{{ $dt->diskon }}</td>
+                                            <td>Rp.{{ $dt->total }}</td>
+                                            
+                                        </tr>
+                                    @empty
+                                        <tr class="text-center">
+                                            <td colspan="6">Pesanan belum ada</td>
+                                        </tr>
+                                    @endforelse
+                                    
+                                    
+                                        
                                 </tbody>
+                                <tfoot >
+                                    <tr class="bg-success text-white" style="position: -webkit-sticky; 
+                                        position: sticky;
+                                        bottom: 0;">
+                                        <th colspan="2" class="text-center">TOTAL</th>
+                                        <th>Rp.{{ number_format($totalDetailTransaksi->total_harga) }}</th>
+                                        <th>{{ $totalDetailTransaksi->qty_total }}</th>
+                                        <th>Rp.{{ number_format($totalDetailTransaksi->total_diskon)  }}</th>
+                                        <th>Rp.{{ number_format($totalDetailTransaksi->grand_total)  }}</th>
+                                    </tr>
+                                    
+                                </tfoot>
                             </table>
                         </div>
                         <div style="border-bottom: 1px solid; display:flex; justify-content: space-between;margin-bottom:1rem">
