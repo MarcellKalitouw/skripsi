@@ -25,14 +25,12 @@
                             <tr >
                                 <th>Opsi</th>
                                 <th>No</th>
+                                <th>Status Pengusaha</th>
                                 <th>Nama</th>
                                 <th>Alamat</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
                                 <th>Nomor Telepon</th>
                                 <th>Email</th>
-                                <th>Gambar</th>
-                                <th>Password</th>
+                                {{-- <th>Gambar</th> --}}
                                 <th>Deskripsi</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
@@ -62,20 +60,18 @@
                                     </form>
                                 </td>
                                 <td>{{$no+=1}}</td>
+                                <td>{{$item->status}}</td>
                                 <td>{{$item->nama}}</td>
                                 <td>{{$item->alamat}}</td>
-                                <td>{{$item->latitude}}</td>
-                                <td>{{$item->longitude}}</td>
                                 <td>{{$item->no_telp}}</td>
                                 <td>{{$item->email}}</td>
-                                <td>
+                                {{-- <td>
                                     @if (file_exists('gambar_pengusaha/'.$item->gambar))
                                         <img src="{{asset('/gambar_pengusaha/'.$item->gambar)}}" alt="" width="300px" height="300px" style="object-fit:contain;">
                                     @else
                                         No image
                                     @endif
-                                </td>
-                                <td>{{$item->password}}</td>
+                                </td> --}}
                                 <td>{{$item->deskripsi}}</td>
                                 <td>{{$item->created_at}}</td>
                                 <td>{{$item->updated_at}}</td>
@@ -89,14 +85,12 @@
                             <tr>
                                 <th>Opsi</th>
                                 <th>No</th>
+                                <th>Status Pengusaha</th>
                                 <th>Nama</th>
                                 <th>Alamat</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
                                 <th>Nomor Telepon</th>
                                 <th>Email</th>
-                                <th>Gambar</th>
-                                <th>Password</th>
+                                {{-- <th>Gambar</th> --}}
                                 <th>Deskripsi</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>

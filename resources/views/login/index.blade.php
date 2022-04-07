@@ -54,7 +54,7 @@
 	<body onload="killSteps()">
 		<div class="wrapper">
 			<div class="image-holder">
-				<img src="{{asset ('../template_register/colorlib-wizard-4/images/form-wizard.png') }}" alt="">
+				{{-- <img src="{{asset ('../template_register/colorlib-wizard-4/images/download.jpg') }}" alt=""> --}}
 			</div>
             <form id="formRegister" action="{{ route('login.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -63,10 +63,16 @@
 
             	<div class="form-header">
             		<a href="#">#Yunit Laundry</a>
-            		<h3 style="margin-bottom: 20px">Login sebagai Partner usaha</h3>
+            		<h3 style="margin-bottom: 20px; color: white; font-size: 32px;background-color: rgba(85, 78, 78, 0.8);border-radius:10px">Login sebagai Partner usaha</h3>
 					<a style="margin-bottom: 20px; background: #0075fc;" href="{{ route('register.index') }}"  >Register Account</a>
 				</div>
-            	<div id="">
+            	<div id="" style="
+					border: 1px solid #fff;
+					border-radius: 10px;
+					padding: 50px 50px;
+					position: relative;
+					background: rgba(56, 53, 53, 0.8);
+				">
             		<!-- SECTION 1 -->
 	                
 
@@ -90,8 +96,8 @@
 	                    	</div>
 	                    </div>	
 						@if ($error = Session::get('error'))
-                        <div class="alert alert-danger" style="color: #000000; background:rgba(145, 145, 145, 0.3); padding:5%; border-radius: 25px;" >
-                            <strong style="color: #C74667;">Whoops!</strong> There were some problems with your input.<br><br>
+                        <div class="alert alert-danger" style="color: #ffffff; background:rgba(145, 145, 145, 0.3); padding:5%; border-radius: 25px;" >
+                            <strong style="color: #C74667;">Whoops!</strong> ada kesalahan.<br><br>
                             <ul>
                                
                                 <li>{{ $error }}</li>

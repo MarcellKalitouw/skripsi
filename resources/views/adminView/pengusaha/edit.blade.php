@@ -71,7 +71,7 @@
                                         
                                         <div class="col-12 form-group">
                                             <label for="password">Kata Sandi</label>
-                                            <input type="password" name="password" class="form-control" value="{{$getData->password}}"  id="password"
+                                            <input type="password" name="password" class="form-control" value=""  id="password"
                                                     aria-describedby="password">
                                         </div>
                                         <div class="col-12 form-group">
@@ -83,6 +83,19 @@
                                             <label for="deskripsi">Deskripsi</label>
                                             <textarea rows="5" name="deskripsi" class="form-control"  id="deskripsi"
                                                 aria-describedby="name">{{$getData->deskripsi}}</textarea>
+                                        </div>
+                                        <div class="col-12 form-group">
+                                            <label for="status">Status</label>
+                                            <select class="form-control" name="status" id="status">
+                                                <option selected disabled>Pilih Status Pengusaha</option>
+                                                @if ($getData->status == 'Aktif')
+                                                    <option value="Aktif" selected>Aktif</option>
+                                                    <option value="Tidak Aktif">Tidak Aktif</option>
+                                                @else
+                                                    <option value="Aktif" >Aktif</option>
+                                                    <option value="Tidak Aktif" selected>Tidak Aktif</option>
+                                                @endif
+                                            </select>
                                         </div>
                                         
                                         <div class="col-6 form-group">

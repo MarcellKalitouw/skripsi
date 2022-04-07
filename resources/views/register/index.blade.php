@@ -47,7 +47,7 @@
 	<body>
 		<div class="wrapper">
 			<div class="image-holder">
-				<img src="{{asset ('../template_register/colorlib-wizard-4/images/form-wizard.png') }}" alt="">
+				{{-- <img src="{{asset ('../template_register/colorlib-wizard-4/images/form-wizard.png') }}" alt=""> --}}
 			</div>
             <form id="formRegister" action="{{ route('register.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -56,10 +56,14 @@
 
             	<div class="form-header">
             		<a href="#">#Yunit Laundry</a>
-            		<h3>Mendaftar untuk menjadi partner</h3>
+            		<h3 style="margin-bottom: 20px; color: white; font-size: 26px;background-color: rgba(85, 78, 78, 0.8);border-radius:10px">Mendaftar untuk menjadi partner</h3>
 					<a style="margin-bottom: 20px; background: #0075fc;" href="{{ route('login.index') }}"  >Login Account</a>
             	</div>
-            	<div id="wizard">
+            	<div id="wizard" style="
+					background: rgba(56, 53, 53, 0.8);
+					padding: 50px 50px;
+
+				">
             		<!-- SECTION 1 -->
 	                <h4></h4>
 	                <section>

@@ -211,7 +211,7 @@
                                                     <div class="input-group-prepend">
                                                         <label class="input-group-text" for="total_qty"></label>
                                                     </div>
-                                                    <input readonly value="{{ $totalDetailTransaksi->total_qty }}" type="number" name="total_qty" class="form-control"  id="total-qty"
+                                                    <input readonly value="{{ $totalDetailTransaksi->qty_total }}" type="number" name="total_qty" class="form-control"  id="total-qty"
                                                         aria-describedby="total_qty">
                                                 </div>
                                                 
@@ -324,19 +324,19 @@
                     'keterangan': inpKeterangan.val(),
                 }
                 console.log('dataTransaksi', dataTransaksi);
-                // if(inpTotalTransaksi.val() !== 0 || inpTotalTransaksi.val() !== ''){
-                //     $.ajax({
-                //         url: "{{ route('transaksi.update-transaksi', $idTransaksi) }}",
-                //         type:'PUT',
-                //         data: {_token:`{{ csrf_token() }}`, data: dataTransaksi},
-                //         success: function(data) {
+                if(inpTotalTransaksi.val() !== 0 || inpTotalTransaksi.val() !== ''){
+                    $.ajax({
+                        url: "{{ route('transaksi.update-transaksi', $idTransaksi) }}",
+                        type:'PUT',
+                        data: {_token:`{{ csrf_token() }}`, data: dataTransaksi},
+                        success: function(data) {
                             
-                //                 window.location.href = "{{ url('/list-transaksi') }}"
+                                window.location.href = "{{ url('/list-transaksi') }}"
                             
-                //         }
-                //     });
+                        }
+                    });
 
-                // }
+                }
 
             }
             function hapusDetailTransaksi(id){
@@ -384,6 +384,11 @@
                      withPajak = parseInt(inpTotalTransaksi.val()) + parseInt(totalPajak);
                      inpTotalTransaksi.val(withPajak);
                      console.log('totalPajak', totalPajak, 'withPajak', withPajak);
+                }
+                if(inpDiskonTransaksi.val() != 0 && inpDiskonTransaksi.val() != null && inpDiskonTransaksi.val() != undefined && inpDiskonTransaksi.val() !== ''){
+                     withDiskon = inpTotalTransaksi.val() - inpDiskonTransaksi.val()
+
+                     inpTotalTransaksi.val(withDiskon);
                 }
                 console.log('new', newExtraCost);
 

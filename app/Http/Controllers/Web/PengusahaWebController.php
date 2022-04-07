@@ -42,7 +42,8 @@ class PengusahaWebController extends Controller
             'email' => 'required',
             'gambar' => 'required',
             'password' => 'required',
-            'deskripsi' => 'required'
+            'deskripsi' => 'required',
+            'status' => 'required'
         ]);
         $input = $request->except(['_token']);
 
@@ -85,7 +86,8 @@ class PengusahaWebController extends Controller
             'longitude' => 'required',
             'no_telp' => 'required',
             'email' => 'required',
-            'deskripsi' => 'required'
+            'deskripsi' => 'required',
+            'status' => 'required'
         ]);
         $input = $request->except(['_token', '_method']);
         $check = DB::table('pengusaha')->where('id', $id)->first();

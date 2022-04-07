@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12">
+            <div class="card border-primary">
+                <div class="card-header bg-primary">
+                    <h4 class="text-white">Tambah </h4>
+                </div>
+                <div class="card-body">
+                    <div class="col-12" style="width: 500px">
+                        <h3>Form Tambah </h3>
+                        <hr>
+                        <form method="post" action="" enctype="multipart/form-data" id="myForm">
+                            <div style="margin-bottom: 2%">
+                                <label for="">Question Content</label>
+                                <textarea type="text" name="question_content" id="question-content" rows="10"
+                                    cols="50"></textarea>
+                            </div>
+                            <div class="a" style="display: flex; flex-direction: column;margin-bottom:2%">
+                                <!-- <label for="">Answer ID A</label>
+                                <input type="text" name="" id="answer-a">  -->
+
+                                <label for="">Answer Content A</label>
+                                <input type="text" name="" id="answer-content-a">
+
+                                <label for="">Is Correct A</label>
+                                <input type="number" name="" id="is-correct-a" value="0" id="">
+                            </div>
+                            <div class="b" style="display: flex; flex-direction: column;margin-bottom:2%">
+                                <!-- <label for="">Answer ID B</label>
+                                <input type="text" name="" id="answer-b">  -->
+
+                                <label for="">BAnswer Content B</label>
+                                <input type="text" name="" id="answer-content-b">
+
+                                <label for="">Is Correct B</label>
+                                <input type="number" name="" id="is-correct-b" value="0" id="">
+                            </div>
+                            <div class="c" style="display: flex; flex-direction: column;margin-bottom:2%">
+                                <!-- <label for="">Answer ID C</label>
+                                <input type="text" name="" id="answer-c">  -->
+
+                                <label for="">Answer Content C</label>
+                                <input type="text" name="" id="answer-content-c">
+
+                                <label for="">Is Correct C</label>
+                                <input type="number" name="" id="is-correct-c" value="0" id="">
+                            </div>
+                            <div class="a" style="display: flex; flex-direction: column;margin-bottom:2%">
+                                <!-- <label for="">Answer ID D</label>
+                                <input type="text" name="" id="answer-d">  -->
+
+                                <label for="">Answer Content D</label>
+                                <input type="text" name="" id="answer-content-d">
+
+                                <label for="">Is Correct D</label>
+                                <input type="number" name="" value="0" id="is-correct-d">
+                            </div>
+
+                            <div>
+                                <button type="reset" onclick="saveToVariable()">
+                                    Tambah
+                                </button>
+                                <button type="reset">Reset</button>
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <div id="display">
+                        <textarea id="textdisplay"></textarea>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        // let questionContent = $("#question-content");
+        // let answerIdA = $("#answer-a");
+        // let answerContentA = $("#answer-content-a");
+        // let answerContentA = $("#answer-content-a");
+        let questions = [];
+        let question_content = [];
+        let answers = [];
+        function saveToVariable() {
+            let q = document.getElementById('question-content').value;
+            let choices = ['a', 'b', 'c', 'd'];
+            question_content.push(q);
+            choices.forEach((element) => {
+                if (document.getElementById('answer-content-' + element).value != '') {
+                    let answer = {
+                        "id": element,
+                        "answer_content": document.getElementById('answer-content-' + element).value,
+                        "is_correct": parseInt(document.getElementById('is-correct-' + element).value),
+                        "answer_category": -1
+                    };
+                    answers.push(answer);
+                }
+
+
+            });
+            let combine = { "question_content": question_content, "answers": answers };
+            questions.push(combine);
+            question_content = [];
+            answers = [];
+            console.log(questions);
+            document.getElementById('textdisplay').innerHTML = JSON.stringify(questions);
+
+
+        }
+
+
+    </script>
+</body>
+
+</html>

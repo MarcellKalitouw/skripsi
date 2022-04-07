@@ -9,7 +9,7 @@ class PengusahaController extends Controller
 {
     public function getData($id=null){
         try{
-            $id?$data = Pengusaha::firstWhere('id', $id) : $data = Pengusaha::all();
+            $id?$data = Pengusaha::firstWhere('id', $id) : $data = Pengusaha::where('status','!=','Tidak Aktif')->get();
 
             // dd(is_null($data));
 
@@ -40,6 +40,7 @@ class PengusahaController extends Controller
             
             if($key){
                 $data = Pengusaha::where('nama', 'LIKE', '%'.$key.'%')
+                        ->where('status', '!=', 'Tidak Aktif')
                         ->skip($page*$limit)->take($limit)->get();
                 $totalRow = $data->count();
                 if(count($data)> 0){
@@ -66,7 +67,8 @@ class PengusahaController extends Controller
         $limit = $limit?$limit:0;
         $page = intval($page);
         $limit = intval($limit);
-        $data = Pengusaha::skip($page*$limit)->take($limit)->get();
+        $data = Pengusaha::where('status','!=','Tidak Aktif')
+                ->skip($page*$limit)->take($limit)->get();
         $totalRow = Pengusaha::count();
         if(count($data)>0)
             return response()->json(['data'=>$data, 'message'=>'success', 'page'=>$page, 'limit'=>$limit, 'total_row'=>$totalRow], 200);

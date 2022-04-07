@@ -56,9 +56,13 @@ img {
   vertical-align: middle; }
 
 body {
-  background: url("../images/form-wizard-bg.png");
+  /* background: rgb(95,95,255);
+  background: linear-gradient(90deg, rgba(95,95,255,1) 0%, rgba(0,212,255,1) 100%); */
+  background: url("../images/bg-5.jpg");
   background-size: cover;
-  height: 100vh; }
+  height: 100vh; 
+  /* width: 100vh; */
+}
 
 .wrapper {
   width: 1400px;

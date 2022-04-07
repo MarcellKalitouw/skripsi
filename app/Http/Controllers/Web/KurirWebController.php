@@ -13,6 +13,7 @@ class KurirWebController extends Controller
 {
     protected $pageTitle = 'Kurir';
     
+    
     public function validateForm($req){
         $req->validate([
             'id_pengusaha'=> 'required',

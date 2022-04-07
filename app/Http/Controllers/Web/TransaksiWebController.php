@@ -45,8 +45,9 @@ class TransaksiWebController extends Controller
                 )
                 ->orderBy('created_at','desc')
                 ->get();
+        $status = Status::orderBy('sequence')->get();
         // dd($data);
-        return view('adminView.transaksi.list-transaksi', compact('data'));
+        return view('adminView.transaksi.list-transaksi', compact('data','status'));
     }
 
     public function detailTransaksi($id){

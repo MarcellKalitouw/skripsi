@@ -16,8 +16,9 @@
     
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <link rel="stylesheet" href="{{ asset('/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/select2/dist/css/select2.min.css') }}">
 
+     
     {{-- HERE MAPS --}}
     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
@@ -27,6 +28,10 @@
 
     <!-- Custom CSS -->
     <link href="{{asset ('../template/src/dist/css/style.min.css')}}" rel="stylesheet">
+    <!-- This Page CSS -->
+    <link href="{{asset ('../template/src/assets/libs/morris.js/morris.css') }}" rel="stylesheet">
+   
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

@@ -63,6 +63,14 @@
                                             <textarea rows="5" name="deskripsi" class="form-control" id="deskripsi"
                                                 aria-describedby="name"></textarea>
                                         </div>
+                                        <div class="col-12 form-group">
+                                            <label for="status">Status</label>
+                                            <select class="form-control" name="status" id="status">
+                                                <option selected disabled>Pilih Status Pengusaha</option>
+                                                <option value="Aktif">Aktif</option>
+                                                <option value="Tidak Aktif">Tidak Aktif</option>
+                                            </select>
+                                        </div>
                                     
                                             <div class="col-12 form-group">
                                                 <label for="lat">Latitude</label>

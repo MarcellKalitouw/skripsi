@@ -41,7 +41,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/CustomFunction/StatusLaundry.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

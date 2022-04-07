@@ -1,6 +1,7 @@
 @extends('adminView.layout')
 
 @section('content')
+    {{-- <x-cek-status-laundry></x-cek-status-laundry> --}}
     <div class="row">
         <div class="col-12 mt-4 mb-4">
             <h4 class="mb-0">Daftar Transaksi</h4>
@@ -9,6 +10,15 @@
                 <a href="{{route('transaksi.create-pelanggan')}}" class="btn waves-effect waves-light btn-success">+
                     Tambah Data</a>
             </h4>
+            <div class="row col-12">
+                @foreach ($status as $item)
+                    <button type="button" class="btn btn-outline-secondary btn-rounded">
+                        <i class="fas fa-check"></i> 
+                        {{ $item->nama }}
+                    </button>
+                @endforeach
+                
+            </div>
         </div>
         @foreach ($data as $item)
             <div class="col-md-4">

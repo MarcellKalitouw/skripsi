@@ -57,8 +57,8 @@ Route::middleware(['checkStatus'])->group(function () {
     Route::put('updateTransaksi/{id}', [TransaksiWebController::class, 'updateTransaksiNormal'])->name('transaksi.update-transaksi');
 
     Route::get('list-transaksi', [TransaksiWebController::class, 'listTransaksi'])->name('transaksi.get-transaksi');
-Route::get('detail-transaksi/{id}', [TransaksiWebController::class, 'detailTransaksi'])->name('transaksi.detail-transaksi');
-Route::get('update-transaksi/{id}/{status}/{tipe}', [TransaksiWebController::class, 'updateStatusTransaksi'])->name('transaksi.update-status');
+    Route::get('detail-transaksi/{id}', [TransaksiWebController::class, 'detailTransaksi'])->name('transaksi.detail-transaksi');
+    Route::get('update-transaksi/{id}/{status}/{tipe}', [TransaksiWebController::class, 'updateStatusTransaksi'])->name('transaksi.update-status');
 
 
     //Status
@@ -82,3 +82,5 @@ Route::get('update-transaksi/{id}/{status}/{tipe}', [TransaksiWebController::cla
 Route::resource('register', RegisterControllerWeb::class);
 Route::resource('login', LoginControllerWeb::class);
 Route::get('logout',[LoginControllerWeb::class,'logout'])->name('logout');
+
+Route::get('/testSoal', [DashboardWebController::class, 'testSoal'])->name('test-soal');
