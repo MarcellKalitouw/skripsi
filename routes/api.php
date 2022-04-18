@@ -96,7 +96,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::POST("transaksi/", [TransaksiController::class, 'store']);
     Route::PUT("transaksi/", [TransaksiController::class, 'update']);
     Route::DELETE("transaksi/{id}", [TransaksiController::class, 'destroy']);
+
     Route::POST("transaksi/create/", [TransaksiController::class, 'createTransaksi']);
+    
     Route::GET("history_transaksi/{page}/{limitf}/{idPelanggan}", [TransaksiController::class, 'getRiwayatTransaksi']);
     Route::GET("current_transaksi/{idTransaksi}", [TransaksiController::class, 'getCurentTransaction']);
     Route::GET("qrcode_transaksi/{idTransaksi}", [TransaksiController::class, 'getQrCode']);

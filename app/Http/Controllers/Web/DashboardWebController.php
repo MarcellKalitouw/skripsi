@@ -63,6 +63,7 @@ class DashboardWebController extends Controller
                       ->selectRaw("YEAR(created_at) as Year, MONTH(created_at) as month, count(id) as value")
                       ->groupByRaw($groupByMonth)
                       ->get();
+        // dd($getByMonth);
         // $getByMonth = DB::table('transaksi')
         //               ->leftJoin('status','transaksi.id_status', 'status.id')
         //               ->where('transaksi.id_pengusaha', $idPengusaha)

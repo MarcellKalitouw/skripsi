@@ -43,8 +43,8 @@ Route::middleware(['checkStatus'])->group(function () {
     Route::resource('produk', ProdukWebController::class);
     Route::resource('pengusaha', PengusahaWebController::class);
 
-    //Transaksi
     Route::resource('shipping', ShippingWebController::class);
+    //Transaksi
     Route::resource('transaksi', TransaksiWebController::class);
     Route::get('chooseProdukTransaksi/', [TransaksiWebController::class, 'pilihProdukTransaksi'])->name('transaksi.pilih-produk');
     
@@ -75,12 +75,13 @@ Route::middleware(['checkStatus'])->group(function () {
 
     //User : Pengusaha
     Route::get('edit-profile/pengusaha/{id}',[PengusahaWebController::class,'EditProfile'] )->name('pengusaha.edit-profil');
+    
+    Route::get('logout',[LoginControllerWeb::class,'logout'])->name('logout');
 });
 
 //Register
 
 Route::resource('register', RegisterControllerWeb::class);
 Route::resource('login', LoginControllerWeb::class);
-Route::get('logout',[LoginControllerWeb::class,'logout'])->name('logout');
 
-Route::get('/testSoal', [DashboardWebController::class, 'testSoal'])->name('test-soal');
+// Route::get('/testSoal', [DashboardWebController::class, 'testSoal'])->name('test-soal');

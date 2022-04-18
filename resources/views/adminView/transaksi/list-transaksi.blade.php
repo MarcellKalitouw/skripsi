@@ -10,7 +10,7 @@
                 <a href="{{route('transaksi.create-pelanggan')}}" class="btn waves-effect waves-light btn-success">+
                     Tambah Data</a>
             </h4>
-            <div class="row col-12">
+            {{-- <div class="row col-12">
                 @foreach ($status as $item)
                     <button type="button" class="btn btn-outline-secondary btn-rounded">
                         <i class="fas fa-check"></i> 
@@ -18,7 +18,7 @@
                     </button>
                 @endforeach
                 
-            </div>
+            </div> --}}
         </div>
         @foreach ($data as $item)
             <div class="col-md-4">
@@ -27,10 +27,15 @@
                         <h4 class="mb-0 text-white">{{ $item->kode_transaksi }} </h4>
                     </div>
                     <div class="card-body">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;flex-direction:column ">
                             <h3 class="card-title" style="margin:0">{{ $item->nama_pelanggan }}</h3>
-                            <h3><span class="badge badge-success">status : {{ $item->nama_status }}</span></h3> 
+                            <h5>Status : <span class="badge badge-secondary"> {{ $item->nama_status }}</span></h5> 
+                           
+                            <h5>Dibuat oleh : <span class="badge badge-info"> {{ $item->transaksi_dari }}</span></h5> 
                         </div>
+                        <p style="margin-bottom: 0">
+                            Keterangan :
+                        </p>
                         <p class="card-text" style="
                             display: -webkit-box;
                             overflow: hidden;
@@ -63,9 +68,29 @@
                                 <p style="margin:0">: Rp. {{ number_format($item->total, 2)  }}</p>
                             </div>
                         </div>
-                        <div style="text-align: right; margin-top: 10px">
-                            <h4>
-                                <a href="{{ route('transaksi.detail-transaksi',$item->id) }}" style="text-decoration: none;font-size: 16px" class="badge badge-light" style="text-decoration: underline">
+                        <div style="text-align: right; margin-top: 10px; display: flex;justify-content: end">
+                            @if ($item->transaksi_dari === 'laundry')
+                            {{-- <form action="{{ route('transaksi.destroy', $item->id) }}" method="POST" style="margin-right: 2%">
+                                @csrf  
+                                @method('DELETE')  --}}
+                                <div style="margin-right: 2%">
+
+                               
+                                <button class="btn btn-danger waves-effect waves-light" onclick="hapusTransaksiNormal('{{ $item->id }}')" type="submit" >
+                                    <span class="btn-label">
+                                        <i class="fas fa-trash"></i>
+                                    </span> 
+                                    
+                                    Hapus
+                                </button>
+                                 </div>
+                                
+                            {{-- </form> --}}
+                                
+                            @endif
+                            
+                            <h4 style="">
+                                <a href="{{ route('transaksi.detail-transaksi',$item->id) }}" style="padding: 10px 6px;text-decoration: none;font-size: 1rem" class="badge badge-light" style="text-decoration: underline">
                                 
                                 <i class="fas fa-search"></i>
                                 lebih rinci
@@ -79,32 +104,53 @@
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Perbaharui Status Transaksi <i class="fas fa-arrow-down" style="margin-left:5%"></i>
                                 </button>
-                                <div class="dropdown-menu bg-dark text-white" style="width:100%">
+                                @if ($item->transaksi_dari == 'laundry')
+                                    <div class="dropdown-menu bg-dark text-white" style="width:100%">
 
-                                    <a class="dropdown-item updateTransaksi" onclick="statusDiterimaDialog('{{ $item->id }}')" data-type="Diterima" href="javascript:void(0)">
-                                       Diterima
-                                    </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusDitolakDialog('{{ $item->id }}')"  data-type="Ditolak" href="javascript:void(0)">
-                                       Ditolak
-                                    </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusPenjemputanDialog('{{ $item->id }}')"  data-type="Penjemputan" href="javascript:void(0)">
-                                       Penjemputan
-                                    </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusProsesDialog('{{ $item->id }}')"  data-type="Diproses" href="javascript:void(0)">
-                                       Diproses
-                                    </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusProsesSelesaiDialog('{{ $item->id }}')"  data-type="ProsesSelesai" href="javascript:void(0)">
-                                       Proses Selesai
-                                    </a>
-                                    <a class="dropdown-item updateTransaksi" onclick="statusPengantaranDialog('{{ $item->id }}')" data-type="Pengantaran" href="javascript:void(0)">
-                                       Pengantaran
-                                    </a>
-                                    {{-- <a class="dropdown-item" href="javascript:void(0)">Something else
-                                        here</a> --}}
-                                    {{-- <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="javascript:void(0)">Separated
-                                        link</a> --}}
-                                </div>
+                                        <a class="dropdown-item updateTransaksi" onclick="statusProsesDialog('{{ $item->id }}')"  data-type="Diproses" href="javascript:void(0)">
+                                        Diproses
+                                        </a>
+                                        <a class="dropdown-item updateTransaksi" onclick="statusProsesSelesaiDialog('{{ $item->id }}')"  data-type="ProsesSelesai" href="javascript:void(0)">
+                                        Proses Selesai
+                                        </a>
+                                        <a class="dropdown-item updateTransaksi" onclick="statusTransaksiSelesai('{{ $item->id }}')" data-type="TransaksiSelesai" href="javascript:void(0)">
+                                        Transaksi Selesai
+                                        </a>
+                                        {{-- <a class="dropdown-item" href="javascript:void(0)">Something else
+                                            here</a> --}}
+                                        {{-- <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="javascript:void(0)">Separated
+                                            link</a> --}}
+                                    </div>
+                                @else
+                                    <div class="dropdown-menu bg-dark text-white" style="width:100%">
+
+                                        <a class="dropdown-item updateTransaksi" onclick="statusDiterimaDialog('{{ $item->id }}')" data-type="Diterima" href="javascript:void(0)">
+                                        Diterima
+                                        </a>
+                                        <a class="dropdown-item updateTransaksi" onclick="statusDitolakDialog('{{ $item->id }}')"  data-type="Ditolak" href="javascript:void(0)">
+                                        Ditolak
+                                        </a>
+                                        <a class="dropdown-item updateTransaksi" onclick="statusPenjemputanDialog('{{ $item->id }}')"  data-type="Penjemputan" href="javascript:void(0)">
+                                        Penjemputan
+                                        </a>
+                                        <a class="dropdown-item updateTransaksi" onclick="statusProsesDialog('{{ $item->id }}')"  data-type="Diproses" href="javascript:void(0)">
+                                        Diproses
+                                        </a>
+                                        <a class="dropdown-item updateTransaksi" onclick="statusProsesSelesaiDialog('{{ $item->id }}')"  data-type="ProsesSelesai" href="javascript:void(0)">
+                                        Proses Selesai
+                                        </a>
+                                        <a class="dropdown-item updateTransaksi" onclick="statusPengantaranDialog('{{ $item->id }}')" data-type="Pengantaran" href="javascript:void(0)">
+                                        Pengantaran
+                                        </a>
+                                        {{-- <a class="dropdown-item" href="javascript:void(0)">Something else
+                                            here</a> --}}
+                                        {{-- <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="javascript:void(0)">Separated
+                                            link</a> --}}
+                                    </div>
+                                @endif
+                                
                             </div>
                         </div>
 
@@ -118,19 +164,40 @@
 @endsection
 
 @push('script')
-    <script>
+    {{-- <script>
         window.addEventListener('keydown', function (event) {
             if(event.shiftKey && event.key === 'A'){
                 alert('succes keyboard');
             }
             if(event.shiftKey && event.key === 'B'){
                 alert('succes keyboard B');
-                // document.location.href = `../dashboard_pengusaha`;
+                document.location.href = `../dashboard_pengusaha`;
 
             }
         })
-    </script>
+    </script> --}}
     <script>
+        let baseUrl = '{{ url('/') }}';
+
+        function hapusTransaksiNormal(id){
+            if(!confirm("Apakah anda ingin menghapus transaksi ini?")) {
+                    return false;
+                }
+
+            let url = baseUrl + `/transaksi/${id}`;
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data:{
+                    "id":id,
+                    "_token": `{{ csrf_token() }}`
+                },
+                success: function(){
+                    location.reload()
+                }
+            })
+
+        }
         
         // function updateTransaksi(){
 
@@ -165,7 +232,6 @@
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Ditolak Laundry', 'tipe'=>'transaksi'])}}`;
                     document.location.href = `../update-transaksi/${id}/Ditolak Laundry/transaksi`;
                 });
             }
@@ -189,7 +255,6 @@
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Diterima Laundry', 'tipe'=>'transaksi'])}}`;
                     document.location.href = `../update-transaksi/${id}/Diterima Laundry/transaksi`;
 
                 });
@@ -214,7 +279,6 @@
                     timer: 1500,
                     showConfirmButton:false
                 }).then(() => {
-                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Penjemputan', 'tipe'=>'shipping'])}}`;
                     document.location.href = `../update-transaksi/${id}/Penjemputan/shipping`;
 
                 });
@@ -241,8 +305,7 @@
                     showConfirmButton:false
                 }).then(() => {
                     document.location.href = `../update-transaksi/${id}/Diproses/transaksi`;
-                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Diproses', 'tipe'=>'transaksi'])}}`;
-                });
+                   });
             }
         }
         async function statusProsesSelesaiDialog(id) {
@@ -266,7 +329,30 @@
                 }).then(() => {
                     document.location.href = `../update-transaksi/${id}/Proses Selesai/transaksi`;
 
-                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Proses Selesai', 'tipe'=>'transaksi'])}}`;
+                });
+            }
+        }
+        async function statusTransaksiSelesai(id) {
+           const  {value :accept}  = await Swal.fire({
+                title: `Apakah anda yakin mengganti status laporan ini ke Status Transaksi Selesai`,
+                text: "Jika ya, klik tombol OK",
+                icon: "success",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+            });
+            // const status = document.getElementsByClassName("updateTransaksi").data('type');
+            // const id = $('.updateTransaksi').data('id');
+
+            
+            if(accept){
+                Swal.fire({
+                    title:"Status Transaksi sedang diperbaharui",
+                    timer: 1500,
+                    showConfirmButton:false
+                }).then(() => {
+                    document.location.href = `../update-transaksi/${id}/Transaksi Selesai/transaksi`;
+
                 });
             }
         }
@@ -291,8 +377,7 @@
                 }).then(() => {
                     document.location.href = `../update-transaksi/${id}/Pengantaran/shipping`;
 
-                    // document.location.href = `{{route('transaksi.update-status',['id' => $item->id, 'status'=>'Pengantaran', 'tipe'=>'shipping'])}}`;
-                });
+               });
             }
         }
 

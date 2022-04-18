@@ -221,6 +221,7 @@ class TransaksiController extends Controller
             'id_pengusaha'=>$req->id_pengusaha,
             // 'id_shipping'=>$req->id_shipping,
             'tgl'=>$req->tgl,
+            'transaksi_dari'=>'pelanggan',
             'total_qty'=>$req->total_qty,
             'subtotal'=>$req->subtotal,
             'pajak'=>$req->pajak,
@@ -291,7 +292,7 @@ class TransaksiController extends Controller
             $random_number = intval(rand(1,9) . rand(0,9)); 
             $date = date('ds');
             $inputTransaksi['kode_transaksi'] = "#yunit_".$random_number.$remakeIdPelanggan.$date;
-            
+            $inputTransaksi['transaksi_dari'] = 'pelanggan';
 
             //Create Transaksi
             $transaksi = Transaksi::create($inputTransaksi);

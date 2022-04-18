@@ -20,6 +20,7 @@ class CreateTransaksi extends Migration
             $table->uuid('id_alamat');
             $table->uuid('id_pelanggan');
             $table->uuid('id_pengusaha');
+            $table->enum('transaksi_dari', ['laundry','pelanggan']);
             // $table->uuid('id_shipping');
             $table->integer('total_qty')->default(5);
             $table->integer('subtotal')->default(5);

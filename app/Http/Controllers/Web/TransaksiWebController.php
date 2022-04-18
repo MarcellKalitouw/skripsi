@@ -166,6 +166,7 @@ class TransaksiWebController extends Controller
             $inputTransaksi['kode_transaksi'] = "#yunit_MAN_".$random_number.$date;
             $inputTransaksi['id_pengusaha'] = $idPengusaha;
             $inputTransaksi['id_pelanggan'] = $pelanggan->id;
+            $inputTransaksi['transaksi_dari'] = 'laundry';
 
             // dd($inputTransaksi);
 
@@ -344,7 +345,7 @@ class TransaksiWebController extends Controller
     
     public function show($id)
     {
-        //
+        dd($id);
     }
 
     
@@ -391,7 +392,9 @@ class TransaksiWebController extends Controller
     
     public function destroy($id)
     {
-        Transaksi::where('id', $id)->delete();
-        return redirect()->route('transaksi.index');
+        // dd($id);
+        $deleteTransaksi = Transaksi::where('id', $id)->delete();
+        return response()->json($deleteTransaksi);
+        // return redirect()->route('transaksi.get-transaksi');
     }
 }

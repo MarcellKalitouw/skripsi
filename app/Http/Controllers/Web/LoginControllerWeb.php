@@ -11,7 +11,13 @@ class LoginControllerWeb extends Controller
     
     public function index()
     {
+        $getToken = session()->get('email');
+        if($getToken){
+            return back();
+        }else{
+
         return view('login.index');
+        }
     }
 
     
