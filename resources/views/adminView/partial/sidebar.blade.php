@@ -201,7 +201,25 @@
                                         class="hide-menu">Data Kurir
                                     </span>
                                 </a>
-                            </li>   
+                            </li>
+                        <li class="list-divider"></li>
+
+                            <li class="nav-small-cap"><span class="hide-menu">Rating Pelanggan</span></li>
+                            
+                            <li class="sidebar-item"> 
+                                <a @class(
+                                    [
+                                        'sidebar-link', 
+                                        'dropdown-item disabled' => (! statusLaundry()->value) && session()->get('tipe') != 'Admin'
+
+                                    ]) href="{{route('rating.index')}}"
+                                    aria-expanded="false">
+                                    <i class="fas fa-table"></i>
+                                    <span
+                                        class="hide-menu">Data Rating
+                                    </span>
+                                </a>
+                            </li> 
                         
                         <li class="list-divider"></li>
                         

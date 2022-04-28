@@ -14,7 +14,8 @@ use App\Http\Controllers\{
     StatusTransaksiController,
     SatuanProdukController,
     AuthController,
-    AlamatPenggunaController
+    AlamatPenggunaController,
+    RatingController
 };
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +112,13 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::POST("status_produk/", [SatuanProdukController::class, 'store']);
     Route::PUT("status_produk/", [SatuanProdukController::class, 'update']);
     Route::DELETE("status_produk/{id}", [SatuanProdukController::class, 'destroy']);
+
+//Rating 
+    Route::GET("rating/{id?}", [RatingController::class, 'getData']); 
+    Route::GET("rating/{page?}/{limit?}", [RatingController::class, 'getDataPageLimit']);
+    Route::POST("rating/", [RatingController::class, 'store']);
+    Route::PUT("rating/", [RatingController::class, 'update']);
+    Route::DELETE("rating/{id}", [RatingController::class, 'destroy']);
 
 //Alamat
     Route::GET("alamat_pengguna/{id}", [AlamatPenggunaController::class, 'getData']); 

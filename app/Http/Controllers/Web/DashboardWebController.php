@@ -17,7 +17,23 @@ class DashboardWebController extends Controller
         return view('testSoal.index', compact('pageTitle'));
     }
 
+    public function requestStatusTransaksiByMonth(Request $req){
+        $idPengusaha = session()->get('id');
 
+        $totalByStatusTransaksi =   DB::table('transaksi')
+                                    ->leftJoin('status','transaksi.id_status', 'status.id')
+                                    ->where('transaksi.tgl','LIKE',$req->month."%")
+                                    ->where('transaksi.id_pengusaha', $idPengusaha)
+                                    ->whereNull('transaksi.deleted_at')
+                                    // ->where('transaksi.created_at', 'LIKE 2020-04%')
+                                    ->select('status.nama', DB::raw('count(status.nama) as total_status'))
+                                    ->groupBy('transaksi.id_status')
+                                    ->get();
+        
+        
+        return response()->json(['success' => true, 'data' => $totalByStatusTransaksi]);
+        
+    }
 
     public function DashboardPengusaha(){
         $idPengusaha = session()->get('id');
@@ -29,7 +45,7 @@ class DashboardWebController extends Controller
                     ->whereNull('deleted_at')
                     ->groupBy('id_pelanggan')
                     ->get()
-                    ->sum('total_pelanggan');
+                    ->sum('total_pelanggan'); 
                     
         $totalPendapatan = DB::table('transaksi')
                            ->where('id_pengusaha', $idPengusaha)
@@ -48,6 +64,15 @@ class DashboardWebController extends Controller
                                     ->select('status.nama', DB::raw('count(status.nama) as total_status'))
                                     ->groupBy('transaksi.id_status')
                                     ->get();
+
+        $averageRating = DB::table('rating')
+                         ->where('id_pengusaha', $idPengusaha)
+                         ->avg('nilai');
+        $totalRating = DB::table('rating')
+                        ->where('id_pengusaha', $idPengusaha)
+                        ->count();
+        // dd($averageRating);
+                         
         // dd($totalByStatusTransaksi->sum('total_status'));
 
         // $totalByStatusTransaksi =  $this->rebuildArrayStatusTransaksi($totalByStatusTransaksi);
@@ -103,7 +128,9 @@ class DashboardWebController extends Controller
             'totalPelanggan',
             'totalPendapatan',
             'totalTransaksi',
-            'totalByStatusTransaksi'
+            'totalByStatusTransaksi',
+            'averageRating',
+            'totalRating'
         ));
     }
     public function convertDateArray($data){

@@ -15,7 +15,8 @@ use App\Http\Controllers\Web\{
     RegisterControllerWeb,
     LoginControllerWeb,
     DashboardWebController,
-    KurirWebController
+    KurirWebController,
+    RatingWebController
 };
 
 /*
@@ -65,6 +66,10 @@ Route::middleware(['checkStatus'])->group(function () {
     Route::resource('status', StatusWebController::class);
     Route::resource('status_transaksi', StatusTransaksiWebController::class);
 
+    //Rating
+    Route::resource('rating', RatingWebController::class);
+
+
     //Pelanggan
     Route::resource('pelanggan', PelangganWebController::class);
 
@@ -72,6 +77,7 @@ Route::middleware(['checkStatus'])->group(function () {
 
     //Dashboard
     Route::get('dashboard_pengusaha', [DashboardWebController::class, 'DashboardPengusaha'])->name('dashboard.pengusaha');
+    Route::post('ajax-request-statusTransaksiByMonth', [DashboardWebController::class, 'requestStatusTransaksiByMonth'])->name('ajax.st-bymonth');
 
     //User : Pengusaha
     Route::get('edit-profile/pengusaha/{id}',[PengusahaWebController::class,'EditProfile'] )->name('pengusaha.edit-profil');

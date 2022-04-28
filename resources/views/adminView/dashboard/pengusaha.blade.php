@@ -66,8 +66,8 @@
         <div class="card-body">
             <div class="d-flex d-lg-flex d-md-block align-items-center">
                 <div>
-                    <h2 class="text-dark mb-1 font-weight-medium">864</h2>
-                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Rating</h6>
+                    <h2 class="text-dark mb-1 font-weight-medium"> {{ $totalRating }} ( {{ number_format($averageRating, '2')  }} )</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Rata - rata rating </h6>
                 </div>
                 <div class="ml-auto mt-md-3 mt-lg-0">
                     <span class="opacity-7 text-muted"><i class="icon-star"></i></span>
@@ -85,7 +85,7 @@
                         Status Transaksi
                         
                     </h4>
-                    <input type="month" value="<?=date('Y-m')?>" name="month" onchange="getTanggal()" id="month-donut" 
+                    <input type="month" value="<?=date('Y-m')?>" name="month" onchange="getSTByMonth()" id="month-donut" 
                         style=" 
                         border-top-style: hidden;
                         border-right-style: hidden;
@@ -94,8 +94,11 @@
                     >
                     
                 </div>
-                <div id="loading-donut" class="spinner-border" style="width: 3rem; height: 3rem;display:none" role="status">
-                    <span class="sr-only">Loading...</span>
+                <div class="d-flex justify-content-center" >
+
+                    <div id="loading-donut" class="spinner-border" style="width: 15rem; height: 15rem;display:none; margin:10%;" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
                 <div id="morris-donut-chart"></div>
                 <ul class="list-style-none mb-0">
@@ -219,15 +222,13 @@
 @endsection
 @push('dashboard')
     <script>
-        
+        initMorrisDonutChart();
         function getTanggal (){
             let getMonth = $("#month-donut").val();
             console.log('getMonth', getMonth);
         }
-
-        $(function() {
-            "use strict";
-            Morris.Donut({
+        function initMorrisDonutChart(){
+            morrisDounut = Morris.Donut({
                 element: "morris-donut-chart",
                 data: [
                         @foreach ($totalByStatusTransaksi as $item)
@@ -239,20 +240,6 @@
                            
                         @endforeach
                     ],
-                // data: [
-                //     {
-                //         label: "Download Sales",
-                //         value: 1,
-                //     },
-                //     {
-                //         label: "In-Store Sales",
-                //         value: 2,
-                //     },
-                //     {
-                //         label: "Mail-Order Sales",
-                //         value: 5,
-                //     },
-                // ],
                 resize: true,
                 colors: [
                                 "#3b5d78", 
@@ -263,6 +250,79 @@
                                 "#e2e750"
                             ],
             });
+        }
+
+        function getSTByMonth(){
+            let getMonth = $("#month-donut").val();
+            let loadingDonut = $("#loading-donut");
+            let morrisChart = $("#morris-donut-chart");
+            loadingDonut.show();
+            morrisChart.hide()
+
+            $.ajax({
+                type:"POST",
+                url: "{{ route('ajax.st-bymonth') }}",
+                data: {_token:`{{ csrf_token() }}`, month: getMonth },
+                dataType: 'json',
+                success: function(res){
+                    alert("Success");
+                    console.log('data', res.data);
+                    loadingDonut.hide();
+                    morrisChart.show();
+
+
+                    let newData = []
+                    res.data.map((v) => {
+                        newData = [...newData, {
+                            label: v.nama,
+                            value: v.total_status
+                        }]    
+                    });
+
+                    morrisDounut.setData(newData);
+                    // morrisChart.remove();
+                }
+            });
+            console.log('getMonth', getMonth);
+        }
+        $(function() {
+            "use strict";
+            // Morris.Donut({
+            //     element: "morris-donut-chart",
+            //     data: [
+            //             @foreach ($totalByStatusTransaksi as $item)
+                        
+            //                 {
+            //                     label: '{{ $item->nama }}',
+            //                     value: {{ $item->total_status }},
+            //                 },
+                           
+            //             @endforeach
+            //         ],
+            //     // data: [
+            //     //     {
+            //     //         label: "Download Sales",
+            //     //         value: 1,
+            //     //     },
+            //     //     {
+            //     //         label: "In-Store Sales",
+            //     //         value: 2,
+            //     //     },
+            //     //     {
+            //     //         label: "Mail-Order Sales",
+            //     //         value: 5,
+            //     //     },
+            //     // ],
+            //     resize: true,
+            //     colors: [
+            //                     "#3b5d78", 
+            //                     "#5f76e8", 
+            //                     "#ff4f70", 
+            //                     "#01caf1",
+            //                     "#61cd93",
+            //                     "#e2e750"
+            //                 ],
+            // });
             Morris.Bar({
                 element: "morris-bar-chart",
                 data: {!! json_encode($getByMonth) !!},

@@ -14,7 +14,7 @@ class CreateRatingsTable extends Migration
     public function up()
     {
         Schema::create('rating', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->uuid('id_pelanggan');
             $table->uuid('id_pengusaha');
             $table->string('deskripsi')->nullable();
