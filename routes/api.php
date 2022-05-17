@@ -132,6 +132,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     
 //Login
 Route::post('login', [AuthController::class, 'login']);
+Route::post('register',[PelangganController::class,'store']);
 Route::post('login_kurir', [AuthController::class, 'login_kurir']);
 
     

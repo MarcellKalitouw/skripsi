@@ -14,7 +14,7 @@ class AuthController extends Controller
         $user = Pelanggan::where('email', $request->email)->first();
         if(!$user || $request->password != $user->password){
             return response()->json([
-                'message' => 'UNAUTHORIZED'
+                'message' => 'UNAUTHORIZED','data'=>$user,'request'=>$request->email
             ], 401);
         }
         $token = $user->createToken('token-name')->plainTextToken;

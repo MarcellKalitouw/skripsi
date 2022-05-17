@@ -17,7 +17,6 @@ class CreateStatusTransaksi extends Migration
             $table->uuid('id')->primary();
             $table->uuid('id_transaksi');
             $table->uuid('id_user');
-            $table->uuid('id_user');
             $table->string('updated_by', 50);
             $table->string('nama', 25);
             $table->enum('tipe', ['transaksi', 'shipping']);
