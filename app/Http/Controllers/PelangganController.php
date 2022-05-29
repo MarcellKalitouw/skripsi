@@ -50,6 +50,7 @@ class PelangganController extends Controller
             'no_telp' => $req->no_telp,
             'email' => $req->email,
             'status' => $req->status,
+            'gender'=>$req->gender,
             'password' => $req->password
         ]);
         if($data){
@@ -101,14 +102,16 @@ class PelangganController extends Controller
 
     public function update(Request $r){
         $data = Pelanggan::where("id", $r->id)->update([
-            'nama'=>$req->nama,
-            'no_telp' => $req->no_telp,
-            'email' => $req->email,
-            'status' => $req->status,
-            'password' => $req->password
+            'nama'=>$r->nama,
+            'no_telp' => $r->no_telp,
+            'email' => $r->email,
+            'status' => $r->status,
+            'gender'=>$r->gender,
+            'password' => $r->password
         ]);
         if($data){
-            return response()->json(['Result'=>"Data has been Updated"], 200);
+            $user = Pelanggan::where('id',$r->id)->first();
+            return response()->json(['Result'=>"Data has been Updated","data"=>$user], 200);
         }else{
             return response()->json(['Result'=>'Data failed to be updated'], 401);
         }
