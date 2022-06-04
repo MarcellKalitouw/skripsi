@@ -50,6 +50,7 @@ class PelangganController extends Controller
             'no_telp' => $req->no_telp,
             'email' => $req->email,
             'status' => $req->status,
+            'gender'=>$req->gender,
             'password' => $req->password
         ]);
         $data['password'] = bcrypt($req->password);
@@ -110,7 +111,8 @@ class PelangganController extends Controller
         ]);
         
         if($data){
-            return response()->json(['Result'=>"Data has been Updated"], 200);
+            $user = Pelanggan::where('id',$r->id)->first();
+            return response()->json(['Result'=>"Data has been Updated","data"=>$user], 200);
         }else{
             return response()->json(['Result'=>'Data failed to be updated'], 401);
         }
