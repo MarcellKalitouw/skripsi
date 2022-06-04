@@ -18,6 +18,8 @@ class DashboardWebController extends Controller
     }
 
     public function requestStatusTransaksiByMonth(Request $req){
+        
+
         $idPengusaha = session()->get('id');
 
         $totalByStatusTransaksi =   DB::table('transaksi')
@@ -33,6 +35,24 @@ class DashboardWebController extends Controller
         
         return response()->json(['success' => true, 'data' => $totalByStatusTransaksi]);
         
+    }
+    public function requestTransaksiSelesaiByYear(Request $req){
+        // dd($req);
+        $idPengusaha = session()->get('id');
+        $groupByMonth = "YEAR(created_at),MONTH(created_at)";
+        $year = $req->year;
+        $finish = DB::table('status')->orderBy('sequence','desc')->first(['id', 'nama']);
+        // dd($finish);
+        $getByMonth = DB::table('transaksi')
+                      ->where('id_pengusaha', $idPengusaha)
+                      ->where('id_status', $finish->id)
+                      ->where('created_at','LIKE',$year."%")
+                      ->selectRaw("YEAR(created_at) as Year, MONTH(created_at) as month, count(id) as value")
+                      ->groupByRaw($groupByMonth)
+                      ->get();
+        $getByMonth = $this->convertDateArray($getByMonth);
+
+        return response()->json(['success' => true, 'data' => $getByMonth]);
     }
 
     public function DashboardPengusaha(){

@@ -78,6 +78,7 @@ Route::middleware(['checkStatus'])->group(function () {
     //Dashboard
     Route::get('dashboard_pengusaha', [DashboardWebController::class, 'DashboardPengusaha'])->name('dashboard.pengusaha');
     Route::post('ajax-request-statusTransaksiByMonth', [DashboardWebController::class, 'requestStatusTransaksiByMonth'])->name('ajax.st-bymonth');
+    Route::post('ajax-request-transaksiSelesaiByYear', [DashboardWebController::class, 'requestTransaksiSelesaiByYear'])->name('ajax.ts-byyear');
 
     //User : Pengusaha
     Route::get('edit-profile/pengusaha/{id}',[PengusahaWebController::class,'EditProfile'] )->name('pengusaha.edit-profil');

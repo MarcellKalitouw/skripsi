@@ -122,23 +122,19 @@
         </div>
     </div>
     
-    {{-- <div class="col-lg-8 col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Jumlah Transaksi Selesai</h4>
-                <div class="net-income mt-4 position-relative" style="height:294px;"></div>
-                <ul class="list-inline text-center mt-5 mb-2">
-                    <li class="list-inline-item text-muted font-italic">Sales for this month</li>
-                </ul>
-            </div>
-        </div>
-    </div> --}}
+    
     <div class="col-lg-6 col-md-12 col-xl-8">
         <div class="card">
             <div class="card-body">
+                <div class="d-flex justify-content-center" >
+
+                    <div id="loading-bar" class="spinner-border" style="width: 15rem; height: 15rem;display:none; margin:10%;" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
                 <div style="display: flex; justify-content: space-between ">
                     <h4 class="card-title">Jumlah Transaksi Selesai</h4>    
-                    <select class="form-control col-3" style="font-size: 18px;font-weight: 500" name="startyear">
+                    <select onchange="getTSByYear()" id="select-year" class="form-control col-3" style="font-size: 18px;font-weight: 500" name="startyear">
                     <?php
                     for ($year = (int)date('Y'); 2020 <= $year; $year--): ?>
                         <option value="<?=$year;?>"><?=$year;?></option>
@@ -223,6 +219,7 @@
 @push('dashboard')
     <script>
         initMorrisDonutChart();
+        initMorrisBar();
         function getTanggal (){
             let getMonth = $("#month-donut").val();
             console.log('getMonth', getMonth);
@@ -250,6 +247,54 @@
                                 "#e2e750"
                             ],
             });
+        }
+
+        function initMorrisBar(){
+            morrisBar = Morris.Bar({
+                element: "morris-bar-chart",
+                data: {!! json_encode($getByMonth) !!},
+                xkey: "y",
+                ykeys: ["jumlah"],
+                labels: ["jumlah"],
+                barColors: ["#01caf1", "#5f76e8"],
+                hideHover: "auto",
+                gridLineColor: "#eef0f2",
+                resize: true,
+            });
+        }
+
+        function getTSByYear(){
+            let getYear = $("#select-year").val();
+            let loadingBar = $("#loading-bar");
+            let morrisBarChart = $("#morris-bar-chart");
+            loadingBar.show();
+            morrisBarChart.hide()
+
+            $.ajax({
+                type:"POST",
+                url: "{{ route('ajax.ts-byyear') }}",
+                data: {_token:`{{ csrf_token() }}`, year: getYear },
+                dataType: 'json',
+                success: function(res){
+                    alert("Success");
+                    console.log('data', res.data);
+                    loadingBar.hide();
+                    morrisBarChart.show();
+
+                    morrisBar.setData(res.data)
+
+                    // let newData = []
+                    // res.data.map((v) => {
+                    //     newData = [...newData, {
+                    //         label: v.nama,
+                    //         value: v.total_status
+                    //     }]    
+                    // });
+
+                    // morrisBar.setData(newData);
+                }
+            });
+            console.log('getMonth', getYear);
         }
 
         function getSTByMonth(){
@@ -280,7 +325,6 @@
                     });
 
                     morrisDounut.setData(newData);
-                    // morrisChart.remove();
                 }
             });
             console.log('getMonth', getMonth);
@@ -323,17 +367,17 @@
             //                     "#e2e750"
             //                 ],
             // });
-            Morris.Bar({
-                element: "morris-bar-chart",
-                data: {!! json_encode($getByMonth) !!},
-                xkey: "y",
-                ykeys: ["jumlah"],
-                labels: ["jumlah"],
-                barColors: ["#01caf1", "#5f76e8"],
-                hideHover: "auto",
-                gridLineColor: "#eef0f2",
-                resize: true,
-            });
+            // Morris.Bar({
+            //     element: "morris-bar-chart",
+            //     data: {!! json_encode($getByMonth) !!},
+            //     xkey: "y",
+            //     ykeys: ["jumlah"],
+            //     labels: ["jumlah"],
+            //     barColors: ["#01caf1", "#5f76e8"],
+            //     hideHover: "auto",
+            //     gridLineColor: "#eef0f2",
+            //     resize: true,
+            // });
         })
     </script>
     {{-- <script src="{{asset ('js/dashboardPelanggan.js')}}"></script> --}}

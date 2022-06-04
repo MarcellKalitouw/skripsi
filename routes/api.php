@@ -15,7 +15,8 @@ use App\Http\Controllers\{
     SatuanProdukController,
     AuthController,
     AlamatPenggunaController,
-    RatingController
+    RatingController,
+    KurirController
 };
 /*
 |--------------------------------------------------------------------------
@@ -52,13 +53,21 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::PUT("paket/", [PaketController::class, 'update']);
     Route::DELETE("paket/{id}", [PaketController::class, 'destroy']);
 
-//Pelanggan
+//Kurir
+
+    Route::PUT('kurir/updatePasswordKurir/{id}', [KurirController::class, 'updatePasswordKurir']);
+    Route::POST('kurir/updateProfilePic/{id}', [KurirController::class, 'updateKurirProfilePicture']);
+
+
+
+//Pelanggan Profile
     Route::GET("pelanggan/{id?}", [PelangganController::class, 'getData']); 
     Route::GET("pelanggan/{page?}/{limit?}", [PelangganController::class, 'getDataPageLimit']);
     Route::POST("pelanggan/", [PelangganController::class, 'store']);
     Route::POST('pelanggan/updateProfilePic/{id}', [PelangganController::class, 'storeGambar']);
     Route::PUT("pelanggan/", [PelangganController::class, 'update']);
     Route::DELETE("pelanggan/{id}", [PelangganController::class, 'destroy']);
+    Route::PUT('pelanggan/updatePasswordPelanggan/{id}', [PelangganController::class, 'updatePasswordPelanggan']);
 
 
 //Pengusaha
@@ -127,12 +136,17 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::PUT("alamat_pengguna/", [AlamatPenggunaController::class, 'update']);
     Route::DELETE("alamat_pengguna/{id}", [AlamatPenggunaController::class, 'destroy']);
 
+    Route::post('logout_pelanggan', [AuthController::class, 'logout_pelanggan']);
+    Route::post('logout_kurir', [AuthController::class, 'logout_kurir']);
+
 });
 
     
 //Login
 Route::post('login', [AuthController::class, 'login']);
-Route::post('register',[PelangganController::class,'store']);
 Route::post('login_kurir', [AuthController::class, 'login_kurir']);
+
+//Register
+Route::post('register',[PelangganController::class,'store']);
 
     

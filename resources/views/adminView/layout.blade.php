@@ -118,7 +118,7 @@
     <!-- ============================================================== -->
     @yield('addScript')
     
-     <script>
+    <script>
         window.hereApiKey = "{{ env('HERE_API_KEY') }}"
     </script>
     
