@@ -70,9 +70,9 @@ class PengusahaController extends Controller
         $data = Pengusaha::where('status','!=','Tidak Aktif')
                 ->skip($page*$limit)->take($limit)->get();
         $totalRow = Pengusaha::count();
-        if(count($data)>0)
+        if($data)
             return response()->json(['data'=>$data, 'message'=>'success', 'page'=>$page, 'limit'=>$limit, 'total_row'=>$totalRow], 200);
-        return response()->json(['message'=>'empty'], 401);
+        return response()->json(['message'=>'empty'], 500);
     }
     public function store(Request $req){
         $data = Pengusaha::create([

@@ -34,7 +34,10 @@ class ProdukController extends Controller
     }
     public function getProdukPengusaha($idPengusaha){
         try{
-            $data = Produk::where('id_pengusaha', $idPengusaha)->get();
+            $data = Produk::leftJoin('kategori_produk','kategori_produk.id','produk.id_kategori')
+                            ->leftJoin('satuan_produk','satuan_produk.id','produk.id_satuan')
+                            ->select('produk.*','satuan_produk.nama AS satuan','kategori_produk.nama AS kategori')
+                            ->where('produk.id_pengusaha', $idPengusaha)->get();
             // dd($data);
             if($idPengusaha){
                 if(is_null($data)){
