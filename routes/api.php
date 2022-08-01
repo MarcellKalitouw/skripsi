@@ -109,11 +109,14 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::POST("transaksi/create/", [TransaksiController::class, 'createTransaksi']);
     
-    Route::GET("history_transaksi/{page}/{limitf}/{idPelanggan}", [TransaksiController::class, 'getRiwayatTransaksi']);
+    Route::GET("history_transaksi/{page}/{limit}/{idPelanggan}", [TransaksiController::class, 'getRiwayatTransaksi']);
     Route::GET("current_transaksi/{idTransaksi}", [TransaksiController::class, 'getCurentTransaction']);
     Route::GET("qrcode_transaksi/{idTransaksi}", [TransaksiController::class, 'getQrCode']);
 
-
+    Route::POST("update_transaksi/{id}",[TransaksiController::class, 'updateTransaksiByPelanggan']);
+//Transaksi Kurir
+    Route::GET("history_transaksi_kurir/{page}/{limit}/{idKurir}", [TransaksiController::class, 'getRiwayatTransaksiKurir']);
+    Route::PUT("update_transaksi_kurir/{id}",[TransaksiController::class, 'updateTransaksiByKurir']);
 
 //SatuanProduk
     Route::GET("status_produk/{id?}", [SatuanProdukController::class, 'getData']); 

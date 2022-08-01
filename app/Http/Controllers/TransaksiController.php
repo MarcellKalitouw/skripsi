@@ -189,6 +189,47 @@ class TransaksiController extends Controller
         return response()->json(['message'=>'empty'], 401);
     }
 
+    public function getRiwayatTransaksiKurir($page=null, $limit = null, $idKurir){
+        
+        // dd()
+        $page = $page?$page:0;
+        $limit = $limit?$limit:0;
+        $page = intval($page);
+        $limit = intval($limit);
+        // $data = Transaksi::skip($page*$limit)
+        //         ->take($limit)
+        //         ->where('id_kurir', $idPelanggan)
+        //         ->whereNull('deleted_at')
+        //         ->orderBy('created_at','desc')
+        //         ->get();
+        
+        // $totalRow = Transaksi::count();
+
+        $data = StatusTransaksi::skip($page*$limit)
+                ->take($limit)
+                ->leftJoin('transaksi','status_transaksi.id_transaksi','transaksi.id')
+                ->where('status_transaksi.id_user', $idKurir)
+                ->whereNull('status_transaksi.deleted_at')
+                ->select('status_transaksi.*', 'transaksi.kode_transaksi as kode_transaksi')
+                ->orderBy('status_transaksi.created_at', 'desc')
+                ->get();
+                // ->dd();
+        $totalRow = StatusTransaksi::where('id_user', $idKurir)
+                    ->get()->count();
+        
+                
+        if(count($data)>0)
+            return response()->json(
+                [
+                    'data'=>$data,
+                    'message'=>'success', 
+                    'page'=>$page, 
+                    'limit'=>$limit, 
+                    'total_row'=>$totalRow
+                ], 200);
+        return response()->json(['message'=>'empty'], 401);
+    }
+
     public function getQrCode($idTransaksi){
         $kode_transaksi = Transaksi::where('id',$idTransaksi)->first('kode_transaksi');
         // dd($kode_transaksi);
@@ -347,34 +388,133 @@ class TransaksiController extends Controller
 
     }
 
-    public function updateTransaksiByKurir(Request $req){
-        DB::beginTransaction();
-        try{
-            //Send by mobile id_transaksi
-            //sequence 
-
-
-            // update Transaksi
-
-            // update Status Transaksi
-
-
-        }catch(\Exception $e){
-            throw new HttpResponseException(response()->json($e->errors(), 422));
-        }
-
-
-    } 
-    public function updateTransaksiByPelanggan(Request $req){
-        DB::beginTransaction();
-        try{
-            
-        }catch(\Exception $e){
-            throw new HttpResponseException(response()->json($e->errors(), 422));
-        }
-
+    public function updateTransaksiByKurir(Request $req, $id){
+        // GET Transaksi
+        // BODY DETAIL TRANSAKSI (RINCIAN PRODUK WITH QTY)
+        // Validate Body
+        // Update Transaksi
+        // Update Detail Transaksi
+        // Create Status Transaksi
         
+        DB::beginTransaction();
+        $transaksi = Transaksi::find($id);
+        // dd($transaksi);
+        try{
+            $validateDetailTransaksi = $this->validateDetailTransaksi($req)['detail_transaksi'];
+            $inputDetailTransaksi = $validateDetailTransaksi;
+            $status_transaksi = Status::where('sequence', 5)->first(['id', 'nama']);
+            // dd($status_transaksi);
+            
+            $updateTransaksi = Transaksi::find($id)->update([
+                    'id_status' => $status_transaksi->id_status,
+                    'id_kurir' => $req->id_kurir
+                ]);
+            // dd($req->transaksi);
+            $updateStatusTransaksi = StatusTransaksi::create([
+                'id_transaksi' => $id,
+                'nama' => $status_transaksi->nama,
+                'keterangan' => '',
+                'tipe' => 'transaksi',
+                'id_user' => $req->transaksi['id_pelanggan'],
+                'updated_by' => 'Kurir'
+            ]);
+
+            foreach ($inputDetailTransaksi as $item ) {
+                // dd($item);
+                $updateDetailTransaksi = DetailTransaksi::where('id_transaksi', $id)
+                                        ->where('id_user', $req->id_pelanggan)
+                                        ->update($item);
+            }
+
+            $getTransaksi = Transaksi::find($id);
+            DB::commit();
+
+            return response()->json([
+                'data' => $getTransaksi,
+                'Result' => 'Transaksi has been updated'
+            ]);
+
+        }catch(\Exception $e){
+            // dd($e->getMessage());
+                throw new HttpResponseException(response()->json($e->getMessage(), 422));
+
+            // if($e->errors()){
+            //     throw new HttpResponseException(response()->json($e->errors(), 422));
+            // }else{
+            //     throw new HttpResponseException(response()->json($e->message, 422));
+            // }
+        }
     }
+
+    public function updateTransaksiByPelanggan(Request $req, $id){
+        DB::beginTransaction();
+        $transaksi = Transaksi::find($id);
+        // dd($transaksi);
+        try{
+            $validate = $req->validate([
+                'id_user'=>'required',
+                'id_status' => 'required',
+            ]);
+
+            $status_transaksi = Status::find($req->id_status);
+            // dd($status_transaksi);
+            $updateTransaksi = Transaksi::find($id)->update(['id_status' => $req->id_status]);
+            $gambar = '';
+            if($req->hasfile('gambar')){
+                $fileName = time().'_'.$req->gambar->getClientOriginalName();
+                $req->gambar->move(public_path('gambar_transaksi'), $fileName);
+                $gambar = $fileName;
+            }
+
+            $updateStatusTransaksi = StatusTransaksi::create([
+                'id_transaksi' => $id,
+                'nama' => $status_transaksi->nama,
+                'keterangan' => $req->keterangan,
+                'tipe' => 'transaksi',
+                'id_user' => $req->id_user,
+                'gambar' => $gambar,
+                'updated_by' => 'Pelanggan'
+            ]);
+
+            $getTransaksi = Transaksi::find($id);
+            DB::commit();
+
+            return response()->json([
+                'data' => $getTransaksi,
+                'Result' => 'Transaksi has been updated'
+            ]);
+
+        }catch(\Exception $e){
+            throw new HttpResponseException(response()->json($e->getMessage(), 422));
+        }
+    }
+    // public function updateTransaksiWithPhoto(Request $req, $id){
+    //     //Update Status Transaksi with Photo
+    //     DB::beginTransaction();
+    //     $transaksi = Transaksi::find($id);
+    //     try {
+    //         $validate = $req->validate([
+    //             'id_status' => 'required',
+    //             'id_user' => 'required',
+    //             'gambar' =>'required',
+    //             'tipe' => 'required',
+    //             'updated_by' => 'required'
+    //         ]);
+            
+    //         $updateStatusTransaksi = StatusTransaksi::create([
+    //             'id_transaksi' => $id,
+    //             'nama' => $status_transaksi->nama,
+    //             'keterangan' => $req->keterangan,
+    //             'tipe' => $req->tipe,
+    //             'id_user' => $req->id_user,
+    //             'updated_by' => $req->updated_by
+    //         ]);
+
+    //     } catch (\Throwable $e) {
+    //         throw new HttpResponseException(response()->json($e->getMessage(), 422));
+    //     }
+        
+    // }
 
     public function update(Request $r){
         $data = Transaksi::where("id", $r->id)->update([
