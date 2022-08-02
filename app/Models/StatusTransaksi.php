@@ -16,10 +16,11 @@ class StatusTransaksi extends Model
     protected $fillable = [
         'id_transaksi',
         'id_user',
-        'nama',
-        'tipe',
-        'keterangan',
         'updated_by',
+        'nama',
+        'keterangan',
+        'gambar',
+        'tipe',
         
     ];
 }

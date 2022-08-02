@@ -18,6 +18,7 @@ class Transaksi extends Model
         'id_status',
         'id_pelanggan',
         'id_pengusaha',
+        'id_kurir',
         // 'id_shipping',
         'transaksi_dari',
         'id_alamat',
