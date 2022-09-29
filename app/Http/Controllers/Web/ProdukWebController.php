@@ -114,7 +114,9 @@ class ProdukWebController extends Controller
         $getSatuanProduk = DB::table('satuan_produk')->get();
         $getKategoriProduk = DB::table('kategori_produk')->get();
         $getPengusaha = DB::table('pengusaha')->get();
-        $getData = DB::table('produk')->where('id',$id)->first();
+        $getData = DB::table('produk')->leftJoin('gambar_produk','gambar_produk.id_produk','produk.id')
+                ->select('produk.*','gambar_produk.file as gambar')
+                ->where('produk.id',$id)->first();
 
         return view('adminView.produk.edit', [
             'getPengusaha'=>$getPengusaha,

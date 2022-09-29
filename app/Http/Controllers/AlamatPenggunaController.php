@@ -72,7 +72,8 @@ class AlamatPenggunaController extends Controller
         ]);
         // dd($data);
         if($data){
-            return response()->json(['Result'=>"Data has been Updated"], 200);
+            $data = AlamatPengguna::where('id',$req->id)->first();
+            return response()->json(['Result'=>"Data has been Updated",'data'=>$data], 200);
         }else{
             return response()->json(['Result'=>'Data failed to be updated'], 401);
         }
