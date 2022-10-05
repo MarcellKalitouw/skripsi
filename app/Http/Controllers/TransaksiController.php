@@ -286,7 +286,7 @@ class TransaksiController extends Controller
     public function validateTransaksi($request)
     {
         
-        $validate = $request->validate( [
+        $validate = Validator::make($request->all(), [
             'transaksi.id_status'=>'required',
             'transaksi.id_pelanggan'=> 'required',
             'transaksi.id_pengusaha' => 'required',
@@ -304,9 +304,9 @@ class TransaksiController extends Controller
         return $validate;
     }
     public function validateDetailTransaksi($request){
-        $validate = $request->validate([
-            'detail_transaksi.*.id_user'=>'required',
-            'detail_transaksi.*.id_pengusaha'=> 'required',
+        $validate = Validator::make($request->all(),[
+            // 'detail_transaksi.*.id_user'=>'required',
+            // 'detail_transaksi.*.id_pengusaha'=> 'required',
             'detail_transaksi.*.id_produk' => 'required',
             'detail_transaksi.*.harga' => 'required',
             'detail_transaksi.*.qty' => 'required',
@@ -317,76 +317,120 @@ class TransaksiController extends Controller
         
         
     }
-    //Create Transaksi By Pelanggan
     public function createTransaksi(Request $req){
-        // dd($req->detail_transaksi);
-        DB::beginTransaction();
-        try {
-            
-            
-            //Transaksi
-            $inputTransaksi = $this->validateTransaksi($req)['transaksi'];
-            // dd($remakeIdPelanggan);
-            
-            //Make Random Code Transaction
-            $remakeIdPelanggan = explode('-', $inputTransaksi['id_pelanggan'])[3];
-            $random_number = intval(rand(1,9) . rand(0,9)); 
-            $date = date('ds');
-            $inputTransaksi['kode_transaksi'] = "#yunit_".$random_number.$remakeIdPelanggan.$date;
-            $inputTransaksi['transaksi_dari'] = 'pelanggan';
+        $validateTransaksi = $this->validateTransaksi($req);
+        $validateDetail = $this->validateDetailTransaksi($req);
+        if(!$validateTransaksi->fails() && !$validateDetail->fails()){
+            // DB::beginTransaction();
+            try{
+                $remakeIdPelanggan = explode('-', $req->transaksi['id_pelanggan'])[3];
+                $random_number = intval(rand(1,9) . rand(0,9)); 
+                $date = date('ds');
+                $inputTransaksi = $req->transaksi;
+                $inputTransaksi['kode_transaksi'] = "#yunit_".$random_number.$remakeIdPelanggan.$date;
+                $inputTransaksi['transaksi_dari'] = 'pelanggan';
+                $inputTransaksi["tgl"] = date('Y-m-d');
+                $transaksi = Transaksi::create($inputTransaksi);
+                if($transaksi){
+                    foreach($req->detail_transaksi as $dt){
+                        $dt['id_transaksi'] = $transaksi->id;
+                        $detail = DetailTransaksi::create($dt);
+                    }
+                }else{
+                    return response()->json(['status'=>'failed','data'=>'failed to create transaksi'],500);
+                }
+                // DB::commit();
 
-            //Create Transaksi
-            $transaksi = Transaksi::create($inputTransaksi);
-            // dd($transaksi->id_status);
-            
-
-            //Create Detail Transaksi
-            $inputDetailTransaksi = $this->validateDetailTransaksi($req)['detail_transaksi'];
-            // dd($inputDetailTransaksi);
-            foreach ($inputDetailTransaksi as $item ) { 
-                $item['id_transaksi'] = $transaksi->id;
-                // dd($item);
-                $detail_transaksi = DetailTransaksi::create($item);
-            }
-
-            //Create New Status Transaksi
-            $status_transaksi = Status::where('id', $transaksi->id_status)->first(['id','nama']);
-            $updateStatusTransaksi = StatusTransaksi::create([
-                'id_transaksi' => $transaksi->id,
-                'nama' => $status_transaksi->nama,
-                'keterangan' => $transaksi->keterangan,
-                'tipe' => 'transaksi',
-                'id_user' => $transaksi->id_pengusaha,
-                'updated_by' => 'Pelanggan'
-            ]);
-            // dd($updateStatusTransaksi);
-
-
-
-            //Comit DB
-            DB::commit();
-
-            return response()->json([
-                'data'=> $transaksi,
+                return response()->json([
+                    'data'=> $transaksi,
+                    
+                    'Result'=>'Transaksi has been created!'
+                ], 200);
+            }catch (HttpResponseException $e) {
+                // dd($e->getResponse());
+                // report($e);
                 
-                'Result'=>'Transaksi has been created!'
-            ], 200);
-            
-        } catch (HttpResponseException $e) {
-            // dd($e->getResponse());
-            // report($e);
-            
-            // return $e->getResponse();
-
-
-            if($e){
-                throw new HttpResponseException(response()->json($e, 422));
-            }else{
-                throw $e;
+                // return $e->getResponse();
+                return response()->json(['status'=>'error','data'=>$e],500);
+    
+              
             }
+        }else{
+            return response()->json(['status'=>'validation error','data'=>$validateTransaksi->errors()." : ".$validateDetail->errors()],500);
         }
-
     }
+    //Create Transaksi By Pelanggan
+    // public function createTransaksi(Request $req){
+    //     // dd($req->detail_transaksi);
+    //     DB::beginTransaction();
+    //     try {
+            
+            
+    //         //Transaksi
+    //         $tmp = $this->validateTransaksi($req);
+    //         // dd($remakeIdPelanggan);
+    //         $inputTransaksi = $req->transaksi;
+            
+    //         //Make Random Code Transaction
+    //         $remakeIdPelanggan = explode('-', $inputTransaksi['id_pelanggan'])[3];
+    //         $random_number = intval(rand(1,9) . rand(0,9)); 
+    //         $date = date('ds');
+    //         $inputTransaksi['kode_transaksi'] = "#yunit_".$random_number.$remakeIdPelanggan.$date;
+    //         $inputTransaksi['transaksi_dari'] = 'pelanggan';
+
+    //         //Create Transaksi
+    //         $transaksi = Transaksi::create($inputTransaksi);
+    //         // dd($transaksi->id_status);
+            
+
+    //         //Create Detail Transaksi
+    //         $tmp = $this->validateDetailTransaksi($req);
+    //         $inputDetailTransaksi =$req->detail_transaksi;// $this->validateDetailTransaksi($req)['detail_transaksi'];
+    //         // dd($inputDetailTransaksi);
+    //         foreach ($inputDetailTransaksi as $item ) { 
+    //             $item['id_transaksi'] = $transaksi->id;
+    //             // dd($item);
+    //             $detail_transaksi = DetailTransaksi::create($item);
+    //         }
+
+    //         //Create New Status Transaksi
+    //         $status_transaksi = Status::where('id', $transaksi->id_status)->first(['id','nama']);
+    //         $updateStatusTransaksi = StatusTransaksi::create([
+    //             'id_transaksi' => $transaksi->id,
+    //             'nama' => $status_transaksi->nama,
+    //             'keterangan' => $transaksi->keterangan,
+    //             'tipe' => 'transaksi',
+    //             'id_user' => $transaksi->id_pengusaha,
+    //             'updated_by' => 'Pelanggan'
+    //         ]);
+    //         // dd($updateStatusTransaksi);
+
+
+
+    //         //Comit DB
+    //         DB::commit();
+
+    //         return response()->json([
+    //             'data'=> $transaksi,
+                
+    //             'Result'=>'Transaksi has been created!'
+    //         ], 200);
+            
+    //     } catch (HttpResponseException $e) {
+    //         // dd($e->getResponse());
+    //         // report($e);
+            
+    //         // return $e->getResponse();
+
+
+    //         if($e){
+    //             throw new HttpResponseException(response()->json($e, 422));
+    //         }else{
+    //             throw $e;
+    //         }
+    //     }
+
+    // }
 
     public function updateTransaksiByKurir(Request $req, $id){
         // GET Transaksi
