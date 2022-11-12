@@ -20,7 +20,7 @@ class AuthController extends Controller
                 
                 unset($user['password']);
                 return response()->json([
-                    'message' => 'UNAUTHORIZED','data'=>$user,'request'=>$request->email
+                    'message' => 'UNAUTHORIZED','request'=>$request->email
                 ], 401);
             }
 
