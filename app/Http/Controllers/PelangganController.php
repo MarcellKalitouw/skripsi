@@ -103,19 +103,23 @@ class PelangganController extends Controller
     }
 
     public function update(Request $r){
-        $data = Pelanggan::where("id", $r->id)->update([
-            'nama'=>$req->nama,
-            'no_telp' => $req->no_telp,
-            'email' => $req->email,
-            'status' => $req->status,
-            'gender' => $req->gender
-        ]);
+    
+        try{
+            $data = Pelanggan::where("id", $r->id)->update([
+                'nama'=>$r->nama,
+                'no_telp' => $r->no_telp,
+                'email' => $r->email,
+                'status' => $r->status,
+            ]);
+        }catch(Exception $e){
+            $data = $e;
+        }
         
         if($data){
             $user = Pelanggan::where('id',$r->id)->first();
             return response()->json(['Result'=>"Data has been Updated","data"=>$user], 200);
         }else{
-            return response()->json(['Result'=>'Data failed to be updated'], 401);
+            return response()->json(['Result'=>'Data failed to be updated','data'=>$data], 401);
         }
     }
     public function destroy ($id){

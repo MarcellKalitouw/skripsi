@@ -12,7 +12,7 @@ class AuthController extends Controller
     //
     public function login(Request $request){
         try{
-            $user = Pelanggan::where('email', $request->email)->first(['id','nama','email','status','password']);
+            $user = Pelanggan::where('email', $request->email)->first();
             // dd($request);
             // dd($user);
             // dd(\Hash::check($request->password, $user->password));

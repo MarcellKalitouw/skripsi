@@ -13,6 +13,7 @@ class AlamatPengguna extends Model
     public $timestamps = true;
     protected $table = "alamat_pengguna";
     protected $fillable = [
+        'id',
         'id_pelanggan',
         'alamat',
         'long',
