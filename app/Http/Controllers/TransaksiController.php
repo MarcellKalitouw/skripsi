@@ -170,7 +170,9 @@ class TransaksiController extends Controller
         $limit = $limit?$limit:0;
         $page = intval($page);
         $limit = intval($limit);
-        $data = Transaksi::skip($page*$limit)
+        $data = Transaksi::leftJoin('status','status.id','transaksi.id_status')
+                ->select('transaksi.*','status.nama as statusName')
+                ->skip($page*$limit)
                 ->take($limit)
                 ->where('id_pelanggan', $idPelanggan)
                 ->whereNull('deleted_at')
