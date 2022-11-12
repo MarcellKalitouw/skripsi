@@ -50,7 +50,7 @@
                                         </span>
                                     </a>
                                 </li>
-                                <li class="sidebar-item"> 
+                                {{-- <li class="sidebar-item"> 
                                     <a @class(
                                     [
                                         'sidebar-link', 
@@ -63,7 +63,7 @@
                                             class="hide-menu">Paket
                                         </span>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
                         

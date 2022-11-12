@@ -139,7 +139,7 @@
                     for ($year = (int)date('Y'); 2020 <= $year; $year--): ?>
                         <option value="<?=$year;?>"><?=$year;?></option>
                     <?php endfor; ?>
-                    </select>
+                    </select>   
                     
                 </div>
                 
