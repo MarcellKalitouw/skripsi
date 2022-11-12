@@ -108,6 +108,7 @@ class PelangganController extends Controller
             'no_telp' => $req->no_telp,
             'email' => $req->email,
             'status' => $req->status,
+            'gender' => $req->gender
         ]);
         
         if($data){
