@@ -9,6 +9,7 @@ use App\Models\StatusTransaksi;
 use App\Models\Status;
 use App\Models\Kurir;
 use App\Models\Pelanggan;
+use App\Models\Pengusaha;
 use DB;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Validator;
@@ -169,7 +170,9 @@ class TransaksiController extends Controller
         $limit = $limit?$limit:0;
         $page = intval($page);
         $limit = intval($limit);
-        $data = Transaksi::skip($page*$limit)
+        $data = Transaksi::leftJoin('status','status.id','transaksi.id_status')
+                ->select('transaksi.*','status.nama as statusName')
+                ->skip($page*$limit)
                 ->take($limit)
                 ->where('id_pelanggan', $idPelanggan)
                 ->whereNull('deleted_at')
@@ -178,6 +181,12 @@ class TransaksiController extends Controller
         
         $totalRow = Transaksi::count();
         if(count($data)>0)
+            // $allData = array();
+            foreach($data as $t){
+                $t["pelanggan"] = Pelanggan::find($t->id_pelanggan);
+                $t['pengusaha'] = Pengusaha::find($t->id_pengusaha);
+
+            }
             return response()->json(
                 [
                     'data'=>$data,
@@ -331,11 +340,19 @@ class TransaksiController extends Controller
                 $inputTransaksi['transaksi_dari'] = 'pelanggan';
                 $inputTransaksi["tgl"] = date('Y-m-d');
                 $transaksi = Transaksi::create($inputTransaksi);
+                // dd($req->detail_transaksi[0]);
                 if($transaksi){
                     foreach($req->detail_transaksi as $dt){
                         $dt['id_transaksi'] = $transaksi->id;
+                        $transaksi->total_qty  += $dt['qty'];
+                        $transaksi->total += $dt['total'];
+                        $transaksi->biaya_pengiriman = 5000;
+
                         $detail = DetailTransaksi::create($dt);
+                    
                     }
+                    $transaksi->total += $transaksi->biaya_pengiriman;
+                    $transaksi->save();
                 }else{
                     return response()->json(['status'=>'failed','data'=>'failed to create transaksi'],500);
                 }
