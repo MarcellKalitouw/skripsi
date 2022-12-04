@@ -45,7 +45,7 @@ class LoginControllerWeb extends Controller
                     'tipe' => "Admin"
                 ]);
                 // dd(session()->all());
-                return redirect()->route('produk.index')->with('success', '<b>Login Admin Berhasil</b>');
+                return redirect()->route('dashboard.admin')->with('success', '<b>Login Admin Berhasil</b>');
             
             }
             elseif ($pengusaha && \Hash::check($r->password, $pengusaha->password)) {

@@ -16,7 +16,7 @@ class DashboardWebController extends Controller
         $pageTitle = "Test";
         return view('testSoal.index', compact('pageTitle'));
     }
-
+    
     public function requestStatusTransaksiByMonth(Request $req){
         
 
@@ -53,6 +53,91 @@ class DashboardWebController extends Controller
         $getByMonth = $this->convertDateArray($getByMonth);
 
         return response()->json(['success' => true, 'data' => $getByMonth]);
+    }
+    public function requestAdminTransaksiSelesaiByYear(Request $req){
+        // dd($req);
+        // $idPengusaha = session()->get('id');
+        $groupByMonth = "YEAR(created_at),MONTH(created_at)";
+        $year = $req->year;
+        $finish = DB::table('status')->orderBy('sequence','desc')->first(['id', 'nama']);
+        // dd($finish);
+        $getByMonth = DB::table('transaksi')
+                    //   ->where('id_pengusaha', $idPengusaha)
+                      ->where('id_status', $finish->id)
+                      ->where('created_at','LIKE',$year."%")
+                      ->selectRaw("YEAR(created_at) as Year, MONTH(created_at) as month, count(id) as value")
+                      ->groupByRaw($groupByMonth)
+                      ->get();
+        $getByMonth = $this->convertDateArray($getByMonth);
+
+        return response()->json(['success' => true, 'data' => $getByMonth]);
+    }
+    public function dashboardAdmin(){
+        
+        $totalPelanggan = DB::table('transaksi')
+                    ->select(DB::raw('count(distinct(id_pelanggan)) as total_pelanggan'))
+                    ->whereNull('deleted_at')
+                    ->groupBy('id_pelanggan')    
+                    ->get()
+                    ->sum('total_pelanggan'); 
+        // dd($totalPelanggan);
+                    
+        $totalPendapatan = DB::table('transaksi')
+                           ->whereNull('deleted_at')
+                           ->sum('total');
+        $totalTransaksi = DB::table('transaksi')
+                          ->whereNull('deleted_at')
+                          ->get()
+                          ->count();
+
+        $totalByStatusTransaksi =   DB::table('transaksi')
+                                    ->leftJoin('status','transaksi.id_status', 'status.id')
+                                    ->whereNull('transaksi.deleted_at')
+                                    // ->where('transaksi.created_at', 'LIKE 2020-04%')
+                                    ->select('status.nama', DB::raw('count(status.nama) as total_status'))
+                                    ->groupBy('transaksi.id_status')
+                                    ->get();
+
+        $averageRating = DB::table('rating')
+                         ->avg('nilai');
+        $totalRating = DB::table('rating')
+                        ->count();
+
+        $groupByMonth = "YEAR(created_at),MONTH(created_at)";
+        $year = "2022";
+        $finish = DB::table('status')->orderBy('sequence','desc')->first(['id', 'nama']);
+        // dd($finish);
+        $getByMonth = DB::table('transaksi')
+                      ->where('id_status', $finish->id)
+                      ->where('created_at','LIKE',$year."%")
+                      ->selectRaw("YEAR(created_at) as Year, MONTH(created_at) as month, count(id) as value")
+                      ->groupByRaw($groupByMonth)
+                      ->get();
+        $totalTransaksiByMonth = DB::table('transaksi')
+                                 ->where('id_status', $finish->id)
+                                 ->where('created_at', 'LIKE', $year."%")
+                                 ->selectRaw("YEAR(created_at) as Year, MONTH(created_at) as month, sum(total) as value, count(total) as jlh_transaksi")
+                                 ->groupBy('transaksi.total')
+                                 ->get()
+                                //  ->dd()
+                                 ;
+        
+
+        $getByMonth = $this->convertDateArray($getByMonth);
+        $totalTransaksiByMonth = $this->convertDateArray($totalTransaksiByMonth);
+        // dd($totalTransaksiByMonth);
+        
+        
+        return view('adminView.dashboard.admin', compact(
+            'getByMonth',
+            'totalPelanggan',
+            'totalPendapatan',
+            'totalTransaksi',
+            'totalByStatusTransaksi',
+            'averageRating',
+            'totalRating',
+            'totalTransaksiByMonth'
+        ));
     }
 
     public function DashboardPengusaha(){
@@ -156,10 +241,11 @@ class DashboardWebController extends Controller
     public function convertDateArray($data){
         $newArray = array();
         // $itemArray = new \ArrayObject();
-        
+        // dd($data);
         foreach ($data as $item ) {
             $itemArray = new \stdClass();
-            $itemArray->y = date('F', strtotime('2022-'.$item->month.'-1')); 
+            $itemArray->y = date('F', strtotime($item->Year.'-'.$item->month.'-1'));
+            $itemArray->yM = date('Y-m', strtotime($item->Year.'-'.$item->month.'-1')); 
             $itemArray->jumlah = $item->value;
             // dd($itemArray);
             array_push($newArray, $itemArray);

@@ -30,13 +30,14 @@ use App\Http\Controllers\Web\{
 |
 */
 
-
+// Route::get('/', function () {
+    //     return view('adminView.layout');
+    // })->name('dashboard.admin');
 
 //Produk
 Route::middleware(['checkStatus'])->group(function () {
-    Route::get('/', function () {
-        return view('adminView.layout');
-    })->name('dashboard.admin');
+    
+    Route::get('/',[DashboardWebController::class, 'dashboardAdmin'])->name('dashboard.admin');
     Route::resource('kategori_produk', KategoriProdukWebController::class);
 
     Route::resource('satuan_produk', SatuanProdukWebController::class);
@@ -79,6 +80,7 @@ Route::middleware(['checkStatus'])->group(function () {
     Route::get('dashboard_pengusaha', [DashboardWebController::class, 'DashboardPengusaha'])->name('dashboard.pengusaha');
     Route::post('ajax-request-statusTransaksiByMonth', [DashboardWebController::class, 'requestStatusTransaksiByMonth'])->name('ajax.st-bymonth');
     Route::post('ajax-request-transaksiSelesaiByYear', [DashboardWebController::class, 'requestTransaksiSelesaiByYear'])->name('ajax.ts-byyear');
+    Route::post('ajax-request-adminTransaksiSelesaiByYear', [DashboardWebController::class, 'requestAdminTransaksiSelesaiByYear'])->name('ajax.admin-ts-byyear');
 
     //User : Pengusaha
     Route::get('edit-profile/pengusaha/{id}',[PengusahaWebController::class,'EditProfile'] )->name('pengusaha.edit-profil');

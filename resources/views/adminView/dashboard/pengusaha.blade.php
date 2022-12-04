@@ -276,7 +276,7 @@
                 data: {_token:`{{ csrf_token() }}`, year: getYear },
                 dataType: 'json',
                 success: function(res){
-                    alert("Success");
+                    // alert("Success");
                     console.log('data', res.data);
                     loadingBar.hide();
                     morrisBarChart.show();
@@ -310,7 +310,7 @@
                 data: {_token:`{{ csrf_token() }}`, month: getMonth },
                 dataType: 'json',
                 success: function(res){
-                    alert("Success");
+                    // alert("Success");    
                     console.log('data', res.data);
                     loadingDonut.hide();
                     morrisChart.show();
