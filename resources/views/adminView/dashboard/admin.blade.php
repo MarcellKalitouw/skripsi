@@ -1,5 +1,20 @@
 @extends('adminView.layout')
 
+
+
+@push('style')
+    <style>
+        #map {
+           grid-column: 1/-1;
+            height: 100%;
+            position: relative;
+            canvas, .mapboxgl-canvas {
+                height: 100%;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
 @if ($message = Session::get('success'))
     
@@ -165,6 +180,17 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Daftar Lokasi Semua Pengusaha</h4>
+                {{-- <div id="here-maps">
+                    <div id="mapContainer"></div>
+                </div> --}}
+                <div id="map" style="height: 500px"></div>
+            </div>
+        </div>
+    </div>
     {{-- <div class="col-md-6 col-lg-4">
         <div class="card">
             <div class="card-body">
@@ -232,6 +258,35 @@
 @push('dashboard')
     <script>
         // initMorrisDonutChart();
+        // window.action = "submit"
+
+
+        //Map Token
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWFyY2VsbGthbGl0b3V3IiwiYSI6ImNqbWM3Z2k4OTA3NXIza256OWY4MXM1cWQifQ.ZuXcoyil-xRQl1JRGdl69g';
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-streets-v12',
+            center: [124.88643611536725,1.2672101058571634],
+            zoom: 16
+        });
+
+        //Add tools zoom
+        map.addControl(new mapboxgl.NavigationControl());
+
+        //Add Marker
+
+        const marker = new mapboxgl.Marker()
+                        .setLngLat([124.88643611536725,1.2672101058571634])
+                        .addTo(map);
+
+        //Resize Map
+        map.on('load', function () {
+            map.resize();
+        });
+        
+
+
         initMorrisBar();
         initMorisLine();
         function getTanggal (){

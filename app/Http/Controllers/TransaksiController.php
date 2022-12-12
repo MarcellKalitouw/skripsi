@@ -10,6 +10,7 @@ use App\Models\Status;
 use App\Models\Kurir;
 use App\Models\Pelanggan;
 use App\Models\Pengusaha;
+use App\Models\Produk;
 use DB;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Validator;
@@ -606,5 +607,77 @@ class TransaksiController extends Controller
         }else{
             return response()->json(['Result'=>"Data failed to be deleted"], 401);
         }
+    }
+
+    
+
+    public function filterTransaksiByStatus($page=null, $limit = null, $idPelanggan, $filter){
+        try {
+            // dd($filter);
+            $getIdFilter = Status::where('nama', $filter)->first('id');
+            // dd($getIdFilter);
+            $page = $page?$page:0;
+            $limit = $limit?$limit:0;
+            $page = intval($page);
+            $limit = intval($limit);
+
+            $data = Transaksi::where('id_pelanggan', $idPelanggan)
+                ->where('id_status', $getIdFilter->id)
+                ->skip($page*$limit)
+                ->take($limit)
+                ->whereNull('deleted_at')
+                ->orderBy('created_at','desc')
+                ->get();
+            $totalRow = $data->count();
+            if(count($data) > 0)
+                return response()->json(
+                    [
+                        'data' => $data,
+                        'message' => 'success',
+                        'page' => $page,
+                        'limit' => $limit,
+                        'total_row' => $totalRow
+                    ]
+                );
+            return response()->json(['message' => 'empty'], 401);
+                
+        } catch (\Throwable $th) {
+            //throw $th;
+            throw new HttpResponseException(response()->json($th->getMessage(), 422));
+        }
+    }
+
+    public function getAllProdukDetailTransaksi($data){
+
+        
+        foreach ($data as $key ) {
+            $getProduk = Produk::where('id', $key->id_produk)->first();
+            $key->product = $getProduk;
+        }
+        return $data;
+    }
+
+    public function detailTransaksi ($idTransaksi){
+        // dd($id);
+        
+        try {
+            //Get Detail Transaksi
+            $detailTransaksi = DetailTransaksi::where('id_transaksi', $id)->get();
+            
+            //Get All Produk Detail
+            $this->getAllProdukDetailTransaksi($detailTransaksi);
+
+
+            return response()->json([
+                'data' => $detailTransaksi,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            throw new HttpResponseException(response()->json($th->getMessage(), 422));
+        }
+
+        // dd($detailTransaksi);
+
+        
     }
 }
