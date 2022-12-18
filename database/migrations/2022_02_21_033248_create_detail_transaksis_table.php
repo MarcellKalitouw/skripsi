@@ -19,6 +19,7 @@ class CreateDetailTransaksisTable extends Migration
             $table->uuid('id_user')->nullable();
             $table->uuid('id_pengusaha')->nullable();
             $table->uuid('id_produk')->nullable();
+            $table->uuid('id_satuan')->nullable();
             $table->double('harga');
             $table->integer('qty');
             $table->integer('diskon')->nullable();
