@@ -173,12 +173,13 @@ class TransaksiController extends Controller
         $page = intval($page);
         $limit = intval($limit);
         $data = Transaksi::leftJoin('status','status.id','transaksi.id_status')
-                ->select('transaksi.*','status.nama as statusName')
+                ->leftJoin('alamat_pengguna','alamat_pengguna','transaksi.id_alamat')
+                ->select('transaksi.*','status.nama as statusName','alamat_pengguna.alamat as addressName')
                 ->skip($page*$limit)
                 ->take($limit)
-                ->where('id_pelanggan', $idPelanggan)
-                ->whereNull('deleted_at')
-                ->orderBy('created_at','desc')
+                ->where('transaksi.id_pelanggan', $idPelanggan)
+                ->whereNull('transaksi.deleted_at')
+                ->orderBy('transaksi.created_at','desc')
                 ->get();
         
         $totalRow = Transaksi::count();
