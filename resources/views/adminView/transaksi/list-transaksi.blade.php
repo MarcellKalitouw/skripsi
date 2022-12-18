@@ -76,7 +76,7 @@
                                 <div style="margin-right: 2%">
 
                                
-                                <button class="btn btn-danger waves-effect waves-light" onclick="hapusTransaksiNormal('{{ $item->id }}')" type="submit" >
+                                <button class="btn btn-danger waves-effect waves-light" onclick="hapusTransaksiNormal('{{ $item->id }}')" type="button" >
                                     <span class="btn-label">
                                         <i class="fas fa-trash"></i>
                                     </span> 
