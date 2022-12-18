@@ -11,6 +11,7 @@ use App\Models\Kurir;
 use App\Models\Pelanggan;
 use App\Models\Pengusaha;
 use App\Models\Produk;
+use App\Models\SatuanProduk;
 use DB;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Validator;
@@ -651,7 +652,9 @@ class TransaksiController extends Controller
 
         
         foreach ($data as $key ) {
+
             $getProduk = Produk::where('id', $key->id_produk)->first();
+            $key->satuan = SatuanProduk::where('id', $getProduk->id_satuan)->first();
             $key->product = $getProduk;
         }
         return $data;
@@ -662,7 +665,7 @@ class TransaksiController extends Controller
         
         try {
             //Get Detail Transaksi
-            $detailTransaksi = DetailTransaksi::where('id_transaksi', $id)->get();
+            $detailTransaksi = DetailTransaksi::where('id_transaksi', $idTransaksi)->get();
             
             //Get All Produk Detail
             $this->getAllProdukDetailTransaksi($detailTransaksi);

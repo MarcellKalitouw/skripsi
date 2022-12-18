@@ -189,11 +189,12 @@ class TransaksiWebController extends Controller
         DB::beginTransaction();
         try {
             $idPengusaha = session()->get('id');
-            
+            // dd($idPengusaha);
 
             // dd($idTransaksi);
 
             $getProdukPengusaha = Produk::where('id_pengusaha', $idPengusaha)->get();
+            // dd($getProdukPengusaha);
             // $detailTransaksi = DetailTransaksi::where('id_pengusaha', $idPengusaha)
             //                     ->where('id_transaksi', $idTransaksi)
             //                     ->get();

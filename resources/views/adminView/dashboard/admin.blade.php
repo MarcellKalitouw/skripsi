@@ -12,6 +12,12 @@
                 height: 100%;
             }
         }
+        .mapboxgl-popup {
+            max-width: 200px;
+        }
+       /* .mapboxgl-marker path{
+            fill: brown
+       }  */
     </style>
 @endpush
 
@@ -268,22 +274,55 @@
             container: 'map',
             style: 'mapbox://styles/mapbox/satellite-streets-v12',
             center: [124.88643611536725,1.2672101058571634],
-            zoom: 16
+            zoom: 10
         });
 
+        let dataPengusaha = {!! json_encode($getAllPengusaha) !!};
+
+        console.log('dataPengusaha', dataPengusaha);
         //Add tools zoom
         map.addControl(new mapboxgl.NavigationControl());
-
-        //Add Marker
-
-        const marker = new mapboxgl.Marker()
-                        .setLngLat([124.88643611536725,1.2672101058571634])
-                        .addTo(map);
-
-        //Resize Map
+        
         map.on('load', function () {
             map.resize();
         });
+
+        const colorMarker = ['#5869F5','#5869F5','#F58D64', '#4CB8F5','#F5CA33', '#40F5D6']
+        //looping marker with popup
+        dataPengusaha.map((v, key) => {
+            console.log('v', v);
+
+            
+            const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+                        `${v.nama}, ${v.alamat}`
+                        );
+
+            const marker = new mapboxgl.Marker(
+                {
+                    color:colorMarker[Math.floor(Math.random() * 6)]
+                }
+            )
+                        .setLngLat([v.latitude, v.longitude])
+                        .setPopup(popup)
+                        .addTo(map);
+        })
+
+        //Add Marker
+
+        // const popup = new mapboxgl.Popup({ offset: 25 }).setText(
+        //                 'Construction on the Washington Monument began in 1848.'
+        //                 );
+
+        // const marker = new mapboxgl.Marker()
+        //                 .setLngLat([124.88643611536725,1.2672101058571634])
+        //                 .setPopup(popup)
+        //                 .addTo(map);
+        
+        // const marker1 = new mapboxgl.Marker({color:'#ff8c8c', rotation: 35})
+        //                 .setLngLat([12.554729, 55.70651])
+        //                 .addTo(map);
+        //Resize Map
+        
         
 
 

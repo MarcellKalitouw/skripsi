@@ -126,10 +126,16 @@ class DashboardWebController extends Controller
         $getByMonth = $this->convertDateArray($getByMonth);
         $totalTransaksiByMonth = $this->convertDateArray($totalTransaksiByMonth);
         // dd($totalTransaksiByMonth);
+
+        $getAllPengusaha = DB::table('pengusaha')
+                            ->whereNull('deleted_at')
+                            ->get(['nama','alamat','latitude','longitude']);
+        // dd($getAllPengusaha);
         
         
         return view('adminView.dashboard.admin', compact(
             'getByMonth',
+            'getAllPengusaha',
             'totalPelanggan',
             'totalPendapatan',
             'totalTransaksi',
